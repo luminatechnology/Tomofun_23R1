@@ -1,0 +1,27 @@
+﻿<Sql TableName="Create_vAmazonSettlementReportQuery" CustomScript="#CDATA">
+    <CDATA name="CustomScript"><![CDATA[IF EXISTS
+(
+	SELECT *
+	FROM SYS.views
+	WHERE name = 'v_AmazonSettlementReportQuery' AND SCHEMA_ID = SCHEMA_ID('dbo')
+)
+DROP VIEW [dbo].[v_AmazonSettlementReportQuery]	
+GO
+CREATE VIEW v_AmazonSettlementReportQuery AS
+SELECT main.CompanyID,
+	   main.SettlementID, 
+	   CAST(CAST(main.PostedDate AS DATE) AS datetime) AS PostedDate, 
+	   main.OrderID, 
+	   main.TransactionType,
+	   SUM(main.Amount) AS Amount,
+	   STUFF(
+         (SELECT DISTINCT ',' + t.AmountDescription
+          FROM LUMAmazonSettlementTransData t
+          WHERE main.CompanyID = t.CompanyID AND main.SettlementID = t.SettlementID AND CAST(main.PostedDate AS DATE) = CAST(t.PostedDate AS DATE) AND main.OrderID = t.OrderID AND main.TransactionType = t.TransactionType
+          FOR XML PATH (''))
+          , 1, 1, '')  AS AmountDescriptionSummary,
+	   --STRING_AGG(main.AmountDescription, ',') AS AmountDescriptionSummaryGG,
+	   MAX(main.ErrorMessage)  AS ErrorMessage
+FROM LUMAmazonSettlementTransData main
+GROUP BY main.CompanyID, main.SettlementID, CAST(main.PostedDate AS DATE), main.OrderID, main.TransactionType]]></CDATA>
+</Sql>

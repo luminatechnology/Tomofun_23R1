@@ -1,0 +1,110 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{DBA5A485-0332-445F-A1C6-44DEA95FEA9B}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>LUMLocalization</RootNamespace>
+    <AssemblyName>LUMLocalization</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+    <WarningLevel>3</WarningLevel>
+    <FileVersion>23.104.0027</FileVersion>
+    <InformationalVersion>23.104.0027</InformationalVersion>
+    <Copyright>Copyright © 2005-2023 Acumatica, Inc. All rights reserved.</Copyright>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\..\..\Bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Bin\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="PX.Common">
+      <HintPath>..\..\..\..\Bin\PX.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="PX.Common.Std">
+      <HintPath>..\..\..\..\Bin\PX.Common.Std.dll</HintPath>
+    </Reference>
+    <Reference Include="PX.CS.Contracts">
+      <HintPath>..\..\..\..\Bin\PX.CS.Contracts.dll</HintPath>
+    </Reference>
+    <Reference Include="PX.Data">
+      <HintPath>..\..\..\..\Bin\PX.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="PX.Data.BQL.Fluent">
+      <HintPath>..\..\..\..\Bin\PX.Data.BQL.Fluent.dll</HintPath>
+    </Reference>
+    <Reference Include="PX.Objects">
+      <HintPath>..\..\..\..\Bin\PX.Objects.DLL</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="DAC\GlobalSiteStatus.cs" />
+    <Compile Include="DAC\LCMValuation.cs" />
+    <Compile Include="DAC\LMICCustomer.cs" />
+    <Compile Include="DAC\LMICVendor.cs" />
+    <Compile Include="DAC\LMTFInvQty.cs" />
+    <Compile Include="DAC\LumINItemCostHist.cs" />
+    <Compile Include="DAC\LumSOForPurchaseReceiptFilter .cs" />
+    <Compile Include="DAC\LumTWCustomsDutyRefresh.cs" />
+    <Compile Include="DAC\RefreshTWCustomsDutyFilter.cs" />
+    <Compile Include="DAC\vGlobalINReconciliation.cs" />
+    <Compile Include="DAC\vGlobalSalesAnalysis.cs" />
+    <Compile Include="DAC\v_LumICFromPO.cs" />
+    <Compile Include="DAC_Extensions\POOrderExtensions.cs" />
+    <Compile Include="DAC_Extensions\SOOrderExtensions.cs" />
+    <Compile Include="DAC_Extensions\SOPackageDetailExt.cs" />
+    <Compile Include="Examples.cs" />
+    <Compile Include="Graph\LCMValuationMaint.cs" />
+    <Compile Include="Graph\LMICCustomerMaint.cs" />
+    <Compile Include="Graph\LMICVendorMaint.cs" />
+    <Compile Include="Graph\LMTFInvEntry.cs" />
+    <Compile Include="Graph\LumINItemCostHistMaint.cs" />
+    <Compile Include="Graph\LumPOCreateIntertenantSO.cs" />
+    <Compile Include="Graph\RefreshCustomsDuty.cs" />
+    <Compile Include="Graph_Extensions\POOrderEntry.cs" />
+    <Compile Include="Graph_Extensions\SOOrderEntry.cs" />
+    <Compile Include="Graph_Extensions\SOShipmentEntry_Extension.cs" />
+    <Compile Include="Helper\TWCustomsDutyResponse.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Bcl.AsyncInterfaces">
+      <Version>5.0.0</Version>
+    </PackageReference>
+    <PackageReference Include="System.Runtime.CompilerServices.Unsafe">
+      <Version>5.0.0</Version>
+    </PackageReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
