@@ -127,7 +127,6 @@
     <Compile Include="DAC\v_OpenTRDetail.cs" />
     <Compile Include="DAC\v_OpenTRSourceData.cs" />
     <Compile Include="DAC\v_ToDayInventoryAllocationResult.cs" />
-    <Compile Include="Examples.cs" />
     <Compile Include="Graph\Amazon Payment Excel Process\LUMAmazon_AUPaymentUploadProcess.cs" />
     <Compile Include="Graph\Amazon Payment Excel Process\LUMAmazon_BEPaymentReport.cs" />
     <Compile Include="Graph\Amazon Payment Excel Process\LUMAmazon_CAPaymentUploadProcess.cs" />

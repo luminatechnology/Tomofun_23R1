@@ -56,6 +56,9 @@ namespace LumTomofunCustomization.Graph
             var row = e.Row as LUMAmazonPaymentTransData;
             if (row.SellerOrderId.IndexOf("#") != -1)
                 row.OrderID = row.SellerOrderId.Substring(row.SellerOrderId.IndexOf("#") + 1);
+            // 新的Payment method 所提供的Excel SellerOrderID 不會有'#' 所以需要放入'OrderID'
+            else
+                row.OrderID = row.SellerOrderId;
         }
 
         #endregion
@@ -128,7 +131,7 @@ namespace LumTomofunCustomization.Graph
                                 var arDoc = arGraph.Document.Cache.CreateInstance() as ARPayment;
                                 arDoc.DocType = oldShopifySOOrder == null ? "PMT" :
                                                 oldShopifySOOrder.Status == "N" ? "PPM" : "PMT";
-                                arDoc.AdjDate = row.TransactionPostedDate;
+                                arDoc.AdjDate = row.TransactionPostedDate?.Date;
                                 arDoc.ExtRefNbr = row.SettlementId;
                                 arDoc.CustomerID = ShopifyPublicFunction.GetMarketplaceCustomer(row.Marketplace);
                                 arDoc.CashAccountID = spCashAccount.CashAccountID;

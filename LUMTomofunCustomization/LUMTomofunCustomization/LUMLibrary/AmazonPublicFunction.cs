@@ -216,6 +216,7 @@ namespace LumTomofunCustomization.LUMLibrary
         }
     }
 
+    /// <summary> Amazon Payment 產生Payment/Refund... Main method</summary>
     public static class AmazonToAcumaticaCore<T> where T : class
     {
         public static void CreatePayment(T selectedItem, string _marketplace, PXGraph baseGraph)
@@ -259,31 +260,19 @@ namespace LumTomofunCustomization.LUMLibrary
                         soGraph.Document.Cache.SetValueExt<SOOrder.curyID>(soGraph.Document.Current, info.CuryID);
                     #endregion
 
-                    #region Address
-                    var soGraph_FA = PXGraph.CreateInstance<SOOrderEntry>();
-                    var soOrder_FAInfo = SelectFrom<SOOrder>
-                                     .Where<SOOrder.orderType.IsEqual<P.AsString>
-                                       .And<SOOrder.customerOrderNbr.IsEqual<P.AsString>>>
-                                     .View.SelectSingleBound(soGraph_FA, null, "FA", amazonData?.Api_orderid).TopFirst;
-                    soGraph_FA.Document.Current = soOrder_FAInfo;
-                    if (soGraph_FA.Document.Current != null)
-                    {
-                        // Setting Shipping_Address
-                        var soAddress = soGraph.Shipping_Address.Current;
-                        soGraph_FA.Shipping_Address.Current = soGraph_FA.Shipping_Address.Select();
-                        soAddress.OverrideAddress = true;
-                        soAddress.PostalCode = soGraph_FA.Shipping_Address.Current?.PostalCode;
-                        soAddress.CountryID = soGraph_FA.Shipping_Address.Current?.CountryID;
-                        soAddress.State = soGraph_FA.Shipping_Address.Current?.State;
-                        soAddress.City = soGraph_FA.Shipping_Address.Current?.City;
-                        soAddress.RevisionID = 1;
-                        // Setting Shipping_Contact
-                        var soContact = soGraph.Shipping_Contact.Current;
-                        soGraph_FA.Shipping_Contact.Current = soGraph_FA.Shipping_Contact.Select();
-                        soContact.OverrideContact = true;
-                        soContact.Email = soGraph_FA.Shipping_Contact.Current?.Email;
-                        soContact.RevisionID = 1;
-                    }
+                    #region Address/Contact
+                    var FAInfomation = SelectFrom<SOOrder>
+                                       .InnerJoin<SOShippingContact>.On<SOOrder.shipContactID.IsEqual<SOShippingContact.contactID>>
+                                       .InnerJoin<SOShippingAddress>.On<SOOrder.shipAddressID.IsEqual<SOShippingAddress.addressID>>
+                                       .Where<SOOrder.orderType.IsEqual<P.AsString>
+                                         .And<SOOrder.customerOrderNbr.IsEqual<P.AsString>>>
+                                       .View.SelectSingleBound(soGraph, null, "FA", amazonData?.Api_orderid);
+
+
+                    if (FAInfomation.RowCast<SOShippingAddress>().FirstOrDefault() != null)
+                        SOShippingAddressAttribute.Copy(soGraph.Shipping_Address.Current, FAInfomation.RowCast<SOShippingAddress>().FirstOrDefault());
+                    if (FAInfomation.RowCast<SOShippingContact>().FirstOrDefault() != null)
+                        SOShippingContactAttribute.CopyContact(soGraph.Shipping_Contact.Current, FAInfomation.RowCast<SOShippingContact>().FirstOrDefault());
                     #endregion
 
                     var customerDefWarehouse = SelectFrom<Location>
@@ -568,43 +557,19 @@ namespace LumTomofunCustomization.LUMLibrary
                             soGraph.Document.Cache.SetValueExt<SOOrder.curyID>(soGraph.Document.Current, info.CuryID);
                         #endregion
 
-                        #region Address
-                        soGraph_FA = PXGraph.CreateInstance<SOOrderEntry>();
-                        soOrder_FAInfo = SelectFrom<SOOrder>
-                                         .Where<SOOrder.orderType.IsEqual<P.AsString>
-                                           .And<SOOrder.customerOrderNbr.IsEqual<P.AsString>>>
-                                         .View.SelectSingleBound(soGraph_FA, null, "FA", amazonData?.Api_orderid).TopFirst;
-                        soGraph_FA.Document.Current = soOrder_FAInfo;
-                        if (soGraph_FA.Document.Current != null)
-                        {
-                            // Setting Shipping_Address
-                            var soAddress = soGraph.Shipping_Address.Current = soGraph.Shipping_Address.Select();
-                            soAddress.OverrideAddress = true;
-                            soAddress = soGraph.Shipping_Address.Cache.Update(soAddress) as SOShippingAddress;
-                            if (soAddress == null)
-                            {
-                                soAddress = soGraph.Shipping_Address.Current;
-                            }
-                            soGraph_FA.Shipping_Address.Current = soGraph_FA.Shipping_Address.Select();
-                            soAddress.PostalCode = soGraph_FA.Shipping_Address.Current?.PostalCode;
-                            soAddress.CountryID = soGraph_FA.Shipping_Address.Current?.CountryID;
-                            soAddress.State = soGraph_FA.Shipping_Address.Current?.State;
-                            soAddress.City = soGraph_FA.Shipping_Address.Current?.City;
-                            soAddress.RevisionID = 1;
-                            soGraph.Shipping_Address.Update(soAddress);
-                            // Setting Shipping_Contact
-                            var soContact = soGraph.Shipping_Contact.Current = soGraph.Shipping_Contact.Select();
-                            soContact.OverrideContact = true;
-                            soContact = soGraph.Shipping_Contact.Cache.Update(soContact) as SOShippingContact;
-                            if (soContact == null)
-                            {
-                                soContact = soGraph.Shipping_Contact.Current;
-                            }
-                            soGraph_FA.Shipping_Contact.Current = soGraph_FA.Shipping_Contact.Select();
-                            soContact.Email = soGraph_FA.Shipping_Contact.Current?.Email;
-                            soContact.RevisionID = 1;
-                            soGraph.Shipping_Contact.Update(soContact);
-                        }
+                        #region Address/Contact
+                        FAInfomation = SelectFrom<SOOrder>
+                                           .InnerJoin<SOShippingContact>.On<SOOrder.shipContactID.IsEqual<SOShippingContact.contactID>>
+                                           .InnerJoin<SOShippingAddress>.On<SOOrder.shipAddressID.IsEqual<SOShippingAddress.addressID>>
+                                           .Where<SOOrder.orderType.IsEqual<P.AsString>
+                                             .And<SOOrder.customerOrderNbr.IsEqual<P.AsString>>>
+                                           .View.SelectSingleBound(soGraph, null, "FA", amazonData?.Api_orderid);
+
+
+                        if (FAInfomation.RowCast<SOShippingAddress>().FirstOrDefault() != null)
+                            SOShippingAddressAttribute.Copy(soGraph.Shipping_Address.Current, FAInfomation.RowCast<SOShippingAddress>().FirstOrDefault());
+                        if (FAInfomation.RowCast<SOShippingContact>().FirstOrDefault() != null)
+                            SOShippingContactAttribute.CopyContact(soGraph.Shipping_Contact.Current, FAInfomation.RowCast<SOShippingContact>().FirstOrDefault());
                         #endregion
 
                         #region SOLine
@@ -683,31 +648,19 @@ namespace LumTomofunCustomization.LUMLibrary
                             soGraph.Document.Cache.SetValueExt<SOOrder.curyID>(soGraph.Document.Current, info.CuryID);
                         #endregion
 
-                        #region Address
-                        soGraph_FA = PXGraph.CreateInstance<SOOrderEntry>();
-                        soOrder_FAInfo = SelectFrom<SOOrder>
-                                         .Where<SOOrder.orderType.IsEqual<P.AsString>
-                                           .And<SOOrder.customerOrderNbr.IsEqual<P.AsString>>>
-                                         .View.SelectSingleBound(soGraph_FA, null, "FA", amazonData?.Api_orderid).TopFirst;
-                        soGraph_FA.Document.Current = soOrder_FAInfo;
-                        if (soGraph_FA.Document.Current != null)
-                        {
-                            // Setting Shipping_Address
-                            var soAddress = soGraph.Shipping_Address.Current;
-                            soGraph_FA.Shipping_Address.Current = soGraph_FA.Shipping_Address.Select();
-                            soAddress.OverrideAddress = true;
-                            soAddress.PostalCode = soGraph_FA.Shipping_Address.Current?.PostalCode;
-                            soAddress.CountryID = soGraph_FA.Shipping_Address.Current?.CountryID;
-                            soAddress.State = soGraph_FA.Shipping_Address.Current?.State;
-                            soAddress.City = soGraph_FA.Shipping_Address.Current?.City;
-                            soAddress.RevisionID = 1;
-                            // Setting Shipping_Contact
-                            var soContact = soGraph.Shipping_Contact.Current;
-                            soGraph_FA.Shipping_Contact.Current = soGraph_FA.Shipping_Contact.Select();
-                            soContact.OverrideContact = true;
-                            soContact.Email = soGraph_FA.Shipping_Contact.Current?.Email;
-                            soContact.RevisionID = 1;
-                        }
+                        #region Address/Contact
+                        FAInfomation = SelectFrom<SOOrder>
+                                           .InnerJoin<SOShippingContact>.On<SOOrder.shipContactID.IsEqual<SOShippingContact.contactID>>
+                                           .InnerJoin<SOShippingAddress>.On<SOOrder.shipAddressID.IsEqual<SOShippingAddress.addressID>>
+                                           .Where<SOOrder.orderType.IsEqual<P.AsString>
+                                             .And<SOOrder.customerOrderNbr.IsEqual<P.AsString>>>
+                                           .View.SelectSingleBound(soGraph, null, "FA", amazonData?.Api_orderid);
+
+
+                        if (FAInfomation.RowCast<SOShippingAddress>().FirstOrDefault() != null)
+                            SOShippingAddressAttribute.Copy(soGraph.Shipping_Address.Current, FAInfomation.RowCast<SOShippingAddress>().FirstOrDefault());
+                        if (FAInfomation.RowCast<SOShippingContact>().FirstOrDefault() != null)
+                            SOShippingContactAttribute.CopyContact(soGraph.Shipping_Contact.Current, FAInfomation.RowCast<SOShippingContact>().FirstOrDefault());
                         #endregion
 
                         #region SOLine
@@ -777,31 +730,19 @@ namespace LumTomofunCustomization.LUMLibrary
                             soGraph.Document.Cache.SetValueExt<SOOrder.curyID>(soGraph.Document.Current, info.CuryID);
                         #endregion
 
-                        #region Address
-                        soGraph_FA = PXGraph.CreateInstance<SOOrderEntry>();
-                        soOrder_FAInfo = SelectFrom<SOOrder>
-                                         .Where<SOOrder.orderType.IsEqual<P.AsString>
-                                           .And<SOOrder.customerOrderNbr.IsEqual<P.AsString>>>
-                                         .View.SelectSingleBound(soGraph_FA, null, "FA", amazonData?.Api_orderid).TopFirst;
-                        soGraph_FA.Document.Current = soOrder_FAInfo;
-                        if (soGraph_FA.Document.Current != null)
-                        {
-                            // Setting Shipping_Address
-                            var soAddress = soGraph.Shipping_Address.Current;
-                            soGraph_FA.Shipping_Address.Current = soGraph_FA.Shipping_Address.Select();
-                            soAddress.OverrideAddress = true;
-                            soAddress.PostalCode = soGraph_FA.Shipping_Address.Current?.PostalCode;
-                            soAddress.CountryID = soGraph_FA.Shipping_Address.Current?.CountryID;
-                            soAddress.State = soGraph_FA.Shipping_Address.Current?.State;
-                            soAddress.City = soGraph_FA.Shipping_Address.Current?.City;
-                            soAddress.RevisionID = 1;
-                            // Setting Shipping_Contact
-                            var soContact = soGraph.Shipping_Contact.Current;
-                            soGraph_FA.Shipping_Contact.Current = soGraph_FA.Shipping_Contact.Select();
-                            soContact.OverrideContact = true;
-                            soContact.Email = soGraph_FA.Shipping_Contact.Current?.Email;
-                            soContact.RevisionID = 1;
-                        }
+                        #region Address/Contact
+                        FAInfomation = SelectFrom<SOOrder>
+                                           .InnerJoin<SOShippingContact>.On<SOOrder.shipContactID.IsEqual<SOShippingContact.contactID>>
+                                           .InnerJoin<SOShippingAddress>.On<SOOrder.shipAddressID.IsEqual<SOShippingAddress.addressID>>
+                                           .Where<SOOrder.orderType.IsEqual<P.AsString>
+                                             .And<SOOrder.customerOrderNbr.IsEqual<P.AsString>>>
+                                           .View.SelectSingleBound(soGraph, null, "FA", amazonData?.Api_orderid);
+
+
+                        if (FAInfomation.RowCast<SOShippingAddress>().FirstOrDefault() != null)
+                            SOShippingAddressAttribute.Copy(soGraph.Shipping_Address.Current, FAInfomation.RowCast<SOShippingAddress>().FirstOrDefault());
+                        if (FAInfomation.RowCast<SOShippingContact>().FirstOrDefault() != null)
+                            SOShippingContactAttribute.CopyContact(soGraph.Shipping_Contact.Current, FAInfomation.RowCast<SOShippingContact>().FirstOrDefault());
                         #endregion
 
                         #region SOLine
@@ -922,31 +863,19 @@ namespace LumTomofunCustomization.LUMLibrary
                         soGraph.Document.Cache.SetValueExt<SOOrder.curyID>(soGraph.Document.Current, info.CuryID);
                     #endregion
 
-                    #region Address
-                    soGraph_FA = PXGraph.CreateInstance<SOOrderEntry>();
-                    soOrder_FAInfo = SelectFrom<SOOrder>
-                                     .Where<SOOrder.orderType.IsEqual<P.AsString>
-                                       .And<SOOrder.customerOrderNbr.IsEqual<P.AsString>>>
-                                     .View.SelectSingleBound(soGraph_FA, null, "FA", amazonData?.Api_orderid).TopFirst;
-                    soGraph_FA.Document.Current = soOrder_FAInfo;
-                    if (soGraph_FA.Document.Current != null)
-                    {
-                        // Setting Shipping_Address
-                        var soAddress = soGraph.Shipping_Address.Current;
-                        soGraph_FA.Shipping_Address.Current = soGraph_FA.Shipping_Address.Select();
-                        soAddress.OverrideAddress = true;
-                        soAddress.PostalCode = soGraph_FA.Shipping_Address.Current?.PostalCode;
-                        soAddress.CountryID = soGraph_FA.Shipping_Address.Current?.CountryID;
-                        soAddress.State = soGraph_FA.Shipping_Address.Current?.State;
-                        soAddress.City = soGraph_FA.Shipping_Address.Current?.City;
-                        soAddress.RevisionID = 1;
-                        // Setting Shipping_Contact
-                        var soContact = soGraph.Shipping_Contact.Current;
-                        soGraph_FA.Shipping_Contact.Current = soGraph_FA.Shipping_Contact.Select();
-                        soContact.OverrideContact = true;
-                        soContact.Email = soGraph_FA.Shipping_Contact.Current?.Email;
-                        soContact.RevisionID = 1;
-                    }
+                    #region Address/Contact
+                    FAInfomation = SelectFrom<SOOrder>
+                                       .InnerJoin<SOShippingContact>.On<SOOrder.shipContactID.IsEqual<SOShippingContact.contactID>>
+                                       .InnerJoin<SOShippingAddress>.On<SOOrder.shipAddressID.IsEqual<SOShippingAddress.addressID>>
+                                       .Where<SOOrder.orderType.IsEqual<P.AsString>
+                                         .And<SOOrder.customerOrderNbr.IsEqual<P.AsString>>>
+                                       .View.SelectSingleBound(soGraph, null, "FA", amazonData?.Api_orderid);
+
+
+                    if (FAInfomation.RowCast<SOShippingAddress>().FirstOrDefault() != null)
+                        SOShippingAddressAttribute.Copy(soGraph.Shipping_Address.Current, FAInfomation.RowCast<SOShippingAddress>().FirstOrDefault());
+                    if (FAInfomation.RowCast<SOShippingContact>().FirstOrDefault() != null)
+                        SOShippingContactAttribute.CopyContact(soGraph.Shipping_Contact.Current, FAInfomation.RowCast<SOShippingContact>().FirstOrDefault());
                     #endregion
 
                     #region SOLine
@@ -1018,31 +947,19 @@ namespace LumTomofunCustomization.LUMLibrary
                         soGraph.Document.Cache.SetValueExt<SOOrder.curyID>(soGraph.Document.Current, info.CuryID);
                     #endregion
 
-                    #region Address
-                    soGraph_FA = PXGraph.CreateInstance<SOOrderEntry>();
-                    soOrder_FAInfo = SelectFrom<SOOrder>
-                                     .Where<SOOrder.orderType.IsEqual<P.AsString>
-                                       .And<SOOrder.customerOrderNbr.IsEqual<P.AsString>>>
-                                     .View.SelectSingleBound(soGraph_FA, null, "FA", amazonData?.Api_orderid).TopFirst;
-                    soGraph_FA.Document.Current = soOrder_FAInfo;
-                    if (soGraph_FA.Document.Current != null)
-                    {
-                        // Setting Shipping_Address
-                        var soAddress = soGraph.Shipping_Address.Current;
-                        soGraph_FA.Shipping_Address.Current = soGraph_FA.Shipping_Address.Select();
-                        soAddress.OverrideAddress = true;
-                        soAddress.PostalCode = soGraph_FA.Shipping_Address.Current?.PostalCode;
-                        soAddress.CountryID = soGraph_FA.Shipping_Address.Current?.CountryID;
-                        soAddress.State = soGraph_FA.Shipping_Address.Current?.State;
-                        soAddress.City = soGraph_FA.Shipping_Address.Current?.City;
-                        soAddress.RevisionID = 1;
-                        // Setting Shipping_Contact
-                        var soContact = soGraph.Shipping_Contact.Current;
-                        soGraph_FA.Shipping_Contact.Current = soGraph_FA.Shipping_Contact.Select();
-                        soContact.OverrideContact = true;
-                        soContact.Email = soGraph_FA.Shipping_Contact.Current?.Email;
-                        soContact.RevisionID = 1;
-                    }
+                    #region Address/Contact
+                    FAInfomation = SelectFrom<SOOrder>
+                                       .InnerJoin<SOShippingContact>.On<SOOrder.shipContactID.IsEqual<SOShippingContact.contactID>>
+                                       .InnerJoin<SOShippingAddress>.On<SOOrder.shipAddressID.IsEqual<SOShippingAddress.addressID>>
+                                       .Where<SOOrder.orderType.IsEqual<P.AsString>
+                                         .And<SOOrder.customerOrderNbr.IsEqual<P.AsString>>>
+                                       .View.SelectSingleBound(soGraph, null, "FA", amazonData?.Api_orderid);
+
+
+                    if (FAInfomation.RowCast<SOShippingAddress>().FirstOrDefault() != null)
+                        SOShippingAddressAttribute.Copy(soGraph.Shipping_Address.Current, FAInfomation.RowCast<SOShippingAddress>().FirstOrDefault());
+                    if (FAInfomation.RowCast<SOShippingContact>().FirstOrDefault() != null)
+                        SOShippingContactAttribute.CopyContact(soGraph.Shipping_Contact.Current, FAInfomation.RowCast<SOShippingContact>().FirstOrDefault());
                     #endregion
 
                     #region SOLine
@@ -1124,31 +1041,19 @@ namespace LumTomofunCustomization.LUMLibrary
                         soGraph.Document.Cache.SetValueExt<SOOrder.curyID>(soGraph.Document.Current, info.CuryID);
                     #endregion
 
-                    #region Address
-                    soGraph_FA = PXGraph.CreateInstance<SOOrderEntry>();
-                    soOrder_FAInfo = SelectFrom<SOOrder>
-                                     .Where<SOOrder.orderType.IsEqual<P.AsString>
-                                       .And<SOOrder.customerOrderNbr.IsEqual<P.AsString>>>
-                                     .View.SelectSingleBound(soGraph_FA, null, "FA", amazonData?.Api_orderid).TopFirst;
-                    soGraph_FA.Document.Current = soOrder_FAInfo;
-                    if (soGraph_FA.Document.Current != null)
-                    {
-                        // Setting Shipping_Address
-                        var soAddress = soGraph.Shipping_Address.Current;
-                        soGraph_FA.Shipping_Address.Current = soGraph_FA.Shipping_Address.Select();
-                        soAddress.OverrideAddress = true;
-                        soAddress.PostalCode = soGraph_FA.Shipping_Address.Current?.PostalCode;
-                        soAddress.CountryID = soGraph_FA.Shipping_Address.Current?.CountryID;
-                        soAddress.State = soGraph_FA.Shipping_Address.Current?.State;
-                        soAddress.City = soGraph_FA.Shipping_Address.Current?.City;
-                        soAddress.RevisionID = 1;
-                        // Setting Shipping_Contact
-                        var soContact = soGraph.Shipping_Contact.Current;
-                        soGraph_FA.Shipping_Contact.Current = soGraph_FA.Shipping_Contact.Select();
-                        soContact.OverrideContact = true;
-                        soContact.Email = soGraph_FA.Shipping_Contact.Current?.Email;
-                        soContact.RevisionID = 1;
-                    }
+                    #region Address/Contact
+                    FAInfomation = SelectFrom<SOOrder>
+                                       .InnerJoin<SOShippingContact>.On<SOOrder.shipContactID.IsEqual<SOShippingContact.contactID>>
+                                       .InnerJoin<SOShippingAddress>.On<SOOrder.shipAddressID.IsEqual<SOShippingAddress.addressID>>
+                                       .Where<SOOrder.orderType.IsEqual<P.AsString>
+                                         .And<SOOrder.customerOrderNbr.IsEqual<P.AsString>>>
+                                       .View.SelectSingleBound(soGraph, null, "FA", amazonData?.Api_orderid);
+
+
+                    if (FAInfomation.RowCast<SOShippingAddress>().FirstOrDefault() != null)
+                        SOShippingAddressAttribute.Copy(soGraph.Shipping_Address.Current, FAInfomation.RowCast<SOShippingAddress>().FirstOrDefault());
+                    if (FAInfomation.RowCast<SOShippingContact>().FirstOrDefault() != null)
+                        SOShippingContactAttribute.CopyContact(soGraph.Shipping_Contact.Current, FAInfomation.RowCast<SOShippingContact>().FirstOrDefault());
                     #endregion
 
                     #region SOLine
@@ -1219,31 +1124,19 @@ namespace LumTomofunCustomization.LUMLibrary
                         soGraph.Document.Cache.SetValueExt<SOOrder.curyID>(soGraph.Document.Current, info.CuryID);
                     #endregion
 
-                    #region Address
-                    soGraph_FA = PXGraph.CreateInstance<SOOrderEntry>();
-                    soOrder_FAInfo = SelectFrom<SOOrder>
-                                     .Where<SOOrder.orderType.IsEqual<P.AsString>
-                                       .And<SOOrder.customerOrderNbr.IsEqual<P.AsString>>>
-                                     .View.SelectSingleBound(soGraph_FA, null, "FA", amazonData?.Api_orderid).TopFirst;
-                    soGraph_FA.Document.Current = soOrder_FAInfo;
-                    if (soGraph_FA.Document.Current != null)
-                    {
-                        // Setting Shipping_Address
-                        var soAddress = soGraph.Shipping_Address.Current;
-                        soGraph_FA.Shipping_Address.Current = soGraph_FA.Shipping_Address.Select();
-                        soAddress.OverrideAddress = true;
-                        soAddress.PostalCode = soGraph_FA.Shipping_Address.Current?.PostalCode;
-                        soAddress.CountryID = soGraph_FA.Shipping_Address.Current?.CountryID;
-                        soAddress.State = soGraph_FA.Shipping_Address.Current?.State;
-                        soAddress.City = soGraph_FA.Shipping_Address.Current?.City;
-                        soAddress.RevisionID = 1;
-                        // Setting Shipping_Contact
-                        var soContact = soGraph.Shipping_Contact.Current;
-                        soGraph_FA.Shipping_Contact.Current = soGraph_FA.Shipping_Contact.Select();
-                        soContact.OverrideContact = true;
-                        soContact.Email = soGraph_FA.Shipping_Contact.Current?.Email;
-                        soContact.RevisionID = 1;
-                    }
+                    #region Address/Contact
+                    FAInfomation = SelectFrom<SOOrder>
+                                       .InnerJoin<SOShippingContact>.On<SOOrder.shipContactID.IsEqual<SOShippingContact.contactID>>
+                                       .InnerJoin<SOShippingAddress>.On<SOOrder.shipAddressID.IsEqual<SOShippingAddress.addressID>>
+                                       .Where<SOOrder.orderType.IsEqual<P.AsString>
+                                         .And<SOOrder.customerOrderNbr.IsEqual<P.AsString>>>
+                                       .View.SelectSingleBound(soGraph, null, "FA", amazonData?.Api_orderid);
+
+
+                    if (FAInfomation.RowCast<SOShippingAddress>().FirstOrDefault() != null)
+                        SOShippingAddressAttribute.Copy(soGraph.Shipping_Address.Current, FAInfomation.RowCast<SOShippingAddress>().FirstOrDefault());
+                    if (FAInfomation.RowCast<SOShippingContact>().FirstOrDefault() != null)
+                        SOShippingContactAttribute.CopyContact(soGraph.Shipping_Contact.Current, FAInfomation.RowCast<SOShippingContact>().FirstOrDefault());
                     #endregion
 
                     #region SOLine
@@ -1282,7 +1175,7 @@ namespace LumTomofunCustomization.LUMLibrary
             }
         }
 
-        /// <summary> Sales Order Prepare Invoice and Override Tax </summary>
+        /// <summary> Sales Order Prepare Invoice </summary>
         public static void PrepareInvoiceAndOverrideTax(SOOrderEntry soGraph, SOOrder soDoc, bool IsOverrideTax = true)
         {
             // Prepare Invoice
@@ -1294,28 +1187,11 @@ namespace LumTomofunCustomization.LUMLibrary
             // Prepare Invoice Success
             catch (PXRedirectRequiredException ex)
             {
-                #region Override Invoice Tax
+                #region Override Invoice Infomation
                 // Invoice Graph
                 SOInvoiceEntry invoiceGraph = ex.Graph as SOInvoiceEntry;
-                var soTax = SelectFrom<SOTaxTran>
-                            .Where<SOTaxTran.orderNbr.IsEqual<P.AsString>
-                                 .And<SOTaxTran.orderType.IsEqual<P.AsString>>>
-                            .View.SelectSingleBound(soGraph, null, soGraph.Document.Current.OrderNbr, soGraph.Document.Current.OrderType)
-                            .TopFirst;
                 // update docDate
                 invoiceGraph.Document.SetValueExt<ARInvoice.docDate>(invoiceGraph.Document.Current, soDoc.RequestDate);
-                if (soTax != null && IsOverrideTax)
-                {
-                    // setting Tax
-                    invoiceGraph.Taxes.Current = invoiceGraph.Taxes.Select();
-                    invoiceGraph.Taxes.SetValueExt<ARTaxTran.curyTaxAmt>(invoiceGraph.Taxes.Current, soTax.CuryTaxAmt);
-                    invoiceGraph.Taxes.Cache.MarkUpdated(invoiceGraph.Taxes.Current);
-                    // setting Document
-                    invoiceGraph.Document.SetValueExt<ARInvoice.curyTaxTotal>(invoiceGraph.Document.Current, soTax.CuryTaxAmt);
-                    invoiceGraph.Document.SetValueExt<ARInvoice.curyDocBal>(invoiceGraph.Document.Current, invoiceGraph.Document.Current.CuryDocBal + (soTax.CuryTaxAmt ?? 0));
-                    invoiceGraph.Document.SetValueExt<ARInvoice.curyOrigDocAmt>(invoiceGraph.Document.Current, invoiceGraph.Document.Current.CuryOrigDocAmt + (soTax.CuryTaxAmt ?? 0));
-                    invoiceGraph.Document.Update(invoiceGraph.Document.Current);
-                }
                 // Save
                 invoiceGraph.Save.Press();
                 // Release Invoice

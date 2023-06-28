@@ -141,7 +141,7 @@ namespace LumTomofunCustomization.API_Entity.ShopifyOrder
         public string state { get; set; }
         public string total_spent { get; set; }
         public long last_order_id { get; set; }
-        public object note { get; set; }
+        public string note { get; set; }
         public bool verified_email { get; set; }
         public object multipass_identifier { get; set; }
         public bool tax_exempt { get; set; }
@@ -308,7 +308,7 @@ namespace LumTomofunCustomization.API_Entity.ShopifyOrder
         public object landing_site_ref { get; set; }
         public object location_id { get; set; }
         public string name { get; set; }
-        public object note { get; set; }
+        public string note { get; set; }
         public List<object> note_attributes { get; set; }
         public int number { get; set; }
         public int order_number { get; set; }
