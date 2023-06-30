@@ -1444,8 +1444,13 @@ namespace LumTomofunCustomization.Graph
             // Prepare Invoice
             try
             {
-                soGraph.releaseFromHold.Press();
-                soGraph.prepareInvoice.Press();
+                soGraph.SelectTimeStamp();
+                using (new PXTimeStampScope(soGraph.TimeStamp))
+                {
+                    soGraph.Document.Current.tstamp = soGraph.TimeStamp;
+                    soGraph.releaseFromHold.Press();
+                    soGraph.prepareInvoice.Press();
+                }
             }
             // Prepare Invoice Success
             catch (PXRedirectRequiredException ex)
@@ -1453,25 +1458,9 @@ namespace LumTomofunCustomization.Graph
                 #region Override Invoice Tax
                 // Invoice Graph
                 SOInvoiceEntry invoiceGraph = ex.Graph as SOInvoiceEntry;
-                var soTax = SelectFrom<SOTaxTran>
-                            .Where<SOTaxTran.orderNbr.IsEqual<P.AsString>
-                                 .And<SOTaxTran.orderType.IsEqual<P.AsString>>>
-                            .View.SelectSingleBound(this, null, soGraph.Document.Current.OrderNbr, soGraph.Document.Current.OrderType)
-                            .TopFirst;
                 // update docDate
                 invoiceGraph.Document.SetValueExt<ARInvoice.docDate>(invoiceGraph.Document.Current, soDoc.RequestDate);
-                if (soTax != null && IsOverrideTax)
-                {
-                    // setting Tax
-                    invoiceGraph.Taxes.Current = invoiceGraph.Taxes.Select();
-                    invoiceGraph.Taxes.SetValueExt<ARTaxTran.curyTaxAmt>(invoiceGraph.Taxes.Current, soTax.CuryTaxAmt);
-                    invoiceGraph.Taxes.Cache.MarkUpdated(invoiceGraph.Taxes.Current);
-                    // setting Document
-                    invoiceGraph.Document.SetValueExt<ARInvoice.curyTaxTotal>(invoiceGraph.Document.Current, soTax.CuryTaxAmt);
-                    invoiceGraph.Document.SetValueExt<ARInvoice.curyDocBal>(invoiceGraph.Document.Current, invoiceGraph.Document.Current.CuryDocBal + (soTax.CuryTaxAmt ?? 0));
-                    invoiceGraph.Document.SetValueExt<ARInvoice.curyOrigDocAmt>(invoiceGraph.Document.Current, invoiceGraph.Document.Current.CuryOrigDocAmt + (soTax.CuryTaxAmt ?? 0));
-                    invoiceGraph.Document.Update(invoiceGraph.Document.Current);
-                }
+                invoiceGraph.Document.UpdateCurrent();
                 // Save
                 invoiceGraph.Save.Press();
                 // Release Invoice

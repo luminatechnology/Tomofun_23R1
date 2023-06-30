@@ -168,6 +168,7 @@
     <Compile Include="Graph_Extension\APInvoiceEntryExt.cs" />
     <Compile Include="Graph_Extension\CATranEnqExt.cs" />
     <Compile Include="Graph_Extension\JournalEntry.cs" />
+    <Compile Include="Graph_Extension\SOOrderEntryExt.cs" />
     <Compile Include="LUMLibrary\AmazonPublicFunction.cs" />
     <Compile Include="LUMLibrary\ShopifyPublicFunction.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -1181,8 +1181,13 @@ namespace LumTomofunCustomization.LUMLibrary
             // Prepare Invoice
             try
             {
-                soGraph.releaseFromHold.Press();
-                soGraph.prepareInvoice.Press();
+                soGraph.SelectTimeStamp();
+                using (new PXTimeStampScope(soGraph.TimeStamp))
+                {
+                    soGraph.Document.Current.tstamp = soGraph.TimeStamp;
+                    soGraph.releaseFromHold.Press();
+                    soGraph.prepareInvoice.Press();
+                }
             }
             // Prepare Invoice Success
             catch (PXRedirectRequiredException ex)
@@ -1192,6 +1197,7 @@ namespace LumTomofunCustomization.LUMLibrary
                 SOInvoiceEntry invoiceGraph = ex.Graph as SOInvoiceEntry;
                 // update docDate
                 invoiceGraph.Document.SetValueExt<ARInvoice.docDate>(invoiceGraph.Document.Current, soDoc.RequestDate);
+                invoiceGraph.Document.UpdateCurrent();
                 // Save
                 invoiceGraph.Save.Press();
                 // Release Invoice
