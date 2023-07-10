@@ -28,7 +28,7 @@ namespace PX.Objects.SO
         public virtual void _(Events.FieldVerifying<SOLine.curyExtPrice> e, PXFieldVerifying baseMethod)
         {
             // Remove curyExtPrice validation(negative)
-            // baseMethod();
+            //baseMethod?.Invoke(e.Cache,e.Args);
             SOLine row = e.Row as SOLine;
 
             if (row == null)
