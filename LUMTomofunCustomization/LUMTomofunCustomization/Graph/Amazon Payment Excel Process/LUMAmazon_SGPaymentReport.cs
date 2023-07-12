@@ -70,6 +70,11 @@ namespace LumTomofunCustomization.Graph
             {
                 GoProcessing(list);
             });
+            this.PaymentTransactions.ParallelProcessingOptions = (options) =>
+            {
+                options.BatchSize = 100;
+                options.IsEnabled = true;
+            };
         }
 
         #region Action

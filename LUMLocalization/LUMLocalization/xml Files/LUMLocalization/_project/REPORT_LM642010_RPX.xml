@@ -1,5 +1,5 @@
 ﻿<Report Name="lm642010.rpx">
-    <Report version="20201103" Name="report1">
+    <Report version="20211215" Name="report1">
         <CommonSettings>
             <ViewPdf>True</ViewPdf>
         </CommonSettings>
@@ -398,7 +398,7 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                 <ParentName>SOShipment</ParentName>
             </ReportRelation>
         </Relations>
-        <SchemaUrl>http://localhost/Tomofun</SchemaUrl>
+        <SchemaUrl>http://44.238.146.140/Sandbox/</SchemaUrl>
         <Sorting>
             <SortExp>
                 <DataField>SOShipment.ShipmentNbr</DataField>
@@ -8107,7 +8107,7 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                                 <Left>1px</Left>
                             </Padding>
                         </Style>
-                        <Value>=IIF([SOShipment.ShipmentType] = 'I',IsNull([Customer.TermsID], ''),'0180')</Value>
+                        <Value>=IIF([SOShipment.ShipmentType] = 'I',IsNull([Customer.TermsID_description], ''),'180 days')</Value>
                     </TextBox>
                     <TextBox Name="textBox36">
                         <Excel>
@@ -8215,7 +8215,7 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                                 <Left>1px</Left>
                             </Padding>
                         </Style>
-                        <Value>= IsNull([SOShipmentAddress.AddressLine1], '')#010;+ '{br}' + IsNull([SOShipmentAddress.AddressLine2], '')#010;+ IIf([SOShipmentAddress.City] &lt;&gt; Null, '{br}' + [SOShipmentAddress.City], '')#010;+ IIf([SOShipmentAddress.CountryID_description] &lt;&gt; Null, ',' + [SOShipmentAddress.CountryID_description], '')#010;+ IIf([SOShipmentAddress.State] &lt;&gt; Null, ',' + [SOShipmentAddress.State], '')#010;+ IIF([SOShipmentAddress.PostalCode] &lt;&gt; Null, ',' + [SOShipmentAddress.PostalCode],'')</Value>
+                        <Value>= IsNull([SOShipmentAddress.AddressLine1], '') + ' ' + IsNull([SOShipmentAddress.AddressLine2], '')#010;+ '{br}'#010;+ IIf([SOShipmentAddress.City] &lt;&gt; Null,[SOShipmentAddress.City] + ',', '')#010;+ IIf([SOShipmentAddress.State] &lt;&gt; Null, [SOShipmentAddress.State] + ',', '')#010;+ IIF([SOShipmentAddress.PostalCode] &lt;&gt; Null, [SOShipmentAddress.PostalCode] + ',','')#010;+ IIf([SOShipmentAddress.CountryID_description] &lt;&gt; Null, '{br}' +[SOShipmentAddress.CountryID_description], '')#010;</Value>
                     </TextBox>
                     <TextBox Name="textBox4">
                         <Excel>
