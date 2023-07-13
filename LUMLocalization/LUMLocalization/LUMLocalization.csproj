@@ -77,7 +77,6 @@
     <Compile Include="DAC_Extensions\POOrderExtensions.cs" />
     <Compile Include="DAC_Extensions\SOOrderExtensions.cs" />
     <Compile Include="DAC_Extensions\SOPackageDetailExt.cs" />
-    <Compile Include="Examples.cs" />
     <Compile Include="Graph\LCMValuationMaint.cs" />
     <Compile Include="Graph\LMICCustomerMaint.cs" />
     <Compile Include="Graph\LMICVendorMaint.cs" />
@@ -87,7 +86,7 @@
     <Compile Include="Graph\RefreshCustomsDuty.cs" />
     <Compile Include="Graph_Extensions\POOrderEntry.cs" />
     <Compile Include="Graph_Extensions\SOOrderEntry.cs" />
-    <Compile Include="Graph_Extensions\SOShipmentEntry_Extension.cs" />
+    <Compile Include="Graph_Extensions\SOShipmentEntry.cs" />
     <Compile Include="Helper\TWCustomsDutyResponse.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
