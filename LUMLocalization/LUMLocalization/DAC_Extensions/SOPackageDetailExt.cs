@@ -1,17 +1,7 @@
-using PX.Common;
-using PX.Data.ReferentialIntegrity.Attributes;
-using PX.Data;
-using PX.Objects.AR;
-using PX.Objects.CS;
-using PX.Objects.IN;
-using PX.Objects.SO;
-using PX.Objects;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System;
+using PX.Data;
 using PX.Data.BQL;
-using PX.Data.BQL.Fluent;
+using PX.Objects.IN;
 
 namespace PX.Objects.SO
 {
@@ -60,6 +50,30 @@ namespace PX.Objects.SO
         [PXUIField(DisplayName = "Total Cartons")]
         public virtual int? UsrTotalCartons { get; set; }
         public abstract class usrTotalCartons : BqlInt.Field<usrTotalCartons> { }
+        #endregion
+
+        #region UsrNWCarton
+        // Write default logic in extension graph event because attribute value is Text.
+        [PXDBDecimal(0)]
+        [PXUIField(DisplayName = "N.W. (KGS)/Carton")]
+        public virtual decimal? UsrNWCarton { get; set; }
+        public abstract class usrNWCarton : PX.Data.BQL.BqlDecimal.Field<usrNWCarton> { }
+        #endregion
+
+        #region UsrGWCarton
+        // Write default logic in extension graph event because attribute value is Text.
+        [PXDBDecimal(0)]
+        [PXUIField(DisplayName = "G.W. (KGS)/Carton")]
+        public virtual decimal? UsrGWCarton { get; set; }
+        public abstract class usrGWCarton : PX.Data.BQL.BqlDecimal.Field<usrGWCarton> { }
+        #endregion
+
+        #region UsrTotalPallet
+        // Write default logic in extension graph event because attribute value is Text.
+        [PXDBDecimal(0)]
+        [PXUIField(DisplayName = "Total Pallet")]
+        public virtual decimal? UsrTotalPallet { get; set; }
+        public abstract class usrTotalPallet : PX.Data.BQL.BqlDecimal.Field<usrTotalPallet> { }
         #endregion
     }
 }
