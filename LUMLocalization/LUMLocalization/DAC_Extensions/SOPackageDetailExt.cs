@@ -54,7 +54,7 @@ namespace PX.Objects.SO
 
         #region UsrNWCarton
         // Write default logic in extension graph event because attribute value is Text.
-        [PXDBDecimal(0)]
+        [PXDBDecimal(2)]
         [PXUIField(DisplayName = "N.W. (KGS)/Carton")]
         public virtual decimal? UsrNWCarton { get; set; }
         public abstract class usrNWCarton : PX.Data.BQL.BqlDecimal.Field<usrNWCarton> { }
@@ -62,7 +62,7 @@ namespace PX.Objects.SO
 
         #region UsrGWCarton
         // Write default logic in extension graph event because attribute value is Text.
-        [PXDBDecimal(0)]
+        [PXDBDecimal(2)]
         [PXUIField(DisplayName = "G.W. (KGS)/Carton")]
         public virtual decimal? UsrGWCarton { get; set; }
         public abstract class usrGWCarton : PX.Data.BQL.BqlDecimal.Field<usrGWCarton> { }
