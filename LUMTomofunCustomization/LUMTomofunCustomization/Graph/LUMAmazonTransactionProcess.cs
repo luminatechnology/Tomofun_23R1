@@ -174,11 +174,14 @@ namespace LumTomofunCustomization.Graph
                                 soGraph.Document.Cache.SetValueExt<SOOrder.curyTaxTotal>(soGraph.Document.Current, amzTotalTax);
                                 soGraph.Document.Cache.SetValueExt<SOOrder.curyOrderTotal>(soGraph.Document.Current, (soGraph.Document.Current?.CuryOrderTotal ?? 0) + amzTotalTax - systemTax);
                             }
+                            else
+                                soGraph.Document.Cache.SetValue<SOOrder.disableAutomaticTaxCalculation>(soGraph.Document.Current, false);
                             #endregion
 
                             // Write json into note
                             PXNoteAttribute.SetNote(soGraph.Document.Cache, soGraph.Document.Current, row.TransJson);
                             // Sales Order Save
+                            soGraph.Document.UpdateCurrent();
                             soGraph.Save.Press();
                         }
                         // 如果已經存在 則更改Request date + 刪除所有SOLine 並重新建立

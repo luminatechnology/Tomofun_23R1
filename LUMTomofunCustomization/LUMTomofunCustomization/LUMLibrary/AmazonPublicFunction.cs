@@ -411,6 +411,8 @@ namespace LumTomofunCustomization.LUMLibrary
                     // Setting SO Tax
                     soGraph.Taxes.Current = soGraph.Taxes.Current ?? soGraph.Taxes.Insert(soGraph.Taxes.Cache.CreateInstance() as SOTaxTran);
                     soGraph.Taxes.Cache.SetValueExt<SOTaxTran.taxID>(soGraph.Taxes.Current, isTaxCalculate ? $"{_marketplace}ECZ" : $"{_marketplace}EC");
+                    if (isTaxCalculate)
+                        soGraph.Document.Cache.SetValue<SOOrder.disableAutomaticTaxCalculation>(soGraph.Document.Current, false);
                     #endregion
 
                     // Sales Order Save
@@ -592,6 +594,8 @@ namespace LumTomofunCustomization.LUMLibrary
                             soGraph.Taxes.Current = soGraph.Taxes.Current ?? soGraph.Taxes.Insert(soGraph.Taxes.Cache.CreateInstance() as SOTaxTran);
                             soGraph.Taxes.Cache.SetValueExt<SOTaxTran.taxID>(soGraph.Taxes.Current, isTaxCalculate ? $"{_marketplace}ECZ" : $"{_marketplace}EC");
                         }
+                        if (isTaxCalculate)
+                            soGraph.Document.Cache.SetValue<SOOrder.disableAutomaticTaxCalculation>(soGraph.Document.Current, false);
                         #endregion
 
                         // Sales Order Save
@@ -679,6 +683,8 @@ namespace LumTomofunCustomization.LUMLibrary
                         // Setting SO Tax
                         soGraph.Taxes.Current = soGraph.Taxes.Current ?? soGraph.Taxes.Insert(soGraph.Taxes.Cache.CreateInstance() as SOTaxTran);
                         soGraph.Taxes.Cache.SetValueExt<SOTaxTran.taxID>(soGraph.Taxes.Current, isTaxCalculate ? $"{_marketplace}ECZ" : $"{_marketplace}EC");
+                        if (isTaxCalculate)
+                            soGraph.Document.Cache.SetValue<SOOrder.disableAutomaticTaxCalculation>(soGraph.Document.Current, false);
                         #endregion
 
                         // Sales Order Save
@@ -758,6 +764,8 @@ namespace LumTomofunCustomization.LUMLibrary
                         // Setting SO Tax
                         soGraph.Taxes.Current = soGraph.Taxes.Current ?? soGraph.Taxes.Insert(soGraph.Taxes.Cache.CreateInstance() as SOTaxTran);
                         soGraph.Taxes.Cache.SetValueExt<SOTaxTran.taxID>(soGraph.Taxes.Current, isTaxCalculate ? $"{_marketplace}ECZ" : $"{_marketplace}EC");
+                        if (isTaxCalculate)
+                            soGraph.Document.Cache.SetValue<SOOrder.disableAutomaticTaxCalculation>(soGraph.Document.Current, false);
                         #endregion
 
                         // Sales Order Save
@@ -809,7 +817,13 @@ namespace LumTomofunCustomization.LUMLibrary
                         soGraph.Transactions.Insert(CreateSOLineObject(soGraph, "EC-SHIPPING", "MCF Shipping fee", Math.Abs(amazonData?.Api_total ?? 0)));
                         #endregion
 
+                        #region Update Tax
+                        if (isTaxCalculate)
+                            soGraph.Document.Cache.SetValue<SOOrder.disableAutomaticTaxCalculation>(soGraph.Document.Current, false);
+                        #endregion
+
                         // Sales Order Save
+                        soGraph.Document.UpdateCurrent();
                         soGraph.Save.Press();
 
                         #region Create PaymentRefund
@@ -891,6 +905,8 @@ namespace LumTomofunCustomization.LUMLibrary
                     // Setting SO Tax
                     soGraph.Taxes.Current = soGraph.Taxes.Current ?? soGraph.Taxes.Insert(soGraph.Taxes.Cache.CreateInstance() as SOTaxTran);
                     soGraph.Taxes.Cache.SetValueExt<SOTaxTran.taxID>(soGraph.Taxes.Current, isTaxCalculate ? $"{_marketplace}ECZ" : $"{_marketplace}EC");
+                    if (isTaxCalculate)
+                        soGraph.Document.Cache.SetValue<SOOrder.disableAutomaticTaxCalculation>(soGraph.Document.Current, false);
                     #endregion
 
                     // Sales Order Save
@@ -975,6 +991,8 @@ namespace LumTomofunCustomization.LUMLibrary
                     // Setting SO Tax
                     soGraph.Taxes.Current = soGraph.Taxes.Current ?? soGraph.Taxes.Insert(soGraph.Taxes.Cache.CreateInstance() as SOTaxTran);
                     soGraph.Taxes.Cache.SetValueExt<SOTaxTran.taxID>(soGraph.Taxes.Current, isTaxCalculate ? $"{_marketplace}ECZ" : $"{_marketplace}EC");
+                    if (isTaxCalculate)
+                        soGraph.Document.Cache.SetValue<SOOrder.disableAutomaticTaxCalculation>(soGraph.Document.Current, false);
                     #endregion
 
                     // Sales Order Save
@@ -1069,6 +1087,8 @@ namespace LumTomofunCustomization.LUMLibrary
                     // Setting SO Tax
                     soGraph.Taxes.Current = soGraph.Taxes.Current ?? soGraph.Taxes.Insert(soGraph.Taxes.Cache.CreateInstance() as SOTaxTran);
                     soGraph.Taxes.Cache.SetValueExt<SOTaxTran.taxID>(soGraph.Taxes.Current, isTaxCalculate ? $"{_marketplace}ECZ" : $"{_marketplace}EC");
+                    if (isTaxCalculate)
+                        soGraph.Document.Cache.SetValue<SOOrder.disableAutomaticTaxCalculation>(soGraph.Document.Current, false);
                     #endregion
 
                     // Sales Order Save
@@ -1152,6 +1172,8 @@ namespace LumTomofunCustomization.LUMLibrary
                     // Setting SO Tax
                     soGraph.Taxes.Current = soGraph.Taxes.Current ?? soGraph.Taxes.Insert(soGraph.Taxes.Cache.CreateInstance() as SOTaxTran);
                     soGraph.Taxes.Cache.SetValueExt<SOTaxTran.taxID>(soGraph.Taxes.Current, isTaxCalculate ? $"{_marketplace}ECZ" : $"{_marketplace}EC");
+                    if (isTaxCalculate)
+                        soGraph.Document.Cache.SetValue<SOOrder.disableAutomaticTaxCalculation>(soGraph.Document.Current, false);
                     #endregion
 
                     // Sales Order Save

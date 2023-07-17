@@ -48,7 +48,11 @@
         <px:PXFormView ID="frmMyCommand" runat="server" SkinID="Transparent" DataMember="JsonViewer" DataSourceID="ds" EmailingGraph="">
             <Template>
                 <px:PXLayoutRule runat="server" ControlSize="L" LabelsWidth="L" StartColumn="True" />
-                <px:PXRichTextEdit ID="PXRichTextEdit1" runat="server" DataField="JsonSource" ></px:PXRichTextEdit>
+                <px:PXRichTextEdit ID="edJsonSource" runat="server" DataField="JsonSource"
+                    Style="width: 100%; height: 120px" AllowAttached="true" AllowSearch="true"
+                    AllowMacros="true" AllowLoadTemplate="false" AllowSourceMode="true">
+                    <AutoSize Enabled="True" MinHeight="216" />
+                </px:PXRichTextEdit>
                 <px:PXPanel ID="PXPanel1" runat="server" SkinID="Buttons">
                     <px:PXButton ID="btnMyCommandCancel" runat="server" DialogResult="Cancel" Text="Confirm" />
                 </px:PXPanel>
