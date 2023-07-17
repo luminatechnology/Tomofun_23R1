@@ -2,7 +2,6 @@
 using PX.Data.BQL;
 using PX.Data.BQL.Fluent;
 using PX.Objects.CS;
-using PX.Objects.GL;
 using PX.Objects.IN;
 using System;
 using System.Collections;
@@ -14,131 +13,150 @@ namespace PX.Objects.SO
 {
     public class SOShipmentEntry_Extension : PXGraphExtension<SOShipmentEntry>
     {
+        #region Constant Strings
+        public const string Attr_QTYCARTON  = "QTYCARTON";
+        public const string Attr_NETWHTCART = "NETWHTCART";
+        public const string Attr_GRSWHTCART = "GRSWHTCART";
+        public const string Attr_PLTAIRUS   = "PLTAIRUS";
+        public const string Attr_PLTSEAUS   = "PLTSEAUS";
+        public const string Attr_PLTAIREU   = "PLTAIREU";
+        public const string Attr_PLTSEAEU   = "PLTSEAEU";
+        public const string ShipVia_Air     = "AIR";
+        public const string ShipVia_Ocean   = "OCEAN";
+        #endregion
+
+        #region Override Methods
         public override void Initialize()
         {
             base.Initialize();
             Base.report.AddMenuAction(PackingList);
             Base.report.AddMenuAction(CommercialInvoice);
         }
+        #endregion
 
-        #region Attributes
+        #region Attribute Classes
         //Attribute : Qty Per Carton, ID = QTYCARTON
         public class QtyPerCartonAttr : BqlString.Constant<QtyPerCartonAttr>
         {
-            public QtyPerCartonAttr() : base("QTYCARTON") { }
+            public QtyPerCartonAttr() : base(Attr_QTYCARTON) { }
         }
 
         //Attribute : Gross Weight Per Carton, ID = GRSWHTCART
         public class GrossWeightPerCartonAttr : BqlString.Constant<GrossWeightPerCartonAttr>
         {
-            public GrossWeightPerCartonAttr() : base("GRSWHTCART") { }
+            public GrossWeightPerCartonAttr() : base(Attr_GRSWHTCART) { }
         }
 
         //Attribute : Net Weight Per Carton, ID = NETWHTCART
         public class NetWeightPerCartonAttr : BqlString.Constant<NetWeightPerCartonAttr>
         {
-            public NetWeightPerCartonAttr() : base("NETWHTCART") { }
+            public NetWeightPerCartonAttr() : base(Attr_NETWHTCART) { }
         }
 
         //Attribute : Cartons Per Pallet, ID = PLTAIREU
         public class CartonsPerPalletAttrAirEU : BqlString.Constant<CartonsPerPalletAttrAirEU>
         {
-            public CartonsPerPalletAttrAirEU() : base("PLTAIREU") { }
+            public CartonsPerPalletAttrAirEU() : base(Attr_PLTAIREU) { }
         }
 
         //Attribute : Cartons Per Pallet, ID = PLTAIRUS
         public class CartonsPerPalletAttrAirUS : BqlString.Constant<CartonsPerPalletAttrAirUS>
         {
-            public CartonsPerPalletAttrAirUS() : base("PLTAIRUS") { }
+            public CartonsPerPalletAttrAirUS() : base(Attr_PLTAIRUS) { }
         }
 
         //Attribute : Cartons Per Pallet, ID = PLTSEAEU
         public class CartonsPerPalletAttrSeaEU : BqlString.Constant<CartonsPerPalletAttrSeaEU>
         {
-            public CartonsPerPalletAttrSeaEU() : base("PLTSEAEU") { }
+            public CartonsPerPalletAttrSeaEU() : base(Attr_PLTSEAEU) { }
         }
 
         //Attribute : Cartons Per Pallet, ID = PLTSEAUS
         public class CartonsPerPalletAttrSeaUS : BqlString.Constant<CartonsPerPalletAttrSeaUS>
         {
-            public CartonsPerPalletAttrSeaUS() : base("PLTSEAUS") { }
+            public CartonsPerPalletAttrSeaUS() : base(Attr_PLTSEAUS) { }
         }
         #endregion
 
-        #region Event
+        #region Event Handlers
         protected virtual void _(Events.FieldUpdated<SOPackageDetailExt.usrShipmentSplitLineNbr> e)
         {
-            if (e.NewValue == null) return;
+            if (e.NewValue == null) { return; }
 
             var _shipLine = Base.Transactions.Cache.Cached.RowCast<SOShipLine>().Where(x => x.LineNbr == (int?)e.NewValue).SingleOrDefault();
-            e.Cache.SetValueExt<SOPackageDetail.inventoryID>(e.Row, _shipLine.InventoryID);
-            e.Cache.SetValueExt<SOPackageDetail.qty>(e.Row, _shipLine.ShippedQty);
 
+            e.Cache.SetValue<SOPackageDetail.qty>(e.Row, _shipLine.ShippedQty);
+            e.Cache.SetValueExt<SOPackageDetail.inventoryID>(e.Row, _shipLine.InventoryID);
             //Box
             var _defBoxID = SelectFrom<CSBox>.Where<CSBox.activeByDefault.IsEqual<True>>.View.Select(Base).TopFirst?.BoxID;
             if (_defBoxID != null) e.Cache.SetValueExt<SOPackageDetail.boxID>(e.Row, _defBoxID);
-
         }
 
-        protected virtual void _(Events.FieldUpdated<SOPackageDetailExt.qty> e)
-        {
-            if (e.NewValue == null) return;
+        //protected virtual void _(Events.FieldUpdated<SOPackageDetailExt.qty> e)
+        //{
+        //    if (e.NewValue == null) return;
 
-            SOPackageDetailEx curSOPackageDetailExLine = e.Row as SOPackageDetailEx;
-            SOPackageDetailExt _line = ((SOPackageDetail)Base.Packages.Cache.Current).GetExtension<SOPackageDetailExt>();
+        //    SOPackageDetailEx curSOPackageDetailExLine = e.Row as SOPackageDetailEx;
+        //    Guid? itemNoteID = InventoryItem.PK.Find(Base, (int)e.NewValue)?.NoteID;
+
+        //    //TotalCartons
+        //    var _QtyPerCarton = SelectFrom<CSAnswers>.LeftJoin<InventoryItem>.On<InventoryItem.noteID.IsEqual<CSAnswers.refNoteID>
+        //                                                                         .And<CSAnswers.attributeID.IsEqual<QtyPerCartonAttr>>>
+        //                                             .Where<InventoryItem.inventoryID.IsEqual<@P.AsInt>>.View
+        //                                             .Select(Base, curSOPackageDetailExLine.InventoryID).TopFirst?.Value;
+
+        //    if (_QtyPerCarton != null)
+        //    {
+        //        if (Convert.ToDecimal(_QtyPerCarton) > 0)
+        //        {
+        //            decimal totalCartons = Convert.ToInt32(Math.Ceiling(Convert.ToDecimal(curSOPackageDetailExLine.Qty) / Convert.ToDecimal(_QtyPerCarton)));
+
+        //            e.Cache.SetValueExt<SOPackageDetailExt.usrTotalCartons>(curSOPackageDetailExLine, totalCartons);
+        //            //Carton No
+        //            e.Cache.SetValueExt<SOPackageDetailExt.customRefNbr2>(curSOPackageDetailExLine, totalCartons);
+
+        //            if (Base.Document.Current?.ShipVia == ShipVia_Air)
+        //            {
+        //                totalCartons = Convert.ToDecimal(CSAnswers.PK.Find(Base, itemNoteID, Base.Shipping_Address.Current?.CountryID == CountryCodes.US ? Attr_PLTAIRUS : Attr_PLTAIREU)?.Value);
+        //            }
+        //            else if (Base.Document?.Current.ShipVia == ShipVia_Ocean)
+        //            {
+        //                totalCartons = Convert.ToDecimal(CSAnswers.PK.Find(Base, itemNoteID, Base.Shipping_Address.Current?.CountryID == CountryCodes.US ? Attr_PLTSEAUS : Attr_PLTSEAEU)?.Value);
+        //            }
+
+        //            e.Cache.SetValueExt<SOPackageDetailExt.usrTotalPallet>(e.Row, Math.Ceiling((e.Row as SOPackageDetailEx).GetExtension<SOPackageDetailExt>().UsrTotalCartons.GetValueOrDefault() / totalCartons));
+        //            e.Cache.SetValueExt<SOPackageDetailExt.customRefNbr1>(e.Row, e.Cache.GetValue<SOPackageDetailExt.usrTotalPallet>(e.Row));
+        //        }
+        //    }
+        //}
+
+        protected virtual void _(Events.FieldUpdated<SOPackageDetailEx.inventoryID> e)
+        {
+            Guid? itemNoteID = InventoryItem.PK.Find(Base, (int)e.NewValue)?.NoteID;
+
+            e.Cache.SetValueExt<SOPackageDetailExt.usrNWCarton>(e.Row, Convert.ToDecimal(CSAnswers.PK.Find(Base, itemNoteID, Attr_NETWHTCART)?.Value ?? "0"));
+            e.Cache.SetValueExt<SOPackageDetailExt.usrGWCarton>(e.Row, Convert.ToDecimal(CSAnswers.PK.Find(Base, itemNoteID, Attr_GRSWHTCART)?.Value ?? "0"));
 
             //TotalCartons
-            var _QtyPerCarton = SelectFrom<CSAnswers>.
-                                LeftJoin<InventoryItem>.On<InventoryItem.noteID.IsEqual<CSAnswers.refNoteID>.And<CSAnswers.attributeID.IsEqual<QtyPerCartonAttr>>>.
-                                Where<InventoryItem.inventoryID.IsEqual<@P.AsInt>>.View.Select(Base, curSOPackageDetailExLine.InventoryID).TopFirst?.Value;
+            decimal qtyPerCarton = Convert.ToDecimal(CSAnswers.PK.Find(Base, itemNoteID, Attr_QTYCARTON)?.Value ?? "0");
 
-            if (_QtyPerCarton != null)
-            {
-                if (Convert.ToDecimal(_QtyPerCarton) > 0)
-                {
-                    var totalCartons = Convert.ToInt32(Math.Ceiling(Convert.ToDecimal(curSOPackageDetailExLine.Qty) / Convert.ToDecimal(_QtyPerCarton)));
-                    e.Cache.SetValueExt<SOPackageDetailExt.usrTotalCartons>(curSOPackageDetailExLine, totalCartons);
-                    //Carton No
-                    e.Cache.SetValueExt<SOPackageDetailExt.customRefNbr2>(curSOPackageDetailExLine, totalCartons);
-                }
-            }
+            decimal totalCartons = Math.Ceiling((e.Row as SOPackageDetailEx).Qty.Value / qtyPerCarton);
 
-            //Cartons per Pallet
-            var _attrCartonsPerPallet = "";
-            if (Base.Document.Current.ShipVia == "AIR")
+            e.Cache.SetValueExt<SOPackageDetailExt.usrTotalCartons>(e.Row, (int)totalCartons);
+            //Carton No
+            e.Cache.SetValueExt<SOPackageDetailExt.customRefNbr2>(e.Row, totalCartons);
+
+            if (Base.Document.Current?.ShipVia == ShipVia_Air)
             {
-                if (Base.Shipping_Address.Current.CountryID == "US")
-                    _attrCartonsPerPallet = SelectFrom<CSAnswers>.
-                                            LeftJoin<InventoryItem>.On<InventoryItem.noteID.IsEqual<CSAnswers.refNoteID>.And<CSAnswers.attributeID.IsEqual<CartonsPerPalletAttrAirUS>>>.
-                                            Where<InventoryItem.inventoryID.IsEqual<@P.AsInt>>.View.Select(Base, curSOPackageDetailExLine.InventoryID).TopFirst?.Value;
-                else
-                    _attrCartonsPerPallet = SelectFrom<CSAnswers>.
-                                            LeftJoin<InventoryItem>.On<InventoryItem.noteID.IsEqual<CSAnswers.refNoteID>.And<CSAnswers.attributeID.IsEqual<CartonsPerPalletAttrAirEU>>>.
-                                            Where<InventoryItem.inventoryID.IsEqual<@P.AsInt>>.View.Select(Base, curSOPackageDetailExLine.InventoryID).TopFirst?.Value;
+                totalCartons = Convert.ToDecimal(CSAnswers.PK.Find(Base, itemNoteID, Base.Shipping_Address.Current?.CountryID == CountryCodes.US ? Attr_PLTAIRUS : Attr_PLTAIREU)?.Value);
             }
-            else if (Base.Document.Current.ShipVia == "OCEAN")
+            else if (Base.Document?.Current.ShipVia == ShipVia_Ocean)
             {
-                if (Base.Shipping_Address.Current.CountryID == "US")
-                    _attrCartonsPerPallet = SelectFrom<CSAnswers>.
-                                            LeftJoin<InventoryItem>.On<InventoryItem.noteID.IsEqual<CSAnswers.refNoteID>.And<CSAnswers.attributeID.IsEqual<CartonsPerPalletAttrSeaUS>>>.
-                                            Where<InventoryItem.inventoryID.IsEqual<@P.AsInt>>.View.Select(Base, curSOPackageDetailExLine.InventoryID).TopFirst?.Value;
-                else
-                    _attrCartonsPerPallet = SelectFrom<CSAnswers>.
-                                            LeftJoin<InventoryItem>.On<InventoryItem.noteID.IsEqual<CSAnswers.refNoteID>.And<CSAnswers.attributeID.IsEqual<CartonsPerPalletAttrSeaEU>>>.
-                                            Where<InventoryItem.inventoryID.IsEqual<@P.AsInt>>.View.Select(Base, curSOPackageDetailExLine.InventoryID).TopFirst?.Value;
-            }
-            else
-            {
-                _attrCartonsPerPallet = SelectFrom<CSAnswers>.
-                                            LeftJoin<InventoryItem>.On<InventoryItem.noteID.IsEqual<CSAnswers.refNoteID>.And<CSAnswers.attributeID.IsEqual<CartonsPerPalletAttrSeaUS>>>.
-                                            Where<InventoryItem.inventoryID.IsEqual<@P.AsInt>>.View.Select(Base, curSOPackageDetailExLine.InventoryID).TopFirst?.Value;
+                totalCartons = Convert.ToDecimal(CSAnswers.PK.Find(Base, itemNoteID, Base.Shipping_Address.Current?.CountryID == CountryCodes.US ? Attr_PLTSEAUS : Attr_PLTSEAEU)?.Value);
             }
 
-            if (_attrCartonsPerPallet != null)
-            {
-                if (Convert.ToDecimal(_attrCartonsPerPallet) > 0)
-                    e.Cache.SetValueExt<SOPackageDetailExt.customRefNbr1>((SOPackageDetailEx)e.Row, Convert.ToInt32(Math.Ceiling(Convert.ToDecimal(_line.UsrTotalCartons) / Convert.ToDecimal(_attrCartonsPerPallet))));
-            }
+            e.Cache.SetValueExt<SOPackageDetailExt.usrTotalPallet>(e.Row, Math.Ceiling((e.Row as SOPackageDetailEx).GetExtension<SOPackageDetailExt>().UsrTotalCartons.GetValueOrDefault() / totalCartons));
+            e.Cache.SetValueExt<SOPackageDetailExt.customRefNbr1>(e.Row, e.Cache.GetValue<SOPackageDetailExt.usrTotalPallet>(e.Row));
         }
         #endregion
 
@@ -278,6 +296,7 @@ namespace PX.Objects.SO
             }
             return "SAY TOTAL US DOLLARS " + dollars.Replace("DOLLARS", "").Replace("ONLY.", "ONLY").Replace("  ", " ");
         }
+
         private string GetEnglish(string nu)
         {
             string x = "";

@@ -4,6 +4,7 @@
     </PXGrid>
     <PXGridLevel DataMember="Packages" ParentId="phG_tab_Items#3_gridPackages_Levels#0" TypeFullName="PX.Web.UI.PXGridLevel">
         <Children Key="Columns">
+            <PXGridColumn DataField="Confirmed" OriginalIndex="0" />
             <AddItem>
                 <PXGridColumn TypeFullName="PX.Web.UI.PXGridColumn">
                     <Prop Key="DataField" Value="UsrShipmentSplitLineNbr" />
@@ -17,11 +18,26 @@
                     <Prop Key="Width" Value="70" />
                 </PXGridColumn>
             </AddItem>
+            <PXGridColumn DataField="Description" OriginalIndex="3" />
+            <PXGridColumn DataField="BoxID" OriginalIndex="1" />
             <AddItem>
                 <PXGridColumn TypeFullName="PX.Web.UI.PXGridColumn">
                     <Prop Key="DataField" Value="Qty" />
                     <Prop Key="Width" Value="100" />
                     <Prop Key="CommitChanges" Value="True" />
+                </PXGridColumn>
+            </AddItem>
+            <PXGridColumn DataField="WeightUOM" OriginalIndex="9" />
+            <AddItem>
+                <PXGridColumn TypeFullName="PX.Web.UI.PXGridColumn">
+                    <Prop Key="DataField" Value="UsrGWCarton" />
+                    <Prop Key="Width" Value="100" />
+                </PXGridColumn>
+            </AddItem>
+            <AddItem>
+                <PXGridColumn TypeFullName="PX.Web.UI.PXGridColumn">
+                    <Prop Key="DataField" Value="UsrNWCarton" />
+                    <Prop Key="Width" Value="100" />
                 </PXGridColumn>
             </AddItem>
             <AddItem>
@@ -30,7 +46,14 @@
                     <Prop Key="Width" Value="70" />
                 </PXGridColumn>
             </AddItem>
-            <PXGridColumn DataField="BoxID" OriginalIndex="1" />
+            <AddItem>
+                <PXGridColumn TypeFullName="PX.Web.UI.PXGridColumn">
+                    <Prop Key="DataField" Value="UsrTotalPallet" />
+                    <Prop Key="Width" Value="100" />
+                </PXGridColumn>
+            </AddItem>
+            <PXGridColumn DataField="PackageType" OriginalIndex="2" />
+            <PXGridColumn DataField="Weight" OriginalIndex="8" />
         </Children>
     </PXGridLevel>
 </Page>
