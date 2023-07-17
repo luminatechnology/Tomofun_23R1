@@ -1,6 +1,8 @@
 using System;
 using PX.Data;
 using PX.Data.BQL;
+using PX.Data.BQL.Fluent;
+using PX.Objects.CS;
 using PX.Objects.IN;
 
 namespace PX.Objects.SO
@@ -74,6 +76,20 @@ namespace PX.Objects.SO
         [PXUIField(DisplayName = "Total Pallet")]
         public virtual decimal? UsrTotalPallet { get; set; }
         public abstract class usrTotalPallet : PX.Data.BQL.BqlDecimal.Field<usrTotalPallet> { }
+        #endregion
+
+        #region UsrPalletSize
+        [PXDBString(10, IsUnicode = true)]
+        [PXUIField(DisplayName = "Pallet Size (CM)")]
+        [PXSelector(typeof(SelectFrom<CSAttributeDetail>.Where<CSAttributeDetail.attributeID.IsEqual<SOShipmentEntry_Extension.PalletSizeAttr>>.SearchFor<CSAttributeDetail.valueID>),
+                    typeof(CSAttributeDetail.valueID),
+                    DescriptionField = typeof(CSAttributeDetail.description))]
+        [PXDefault(typeof(SelectFrom<CSAttributeDetail>.Where<CSAttributeDetail.attributeID.IsEqual<SOShipmentEntry_Extension.PalletSizeAttr>>
+                                                       .OrderBy<CSAttributeDetail.sortOrder.Asc>
+                                                       .SearchFor<CSAttributeDetail.valueID>),
+                   PersistingCheck = PXPersistingCheck.Nothing)]
+        public virtual string UsrPalletSize { get; set; }
+        public abstract class usrPalletSize : PX.Data.BQL.BqlString.Field<usrPalletSize> { }
         #endregion
     }
 }

@@ -23,6 +23,7 @@ namespace PX.Objects.SO
         public const string Attr_PLTSEAEU   = "PLTSEAEU";
         public const string ShipVia_Air     = "AIR";
         public const string ShipVia_Ocean   = "OCEAN";
+        public const string Attr_PALLETSIZE = "PALLETSIZE";
         #endregion
 
         #region Override Methods
@@ -75,6 +76,11 @@ namespace PX.Objects.SO
         public class CartonsPerPalletAttrSeaUS : BqlString.Constant<CartonsPerPalletAttrSeaUS>
         {
             public CartonsPerPalletAttrSeaUS() : base(Attr_PLTSEAUS) { }
+        }
+
+        public class PalletSizeAttr : BqlString.Constant<PalletSizeAttr>
+        {
+            public PalletSizeAttr() : base(Attr_PALLETSIZE) { }
         }
         #endregion
 
