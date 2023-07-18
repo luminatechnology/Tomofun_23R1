@@ -318,6 +318,21 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                 </Links>
                 <ParentName>SOShipment</ParentName>
             </ReportRelation>
+            <ReportRelation>
+                <ChildAlias>PalltSizeAttr</ChildAlias>
+                <ChildName>CSAttributeDetail</ChildName>
+                <Links>
+                    <RelationRow>
+                        <ChildField>ValueID</ChildField>
+                        <ParentField>UsrPalletSize</ParentField>
+                    </RelationRow>
+                    <RelationRow>
+                        <ChildField>='PALLETSIZE'</ChildField>
+                        <ParentField>PalltSizeAttr.AttributeID</ParentField>
+                    </RelationRow>
+                </Links>
+                <ParentName>SOPackageDetail</ParentName>
+            </ReportRelation>
         </Relations>
         <SchemaUrl>http://localhost/Tomofun</SchemaUrl>
         <Tables>
@@ -660,6 +675,12 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                     <ReportField Name="UsrNWCarton">
                         <DataType>Decimal</DataType>
                     </ReportField>
+                    <ReportField Name="UsrPalletSize">
+                    </ReportField>
+                    <ReportField Name="UsrPalletSize_CSAttributeDetail_description">
+                    </ReportField>
+                    <ReportField Name="UsrPalletSize_description">
+                    </ReportField>
                     <ReportField Name="UsrShipmentSplitLineNbr">
                         <DataType>Int32</DataType>
                     </ReportField>
@@ -822,6 +843,12 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                     </ReportField>
                     <ReportField Name="UsrNWCarton">
                         <DataType>Decimal</DataType>
+                    </ReportField>
+                    <ReportField Name="UsrPalletSize">
+                    </ReportField>
+                    <ReportField Name="UsrPalletSize_CSAttributeDetail_description">
+                    </ReportField>
+                    <ReportField Name="UsrPalletSize_description">
                     </ReportField>
                     <ReportField Name="UsrShipmentSplitLineNbr">
                         <DataType>Int32</DataType>
@@ -3692,8 +3719,6 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                         <DataType>Boolean</DataType>
                     </ReportField>
                     <ReportField Name="MXHSCODE_Attributes">
-                    </ReportField>
-                    <ReportField Name="MyCustomField">
                     </ReportField>
                     <ReportField Name="NegQty">
                         <DataType>Boolean</DataType>
@@ -6874,7 +6899,7 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                                 <Left>1px</Left>
                             </Padding>
                         </Style>
-                        <Value>= IsNull([SOShipmentAddress.AddressLine1], '')+ '{br}' #010;+ IsNull([SOShipmentAddress.AddressLine2], '')#010;+ IIf([SOShipmentAddress.City] &lt;&gt; Null, ',' + [SOShipmentAddress.City], '')#010;+ IIf([SOShipmentAddress.State] &lt;&gt; Null, ',' + [SOShipmentAddress.State], '')#010;+ IIF([SOShipmentAddress.PostalCode] &lt;&gt; Null, ',' + [SOShipmentAddress.PostalCode],'')#010;+ IIf([SOShipmentAddress.CountryID_description] &lt;&gt; Null, ',' + [SOShipmentAddress.CountryID_description], '')#010;</Value>
+                        <Value>= IsNull([SOShipmentAddress.AddressLine1], '')+ '{br}' #010;+ IsNull([SOShipmentAddress.AddressLine2], '')#010;+ IIf([SOShipmentAddress.City] &lt;&gt; Null, ', ' + [SOShipmentAddress.City], '')#010;+ IIf([SOShipmentAddress.State] &lt;&gt; Null, ', ' + [SOShipmentAddress.State], '')#010;+ IIF([SOShipmentAddress.PostalCode] &lt;&gt; Null, ', ' + [SOShipmentAddress.PostalCode],'')#010;+ IIf([SOShipmentAddress.CountryID_description] &lt;&gt; Null, ', ' + [SOShipmentAddress.CountryID_description], '')#010;</Value>
                     </TextBox>
                     <TextBox Name="textBox4">
                         <Excel>
@@ -7298,6 +7323,14 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                     <ReportVariable>
                         <Name>SumPallet</Name>
                         <ValueExpr>=Round($SumPallet + [SOPackageDetail.UsrTotalPallet], 0)</ValueExpr>
+                    </ReportVariable>
+                    <ReportVariable>
+                        <Name>Volumn_CBM</Name>
+                        <ValueExpr>=$Volumn_CBM + IIf([PalltSizeAttr.NoteText] = null, 0, CDec([PalltSizeAttr.NoteText]) / 1000000 * [SOPackageDetail.UsrTotalPallet])</ValueExpr>
+                    </ReportVariable>
+                    <ReportVariable>
+                        <Name>SummaryPalletSzie</Name>
+                        <ValueExpr>=$SummaryPalletSzie + [PalltSizeAttr.Description] + '{br}'</ValueExpr>
                     </ReportVariable>
                 </Variables>
                 <Items>
@@ -7758,53 +7791,7 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                 </Headers>
                 <Footers>
                     <Footer Name="groupFooterSection1">
-                        <Height>4.2328cm</Height>
-                        <Variables>
-                            <ReportVariable>
-                                <Name>BasePallet</Name>
-                                <ValueExpr>=Substring([SOShipment.AttributePLTSIZE],0,InStr([SOShipment.AttributePLTSIZE],' '))</ValueExpr>
-                            </ReportVariable>
-                            <ReportVariable>
-                                <Name>PalletX1</Name>
-                                <ValueExpr>=InStr($BasePallet, 'x')</ValueExpr>
-                            </ReportVariable>
-                            <ReportVariable>
-                                <Name>PalletX2</Name>
-                                <ValueExpr>=InStr(Substring($BasePallet,$PalletX1+1,Len($BasePallet) - $PalletX1 - 1),'x')+$PalletX1+1</ValueExpr>
-                            </ReportVariable>
-                            <ReportVariable>
-                                <Name>NumPallet1</Name>
-                                <ValueExpr>=CDec(Substring($BasePallet,0,$PalletX1))</ValueExpr>
-                            </ReportVariable>
-                            <ReportVariable>
-                                <Name>NumPallet2</Name>
-                                <ValueExpr>=CDec(Substring($BasePallet,$PalletX1+1,$PalletX2-$PalletX1-1))</ValueExpr>
-                            </ReportVariable>
-                            <ReportVariable>
-                                <Name>NumPallet3</Name>
-                                <ValueExpr>=CDec(Substring($BasePallet,$PalletX2+1,Len($BasePallet)-$PalletX2-1))</ValueExpr>
-                            </ReportVariable>
-                            <ReportVariable>
-                                <Name>Pallet2_x</Name>
-                                <ValueExpr>InStr([SOShipment.AttributePLTSIZE2], 'x')</ValueExpr>
-                            </ReportVariable>
-                            <ReportVariable>
-                                <Name>Pallet2_xRev</Name>
-                                <ValueExpr>=InStrRev([SOShipment.AttributePLTSIZE2], 'x')</ValueExpr>
-                            </ReportVariable>
-                            <ReportVariable>
-                                <Name>Pallet2_Length</Name>
-                                <ValueExpr>=IIf([SOShipment.AttributePLTSIZE2] &lt;&gt; null, CDec(Substring([SOShipment.AttributePLTSIZE2], 0, $Pallet2_x)), 0)</ValueExpr>
-                            </ReportVariable>
-                            <ReportVariable>
-                                <Name>Pallet2_Width</Name>
-                                <ValueExpr>=IIf([SOShipment.AttributePLTSIZE2] &lt;&gt; null, CDec(Substring([SOShipment.AttributePLTSIZE2], $Pallet2_x + 1, $Pallet2_xRev - $Pallet2_x - 1)), 0)</ValueExpr>
-                            </ReportVariable>
-                            <ReportVariable>
-                                <Name>Pallet2_Height</Name>
-                                <ValueExpr>=IIf([SOShipment.AttributePLTSIZE2] &lt;&gt; null, CDec(Substring([SOShipment.AttributePLTSIZE2], $Pallet2_xRev + 1, InStr([SOShipment.AttributePLTSIZE2], ' ') - $Pallet2_xRev)), 0)</ValueExpr>
-                            </ReportVariable>
-                        </Variables>
+                        <Height>3.75cm</Height>
                         <Items>
                             <Line Name="line1">
                                 <Excel>
@@ -7813,6 +7800,40 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                                 <Location>0px, 8px</Location>
                                 <Size>672px, 8px</Size>
                             </Line>
+                            <Panel Name="panel1">
+                                <Location>0px, 124px</Location>
+                                <Size>296px, 16px</Size>
+                                <Items>
+                                    <TextBox Name="textBox86">
+                                        <Excel>
+                                            <column>2</column>
+                                            <row>11</row>
+                                            <width>3</width>
+                                        </Excel>
+                                        <Location>88px, 0px</Location>
+                                        <Size>208px, 16px</Size>
+                                        <Style>
+                                            <Font>
+                                                <Size>10px</Size>
+                                            </Font>
+                                        </Style>
+                                        <Value>=IsNull([SOShipment.AttributeFORWARDER], '')</Value>
+                                    </TextBox>
+                                    <TextBox Name="textBox88">
+                                        <Excel>
+                                            <row>11</row>
+                                        </Excel>
+                                        <Location>0px, 0px</Location>
+                                        <Size>88px, 16px</Size>
+                                        <Style>
+                                            <Font>
+                                                <Style>Bold</Style>
+                                            </Font>
+                                        </Style>
+                                        <Value>Forwarder :</Value>
+                                    </TextBox>
+                                </Items>
+                            </Panel>
                             <TextBox Name="textBox59">
                                 <Excel>
                                     <row>2</row>
@@ -8091,7 +8112,7 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                                         <Size>10px</Size>
                                     </Font>
                                 </Style>
-                                <Value>=$SumGW + (Round(CDec($SumTotalCTNS) / CDec($CartonsPerPallet), 0)) * CDec([SOShipment.AttributePLTWHT])</Value>
+                                <Value>=$SumGW + ($SumPallet * CDec([SOShipment.AttributePLTWHT]))#010;#010;/*(Round(CDec($SumTotalCTNS) / CDec($CartonsPerPallet), 0)) * CDec([SOShipment.AttributePLTWHT])*/</Value>
                             </TextBox>
                             <TextBox Name="textBox78">
                                 <Excel>
@@ -8106,7 +8127,7 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                                         <Size>10px</Size>
                                     </Font>
                                 </Style>
-                                <Value>='Volume (CBM) ' + Format('{0:0.00}', (($NumPallet1 * $NumPallet2 * $NumPallet3) + ($Pallet2_Length * $Pallet2_Width * $Pallet2_Height)) / 1000000 * $SumPallet)</Value>
+                                <Value>='Volume (CBM)  ' + Format('{0:0.00}', $Volumn_CBM)</Value>
                             </TextBox>
                             <TextBox Name="textBox79">
                                 <Excel>
@@ -8162,50 +8183,7 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                                         <Size>10px</Size>
                                     </Font>
                                 </Style>
-                                <Value>=[SOShipment.AttributePLTSIZE]</Value>
-                            </TextBox>
-                            <TextBox Name="textBox86">
-                                <Excel>
-                                    <column>2</column>
-                                    <row>11</row>
-                                    <width>3</width>
-                                </Excel>
-                                <Location>88px, 136px</Location>
-                                <Size>208px, 16px</Size>
-                                <Style>
-                                    <Font>
-                                        <Size>10px</Size>
-                                    </Font>
-                                </Style>
-                                <Value>=IsNull([SOShipment.AttributeFORWARDER], '')</Value>
-                            </TextBox>
-                            <TextBox Name="textBox88">
-                                <Excel>
-                                    <row>11</row>
-                                </Excel>
-                                <Location>0px, 136px</Location>
-                                <Size>88px, 16px</Size>
-                                <Style>
-                                    <Font>
-                                        <Style>Bold</Style>
-                                    </Font>
-                                </Style>
-                                <Value>Forwarder :</Value>
-                            </TextBox>
-                            <TextBox Name="textBox94">
-                                <CanGrow>True</CanGrow>
-                                <Excel>
-                                    <column>2</column>
-                                    <row>9</row>
-                                </Excel>
-                                <Location>88px, 120px</Location>
-                                <Size>400px, 16px</Size>
-                                <Style>
-                                    <Font>
-                                        <Size>10px</Size>
-                                    </Font>
-                                </Style>
-                                <Value>=[SOShipment.AttributePLTSIZE2]</Value>
+                                <Value>=Substring($SummaryPalletSzie, 1, Len($SummaryPalletSzie) - 1)</Value>
                             </TextBox>
                         </Items>
                     </Footer>

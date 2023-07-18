@@ -4,4 +4,5 @@
     <Column TableName="SOPackageDetail" ColumnName="UsrNWCarton" ColumnType="decimal" AllowNull="True" MaxLength="25" DecimalPrecision="6" DecimalLength="25" IsNewColumn="True" IsUnicode="True" />
     <Column TableName="SOPackageDetail" ColumnName="UsrGWCarton" ColumnType="decimal" AllowNull="True" MaxLength="25" DecimalPrecision="6" DecimalLength="25" IsNewColumn="True" IsUnicode="True" />
     <Column TableName="SOPackageDetail" ColumnName="UsrTotalPallet" ColumnType="decimal" AllowNull="True" MaxLength="25" DecimalPrecision="6" DecimalLength="25" IsNewColumn="True" IsUnicode="True" />
+    <Column TableName="SOPackageDetail" ColumnName="UsrPalletSize" ColumnType="string" AllowNull="True" MaxLength="10" DecimalPrecision="0" DecimalLength="0" IsNewColumn="True" IsUnicode="True" />
 </Table>
