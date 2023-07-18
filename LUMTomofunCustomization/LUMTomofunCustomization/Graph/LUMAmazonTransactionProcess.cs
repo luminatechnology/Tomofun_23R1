@@ -241,6 +241,7 @@ namespace LumTomofunCustomization.Graph
                                 invNbr = invoiceGraph.Document.Current?.RefNbr;
                                 // update invoice Date
                                 invoiceGraph.Document.SetValueExt<ARInvoice.invoiceDate>(invoiceGraph.Document.Current, amzFulfillmentDate);
+                                invoiceGraph.Document.UpdateCurrent();
                                 // Save
                                 invoiceGraph.Save.Press();
                                 // Release Invoice

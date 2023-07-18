@@ -80,7 +80,7 @@ namespace LumTomofunCustomization.Graph
                             #region Create Sales Order Header
                             shopifySOOrder = soGraph.Document.Cache.CreateInstance() as SOOrder;
                             shopifySOOrder.OrderType = "SP";
-                            if (spOrder.checkout_id == null && spOrder.note.Contains("BwP Order #:"))
+                            if (spOrder.checkout_id == null && (spOrder.note?.Contains("BwP Order #:") ?? false))
                                 shopifySOOrder.CustomerOrderNbr = spOrder.note.Replace("BwP Order #:", "").Trim();
                             else
                                 shopifySOOrder.CustomerOrderNbr = spOrder.checkout_id?.ToString();
@@ -248,6 +248,7 @@ namespace LumTomofunCustomization.Graph
                             invoiceGraph.Document.SetValueExt<ARInvoice.docDate>(invoiceGraph.Document.Current, shopifySOOrder.RequestDate);
                             // Update invoiceDate
                             invoiceGraph.Document.SetValueExt<ARInvoice.invoiceDate>(invoiceGraph.Document.Current, (spOrder.closed_at ?? spOrder.updated_at));
+                            invoiceGraph.Document.UpdateCurrent();
                             // Save
                             invoiceGraph.Save.Press();
                             // Release Invoice
