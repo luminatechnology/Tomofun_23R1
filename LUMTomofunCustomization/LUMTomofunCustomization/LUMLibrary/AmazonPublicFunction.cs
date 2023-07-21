@@ -425,13 +425,18 @@ namespace LumTomofunCustomization.LUMLibrary
 
                         #region Create PaymentRefund
                         var paymentExt = soGraph.GetExtension<CreatePaymentExt>();
-                        paymentExt.SetDefaultValues(paymentExt.QuickPayment.Current, soGraph.Document.Current);
-                        paymentExt.QuickPayment.Current.ExtRefNbr = amazonData?.Api_settlementid;
-                        ARPaymentEntry paymentEntry = paymentExt.CreatePayment(paymentExt.QuickPayment.Current, soGraph.Document.Current, ARPaymentType.Refund);
-                        paymentEntry.Document.Cache.SetValueExt<ARPayment.adjDate>(paymentEntry.Document.Current, amazonData?.Api_date);
-                        paymentEntry.Save.Press();
-                        paymentEntry.releaseFromHold.Press();
-                        paymentEntry.release.Press();
+                        ARPaymentEntry paymentEntry = null;
+                        if (amazonData?.Api_total != 0)
+                        {
+                            paymentExt = soGraph.GetExtension<CreatePaymentExt>();
+                            paymentExt.SetDefaultValues(paymentExt.QuickPayment.Current, soGraph.Document.Current);
+                            paymentExt.QuickPayment.Current.ExtRefNbr = amazonData?.Api_settlementid;
+                            paymentEntry = paymentExt.CreatePayment(paymentExt.QuickPayment.Current, soGraph.Document.Current, ARPaymentType.Refund);
+                            paymentEntry.Document.Cache.SetValueExt<ARPayment.adjDate>(paymentEntry.Document.Current, amazonData?.Api_date);
+                            paymentEntry.Save.Press();
+                            paymentEntry.releaseFromHold.Press();
+                            paymentEntry.release.Press();
+                        }
                         #endregion
 
                         // Prepare Invoice
@@ -607,14 +612,17 @@ namespace LumTomofunCustomization.LUMLibrary
                             soGraph.Save.Press();
 
                             #region Create PaymentRefund
-                            paymentExt = soGraph.GetExtension<CreatePaymentExt>();
-                            paymentExt.SetDefaultValues(paymentExt.QuickPayment.Current, soGraph.Document.Current);
-                            paymentExt.QuickPayment.Current.ExtRefNbr = amazonData?.Api_settlementid;
-                            paymentEntry = paymentExt.CreatePayment(paymentExt.QuickPayment.Current, soGraph.Document.Current, ARPaymentType.Refund);
-                            paymentEntry.Document.Cache.SetValueExt<ARPayment.adjDate>(paymentEntry.Document.Current, amazonData?.Api_date);
-                            paymentEntry.Save.Press();
-                            paymentEntry.releaseFromHold.Press();
-                            paymentEntry.release.Press();
+                            if (amazonData?.Api_total != 0)
+                            {
+                                paymentExt = soGraph.GetExtension<CreatePaymentExt>();
+                                paymentExt.SetDefaultValues(paymentExt.QuickPayment.Current, soGraph.Document.Current);
+                                paymentExt.QuickPayment.Current.ExtRefNbr = amazonData?.Api_settlementid;
+                                paymentEntry = paymentExt.CreatePayment(paymentExt.QuickPayment.Current, soGraph.Document.Current, ARPaymentType.Refund);
+                                paymentEntry.Document.Cache.SetValueExt<ARPayment.adjDate>(paymentEntry.Document.Current, amazonData?.Api_date);
+                                paymentEntry.Save.Press();
+                                paymentEntry.releaseFromHold.Press();
+                                paymentEntry.release.Press();
+                            }
                             #endregion
 
                             // Prepare Invoice
@@ -696,14 +704,17 @@ namespace LumTomofunCustomization.LUMLibrary
                             soGraph.Save.Press();
 
                             #region Create PaymentRefund
-                            paymentExt = soGraph.GetExtension<CreatePaymentExt>();
-                            paymentExt.SetDefaultValues(paymentExt.QuickPayment.Current, soGraph.Document.Current);
-                            paymentExt.QuickPayment.Current.ExtRefNbr = amazonData?.Api_settlementid;
-                            paymentEntry = paymentExt.CreatePayment(paymentExt.QuickPayment.Current, soGraph.Document.Current, soDoc.OrderType == "CM" ? ARPaymentType.Refund : ARPaymentType.Payment);
-                            paymentEntry.Document.Cache.SetValueExt<ARPayment.adjDate>(paymentEntry.Document.Current, amazonData?.Api_date);
-                            paymentEntry.Save.Press();
-                            paymentEntry.releaseFromHold.Press();
-                            paymentEntry.release.Press();
+                            if (amazonData?.Api_total != 0)
+                            {
+                                paymentExt = soGraph.GetExtension<CreatePaymentExt>();
+                                paymentExt.SetDefaultValues(paymentExt.QuickPayment.Current, soGraph.Document.Current);
+                                paymentExt.QuickPayment.Current.ExtRefNbr = amazonData?.Api_settlementid;
+                                paymentEntry = paymentExt.CreatePayment(paymentExt.QuickPayment.Current, soGraph.Document.Current, soDoc.OrderType == "CM" ? ARPaymentType.Refund : ARPaymentType.Payment);
+                                paymentEntry.Document.Cache.SetValueExt<ARPayment.adjDate>(paymentEntry.Document.Current, amazonData?.Api_date);
+                                paymentEntry.Save.Press();
+                                paymentEntry.releaseFromHold.Press();
+                                paymentEntry.release.Press();
+                            }
                             #endregion
 
                             // Prepare Invoice
@@ -832,14 +843,17 @@ namespace LumTomofunCustomization.LUMLibrary
                             soGraph.Save.Press();
 
                             #region Create PaymentRefund
-                            paymentExt = soGraph.GetExtension<CreatePaymentExt>();
-                            paymentExt.SetDefaultValues(paymentExt.QuickPayment.Current, soGraph.Document.Current);
-                            paymentExt.QuickPayment.Current.ExtRefNbr = amazonData?.Api_settlementid;
-                            paymentEntry = paymentExt.CreatePayment(paymentExt.QuickPayment.Current, soGraph.Document.Current, soDoc.OrderType == "CM" ? ARPaymentType.Refund : ARPaymentType.Payment);
-                            paymentEntry.Document.Cache.SetValueExt<ARPayment.adjDate>(paymentEntry.Document.Current, amazonData?.Api_date);
-                            paymentEntry.Save.Press();
-                            paymentEntry.releaseFromHold.Press();
-                            paymentEntry.release.Press();
+                            if (amazonData?.Api_total != 0)
+                            {
+                                paymentExt = soGraph.GetExtension<CreatePaymentExt>();
+                                paymentExt.SetDefaultValues(paymentExt.QuickPayment.Current, soGraph.Document.Current);
+                                paymentExt.QuickPayment.Current.ExtRefNbr = amazonData?.Api_settlementid;
+                                paymentEntry = paymentExt.CreatePayment(paymentExt.QuickPayment.Current, soGraph.Document.Current, soDoc.OrderType == "CM" ? ARPaymentType.Refund : ARPaymentType.Payment);
+                                paymentEntry.Document.Cache.SetValueExt<ARPayment.adjDate>(paymentEntry.Document.Current, amazonData?.Api_date);
+                                paymentEntry.Save.Press();
+                                paymentEntry.releaseFromHold.Press();
+                                paymentEntry.release.Press();
+                            }
                             #endregion
 
                             // Prepare Invoice
@@ -1100,14 +1114,17 @@ namespace LumTomofunCustomization.LUMLibrary
                         soGraph.Save.Press();
 
                         #region Create PaymentRefund
-                        paymentExt = soGraph.GetExtension<CreatePaymentExt>();
-                        paymentExt.SetDefaultValues(paymentExt.QuickPayment.Current, soGraph.Document.Current);
-                        paymentExt.QuickPayment.Current.ExtRefNbr = amazonData?.Api_settlementid;
-                        paymentEntry = paymentExt.CreatePayment(paymentExt.QuickPayment.Current, soGraph.Document.Current, soDoc.OrderType == "CM" ? ARPaymentType.Refund : ARPaymentType.Payment);
-                        paymentEntry.Document.Cache.SetValueExt<ARPayment.adjDate>(paymentEntry.Document.Current, amazonData?.Api_date);
-                        paymentEntry.Save.Press();
-                        paymentEntry.releaseFromHold.Press();
-                        paymentEntry.release.Press();
+                        if (amazonData?.Api_total != 0)
+                        {
+                            paymentExt = soGraph.GetExtension<CreatePaymentExt>();
+                            paymentExt.SetDefaultValues(paymentExt.QuickPayment.Current, soGraph.Document.Current);
+                            paymentExt.QuickPayment.Current.ExtRefNbr = amazonData?.Api_settlementid;
+                            paymentEntry = paymentExt.CreatePayment(paymentExt.QuickPayment.Current, soGraph.Document.Current, soDoc.OrderType == "CM" ? ARPaymentType.Refund : ARPaymentType.Payment);
+                            paymentEntry.Document.Cache.SetValueExt<ARPayment.adjDate>(paymentEntry.Document.Current, amazonData?.Api_date);
+                            paymentEntry.Save.Press();
+                            paymentEntry.releaseFromHold.Press();
+                            paymentEntry.release.Press();
+                        }
                         #endregion
 
                         // Prepare Invoice
@@ -1185,14 +1202,17 @@ namespace LumTomofunCustomization.LUMLibrary
                         soGraph.Save.Press();
 
                         #region Create PaymentRefund
-                        paymentExt = soGraph.GetExtension<CreatePaymentExt>();
-                        paymentExt.SetDefaultValues(paymentExt.QuickPayment.Current, soGraph.Document.Current);
-                        paymentExt.QuickPayment.Current.ExtRefNbr = amazonData?.Api_settlementid;
-                        paymentEntry = paymentExt.CreatePayment(paymentExt.QuickPayment.Current, soGraph.Document.Current, soDoc.OrderType == "CM" ? ARPaymentType.Refund : ARPaymentType.Payment);
-                        paymentEntry.Document.Cache.SetValueExt<ARPayment.adjDate>(paymentEntry.Document.Current, amazonData?.Api_date);
-                        paymentEntry.Save.Press();
-                        paymentEntry.releaseFromHold.Press();
-                        paymentEntry.release.Press();
+                        if (amazonData?.Api_total != 0)
+                        {
+                            paymentExt = soGraph.GetExtension<CreatePaymentExt>();
+                            paymentExt.SetDefaultValues(paymentExt.QuickPayment.Current, soGraph.Document.Current);
+                            paymentExt.QuickPayment.Current.ExtRefNbr = amazonData?.Api_settlementid;
+                            paymentEntry = paymentExt.CreatePayment(paymentExt.QuickPayment.Current, soGraph.Document.Current, soDoc.OrderType == "CM" ? ARPaymentType.Refund : ARPaymentType.Payment);
+                            paymentEntry.Document.Cache.SetValueExt<ARPayment.adjDate>(paymentEntry.Document.Current, amazonData?.Api_date);
+                            paymentEntry.Save.Press();
+                            paymentEntry.releaseFromHold.Press();
+                            paymentEntry.release.Press();
+                        }
                         #endregion
 
                         // Prepare Invoice

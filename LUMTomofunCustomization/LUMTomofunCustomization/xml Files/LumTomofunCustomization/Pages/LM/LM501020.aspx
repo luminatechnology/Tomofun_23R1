@@ -30,7 +30,8 @@
                     <px:PXGridColumn DataField="SalesChannel" Width="150"></px:PXGridColumn>
                     <px:PXGridColumn DataField="OrderStatus" Width="150"></px:PXGridColumn>
                     <px:PXGridColumn DataField="Amount" Width="150"></px:PXGridColumn>
-                    <px:PXGridColumn DataField="OrderStatus" Width="150"></px:PXGridColumn><px:PXGridColumn DataField="IsProcessed" Width="150" Type="CheckBox"></px:PXGridColumn>
+                    <px:PXGridColumn DataField="OrderStatus" Width="150"></px:PXGridColumn>
+                    <px:PXGridColumn DataField="IsProcessed" Width="150" Type="CheckBox"></px:PXGridColumn>
                     <px:PXGridColumn DataField="ErrorMessage" Width="150"></px:PXGridColumn>
                     <px:PXGridColumn DataField="TransJson" Width="400"></px:PXGridColumn>
                     <px:PXGridColumn DataField="CreatedDateTime" Width="130" DisplayFormat="g"></px:PXGridColumn>
@@ -41,7 +42,8 @@
             </px:PXGridLevel>
         </Levels>
         <AutoSize Container="Window" Enabled="True" MinHeight="150"></AutoSize>
-        <ActionBar>
+        <ActionBar PagerVisible="Bottom">
+            <PagerSettings Mode="NumericCompact" />
         </ActionBar>
         <Mode AllowUpload="True" />
     </px:PXGrid>

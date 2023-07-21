@@ -19,6 +19,8 @@ namespace LumTomofunCustomization.Graph
         [PXImport(typeof(LUMAmazonESPaymentReport))]
         public PXProcessing<LUMAmazonESPaymentReport> PaymentTransactions;
 
+        private static Object thisLock = new Object();
+
         protected virtual IEnumerable filter()
         {
             AmazonPaymentUploadFileter filter = Filter.Current;
@@ -182,7 +184,6 @@ namespace LumTomofunCustomization.Graph
                     selectedItem.ErrorMessage = errorMessge.Length > 2048 ? errorMessge.Substring(0, 2048) : errorMessge; ;
                     selectedItem.IsProcessed = string.IsNullOrEmpty(errorMessge);
                     baseGraph.PaymentTransactions.Update(selectedItem);
-                    baseGraph.Actions.PressSave();
                     // Setting Process information
                     if (!string.IsNullOrEmpty(errorMessge))
                         PXProcessing.SetError(errorMessge);
@@ -190,6 +191,8 @@ namespace LumTomofunCustomization.Graph
                         PXProcessing.SetProcessed();
                 }
             }
+            lock (thisLock)
+                baseGraph.Actions.PressSave();
         }
 
         #endregion
