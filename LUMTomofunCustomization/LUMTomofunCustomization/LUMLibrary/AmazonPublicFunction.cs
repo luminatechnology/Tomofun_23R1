@@ -16,6 +16,7 @@ using PX.Objects.CR;
 using PX.Objects.SO.GraphExtensions.SOOrderEntryExt;
 using PX.Objects.AR.GraphExtensions;
 using PX.Objects.AR;
+using PX.Common;
 
 namespace LumTomofunCustomization.LUMLibrary
 {
@@ -421,7 +422,7 @@ namespace LumTomofunCustomization.LUMLibrary
                         #endregion
 
                         // Sales Order Save
-                        soGraph.Save.Press();
+                        ValidAndSaveOrder(soGraph, amazonData);
 
                         #region Create PaymentRefund
                         var paymentExt = soGraph.GetExtension<CreatePaymentExt>();
@@ -609,7 +610,7 @@ namespace LumTomofunCustomization.LUMLibrary
                             #endregion
 
                             // Sales Order Save
-                            soGraph.Save.Press();
+                            ValidAndSaveOrder(soGraph, amazonData);
 
                             #region Create PaymentRefund
                             if (amazonData?.Api_total != 0)
@@ -701,7 +702,7 @@ namespace LumTomofunCustomization.LUMLibrary
                             #endregion
 
                             // Sales Order Save
-                            soGraph.Save.Press();
+                            ValidAndSaveOrder(soGraph, amazonData);
 
                             #region Create PaymentRefund
                             if (amazonData?.Api_total != 0)
@@ -785,7 +786,7 @@ namespace LumTomofunCustomization.LUMLibrary
                             #endregion
 
                             // Sales Order Save
-                            soGraph.Save.Press();
+                            ValidAndSaveOrder(soGraph, amazonData);
 
                             // Prepare Invoice
                             PrepareInvoiceAndOverrideTax(soGraph, soDoc);
@@ -840,7 +841,7 @@ namespace LumTomofunCustomization.LUMLibrary
 
                             // Sales Order Save
                             soGraph.Document.UpdateCurrent();
-                            soGraph.Save.Press();
+                            ValidAndSaveOrder(soGraph, amazonData);
 
                             #region Create PaymentRefund
                             if (amazonData?.Api_total != 0)
@@ -929,7 +930,7 @@ namespace LumTomofunCustomization.LUMLibrary
                         #endregion
 
                         // Sales Order Save
-                        soGraph.Save.Press();
+                        ValidAndSaveOrder(soGraph, amazonData);
 
                         #region Create PaymentRefund
                         if (amazonData?.Api_total != 0)
@@ -1015,7 +1016,7 @@ namespace LumTomofunCustomization.LUMLibrary
                         #endregion
 
                         // Sales Order Save
-                        soGraph.Save.Press();
+                        ValidAndSaveOrder(soGraph, amazonData);
 
                         #region Create Payment
                         if (amazonData?.Api_total != 0)
@@ -1111,7 +1112,7 @@ namespace LumTomofunCustomization.LUMLibrary
                         #endregion
 
                         // Sales Order Save
-                        soGraph.Save.Press();
+                        ValidAndSaveOrder(soGraph, amazonData);
 
                         #region Create PaymentRefund
                         if (amazonData?.Api_total != 0)
@@ -1199,7 +1200,7 @@ namespace LumTomofunCustomization.LUMLibrary
                         #endregion
 
                         // Sales Order Save
-                        soGraph.Save.Press();
+                        ValidAndSaveOrder(soGraph, amazonData);
 
                         #region Create PaymentRefund
                         if (amazonData?.Api_total != 0)
@@ -1281,6 +1282,14 @@ namespace LumTomofunCustomization.LUMLibrary
                 soTrans.SalesSubID = PX.Objects.IN.InventoryItem.PK.Find(soGraph, soTrans.InventoryID)?.SalesSubID;
             }
             return soTrans;
+        }
+
+        /// <summary> 檢查和儲存SalesOrder </summary>
+        public static void ValidAndSaveOrder(SOOrderEntry soGraph, AmazonExcelEntity amazonData)
+        {
+            if (amazonData?.Api_total == 0 && soGraph.Transactions.Cache.Inserted.Count() == 0)
+                throw new Exception("Zero total will not be processed");
+            soGraph.Save.Press();
         }
 
     }
