@@ -218,7 +218,7 @@ namespace LUMTomofunCustomization.Graph
                     {
                         mP_EU_CA = mpID;
 
-                        var reports = GetLedgerSummaryReport(amzConnection, endDate.Value, endDate.Value, mfPref.Marketplace == "JP").Result;
+                        var reports = GetLedgerSummaryReport(amzConnection, endDate.Value.AddDays(-14), endDate.Value, mfPref.Marketplace == "JP").Result;
 
                         for (int i = 0; i < reports.Count; i++)
                         {
