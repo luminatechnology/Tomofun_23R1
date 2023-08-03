@@ -32,6 +32,7 @@
                 <PXGridColumn TypeFullName="PX.Web.UI.PXGridColumn">
                     <Prop Key="DataField" Value="UsrGWCarton" />
                     <Prop Key="Width" Value="100" />
+                    <Prop Key="CommitChanges" Value="True" />
                 </PXGridColumn>
             </AddItem>
             <AddItem>
@@ -44,12 +45,14 @@
                 <PXGridColumn TypeFullName="PX.Web.UI.PXGridColumn">
                     <Prop Key="DataField" Value="UsrTotalCartons" />
                     <Prop Key="Width" Value="70" />
+                    <Prop Key="CommitChanges" Value="True" />
                 </PXGridColumn>
             </AddItem>
             <AddItem>
                 <PXGridColumn TypeFullName="PX.Web.UI.PXGridColumn">
                     <Prop Key="DataField" Value="UsrTotalPallet" />
                     <Prop Key="Width" Value="100" />
+                    <Prop Key="CommitChanges" Value="True" />
                 </PXGridColumn>
             </AddItem>
             <AddItem>
@@ -57,6 +60,7 @@
                     <Prop Key="DataField" Value="UsrPalletSize" />
                     <Prop Key="Width" Value="200" />
                     <Prop Key="DisplayMode" Value="Hint" />
+                    <Prop Key="CommitChanges" Value="True" />
                 </PXGridColumn>
             </AddItem>
             <PXGridColumn DataField="PackageType" OriginalIndex="2" />

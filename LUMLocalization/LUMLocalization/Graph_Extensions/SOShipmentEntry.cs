@@ -3,11 +3,13 @@ using PX.Data.BQL;
 using PX.Data.BQL.Fluent;
 using PX.Objects.CS;
 using PX.Objects.IN;
+using PX.Objects.PO;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using PX.Objects.PO;
+//using static PX.Data.BQL.BqlPlaceholder;
+using Note = PX.Data.Note;
 
 namespace PX.Objects.SO
 {
@@ -24,6 +26,9 @@ namespace PX.Objects.SO
         public const string ShipVia_Air     = "AIR";
         public const string ShipVia_Ocean   = "OCEAN";
         public const string Attr_PALLETSIZE = "PALLETSIZE";
+        public const string Attr_PLTWHT     = "PLTWHT";
+        public const string Attr_TOTALGW    = "TOTALGW";
+        public const string Attr_CBM        = "CBM";
         #endregion
 
         #region Override Methods
@@ -85,6 +90,19 @@ namespace PX.Objects.SO
         #endregion
 
         #region Event Handlers
+        protected void _(Events.RowUpdated<SOShipment> e, PXRowUpdated baseHanlder)
+        {
+            baseHanlder?.Invoke(e.Cache, e.Args);
+
+            var newValue = (string)GetShipmentUDF(e.Cache, e.Row, Attr_PLTWHT);
+            var oldValue = (string)GetShipmentUDF(e.Cache, e.OldRow, Attr_PLTWHT);
+
+            if (string.Compare(newValue, oldValue) != 0)
+            {
+                UpdateShipmentUDF(Attr_TOTALGW, CalcTotalShipWeight(e.Cache, e.Row, Base.Packages.View.SelectMulti().RowCast<SOPackageDetailEx>().ToList()));
+            }
+        }
+
         protected virtual void _(Events.FieldUpdated<SOPackageDetailExt.usrShipmentSplitLineNbr> e)
         {
             if (e.NewValue == null) { return; }
@@ -164,6 +182,27 @@ namespace PX.Objects.SO
             e.Cache.SetValueExt<SOPackageDetailExt.usrTotalPallet>(e.Row, Math.Ceiling((e.Row as SOPackageDetailEx).GetExtension<SOPackageDetailExt>().UsrTotalCartons.GetValueOrDefault() / totalCartons));
             e.Cache.SetValueExt<SOPackageDetailExt.customRefNbr1>(e.Row, e.Cache.GetValue<SOPackageDetailExt.usrTotalPallet>(e.Row));
         }
+
+        protected virtual void _(Events.FieldUpdated<SOPackageDetailExt.usrTotalCartons> e)
+        {
+            UpdateShipmentUDF(Attr_TOTALGW, CalcTotalShipWeight(Base.Document.Cache, Base.Document.Current, Base.Packages.View.SelectMulti().RowCast<SOPackageDetailEx>().ToList()));
+        }
+
+        protected virtual void _(Events.FieldUpdated<SOPackageDetailExt.usrGWCarton> e)
+        {
+            UpdateShipmentUDF(Attr_TOTALGW, CalcTotalShipWeight(Base.Document.Cache, Base.Document.Current, Base.Packages.View.SelectMulti().RowCast<SOPackageDetailEx>().ToList()));
+        }
+
+        protected virtual void _(Events.FieldUpdated<SOPackageDetailExt.usrTotalPallet> e)
+        {
+            UpdateShipmentUDF(Attr_TOTALGW, CalcTotalShipWeight(Base.Document.Cache, Base.Document.Current, Base.Packages.View.SelectMulti().RowCast<SOPackageDetailEx>().ToList()));
+            UpdateShipmentUDF(Attr_CBM, CalcVolumnCBM(e.Cache));
+        }
+
+        protected virtual void _(Events.FieldUpdated<SOPackageDetailExt.usrPalletSize> e)
+        {
+            UpdateShipmentUDF(Attr_CBM, CalcVolumnCBM(e.Cache));
+        }
         #endregion
 
         #region Actions
@@ -241,6 +280,68 @@ namespace PX.Objects.SO
         #endregion
 
         #region Other Custom Method
+
+        /// <summary>
+        /// Add a new field “Total Shipping Weight” in User-Defined Field, allow user to adjust the final gross weight based on the actual number.
+        /// ROUND(Total(SOPackageDetailEx.UsrTotalCartons x SOPackageDetailEx.UsrGWCarton) + Attribute(PLTWHT) x Total(SOPackageDetailEx.UsrTotalPallet), 2)
+        /// </summary>
+        public virtual decimal? CalcTotalShipWeight(PXCache shipmentCache, SOShipment shipment, List<SOPackageDetailEx> packages)
+        {
+            decimal calcValue = 0m, totalPallet = 0m, palletWeight = Convert.ToDecimal(GetShipmentUDF(shipmentCache, shipment, Attr_PLTWHT) ?? "0");
+
+            for (int i = 0; i < packages.Count; i++)
+            {
+                var packageExt = packages[i].GetExtension<SOPackageDetailExt>();
+
+                calcValue   += (packageExt.UsrTotalCartons ?? 0m) * (packageExt.UsrGWCarton ?? 0m);
+                totalPallet += packageExt.UsrTotalPallet ?? 0m;
+            }
+
+            return Math.Round(calcValue + (palletWeight * totalPallet), 2, MidpointRounding.AwayFromZero);
+        }
+
+        /// <summary>
+        /// Add a new field “Volume (CBM)” in User-Defined Field, allow user to adjust the final CBM based on the actual number.
+        /// ROUND(SUM(SOPackageDetailEx.UsrPalletSize.Note / 1,000,000 x SOPackageDetailEx.UsrTotalPallet), 2)
+        /// </summary>
+        public virtual decimal? CalcVolumnCBM(PXCache packageCache)
+        {
+            List<SOPackageDetailEx> packages = packageCache.Cached.RowCast<SOPackageDetailEx>().ToList();
+
+            foreach (SOPackageDetailEx row in packageCache.Deleted)
+            {
+                packages.Remove(row);
+            }
+
+            decimal calcValue = 0m;
+
+            for (int i = 0; i < packages.Count; i++)
+            {
+                var packageExt = packages[i].GetExtension<SOPackageDetailExt>();
+
+                decimal volumn = Convert.ToDecimal(SelectFrom<Note>.Where<Note.noteID.IsEqual<@P.AsGuid>>.View
+                                                                   .SelectSingleBound(packageCache.Graph, null, 
+                                                                                      CSAttributeDetail.PK.Find(packageCache.Graph, Attr_PALLETSIZE, packageExt?.UsrPalletSize)?.NoteID)
+                                                                   .TopFirst?.NoteText ?? "0");
+
+                calcValue += Math.Round(volumn / 1000000m * (packageExt.UsrTotalPallet ?? 0m), 2, MidpointRounding.AwayFromZero);
+            }
+
+            return calcValue;
+        }
+
+        private object GetShipmentUDF(PXCache shipmentCache, SOShipment shipment, string attributeID)
+        {
+            var state = shipmentCache.GetValueExt(shipment, $"{CS.Messages.Attribute}{attributeID}") as PXFieldState;
+
+            return state.Value;
+        }
+
+        private void UpdateShipmentUDF(string attributeID, object value)
+        {
+            Base.Document.Cache.SetValueExt(Base.Document.Current, $"{CS.Messages.Attribute}{attributeID}", value);
+            Base.Document.Cache.MarkUpdated(Base.Document.Current);
+        }
 
         #region Number2English mothod
         public string Number2English(decimal num)
