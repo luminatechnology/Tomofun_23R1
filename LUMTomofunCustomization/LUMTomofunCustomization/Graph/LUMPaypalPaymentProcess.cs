@@ -344,12 +344,14 @@ namespace LumTomofunCustomization.Graph
                                 #endregion
 
                                 #region Update Tax
+                                if (isTaxCalculate)
+                                    soGraph.Document.Cache.SetValue<SOOrder.disableAutomaticTaxCalculation>(soGraph.Document.Current, false);
+                                soGraph.Document.UpdateCurrent();
+
                                 // Setting SO Tax
                                 soGraph.Taxes.Current = soGraph.Taxes.Current ?? soGraph.Taxes.Insert(soGraph.Taxes.Cache.CreateInstance() as SOTaxTran);
                                 soGraph.Taxes.Cache.SetValueExt<SOTaxTran.taxID>(soGraph.Taxes.Current, row.Marketplace2 + "EC");
                                 soGraph.Taxes.Update(soGraph.Taxes.Current);
-                                if (isTaxCalculate)
-                                    soGraph.Document.Cache.SetValue<SOOrder.disableAutomaticTaxCalculation>(soGraph.Document.Current, false);
                                 #endregion
 
                                 // Sales Order Save
@@ -452,13 +454,14 @@ namespace LumTomofunCustomization.Graph
                                 #endregion
 
                                 #region Update Tax
+                                if (isTaxCalculate)
+                                    soGraph.Document.Cache.SetValue<SOOrder.disableAutomaticTaxCalculation>(soGraph.Document.Current, false);
+                                soGraph.Document.UpdateCurrent();
+
                                 // Setting SO Tax
                                 soGraph.Taxes.Current = soGraph.Taxes.Current ?? soGraph.Taxes.Insert(soGraph.Taxes.Cache.CreateInstance() as SOTaxTran);
                                 soGraph.Taxes.Cache.SetValueExt<SOTaxTran.taxID>(soGraph.Taxes.Current, row.Marketplace2 + "EC");
                                 soGraph.Taxes.Update(soGraph.Taxes.Current);
-                                // 讓系統自動計算稅率
-                                if (isTaxCalculate)
-                                    soGraph.Document.Cache.SetValue<SOOrder.disableAutomaticTaxCalculation>(soGraph.Document.Current, false);
                                 #endregion
 
                                 // Sales Order Save
