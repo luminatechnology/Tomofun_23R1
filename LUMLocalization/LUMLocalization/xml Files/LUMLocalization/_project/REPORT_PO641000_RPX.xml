@@ -486,7 +486,7 @@ c7+6v2ZP1207b03EXAuw1TOjS2SCNkKsVKDlUl9e3ifjiVx4xa9cYz0C1+3trhDQCnUx0epveeTLGgt8
                 <ParentName>OrganizationBAccount</ParentName>
             </ReportRelation>
         </Relations>
-        <SchemaUrl>https://tomofun.acumatica.com/</SchemaUrl>
+        <SchemaUrl>https://tomofun.acumatica.com</SchemaUrl>
         <StylesTemplate>TemplateFormExternal.rpx</StylesTemplate>
         <Tables>
             <ReportTable Name="POOrder">
@@ -3911,8 +3911,8 @@ c7+6v2ZP1207b03EXAuw1TOjS2SCNkKsVKDlUl9e3ifjiVx4xa9cYz0C1+3trhDQCnUx0epveeTLGgt8
                                 <Value>=[Organization.LogoNameReport]</Value>
                             </PictureBox>
                             <TextBox Name="textBox1">
-                                <Location>176px, 192px</Location>
-                                <Size>176px, 20px</Size>
+                                <Location>168px, 192px</Location>
+                                <Size>184px, 20px</Size>
                                 <Style>
                                     <BorderStyle>
                                         <Right>Solid</Right>
@@ -3928,7 +3928,7 @@ c7+6v2ZP1207b03EXAuw1TOjS2SCNkKsVKDlUl9e3ifjiVx4xa9cYz0C1+3trhDQCnUx0epveeTLGgt8
                             </TextBox>
                             <TextBox Name="textBox10">
                                 <Location>368px, 192px</Location>
-                                <Size>320px, 100px</Size>
+                                <Size>328px, 100px</Size>
                                 <Style>
                                     <BorderStyle>
                                         <Bottom>Solid</Bottom>
@@ -3949,8 +3949,8 @@ c7+6v2ZP1207b03EXAuw1TOjS2SCNkKsVKDlUl9e3ifjiVx4xa9cYz0C1+3trhDQCnUx0epveeTLGgt8
                                 <Value>= IsNull([OrgContact.FullName], '')#010;+ '{br}'#010;+ '{br}'#010;+ IsNull([OrgAddress.AddressLine1], '')#010;+ IIf([OrgAddress.City] &lt;&gt; Null, ',' + [OrgAddress.City]+',', '')#010;+ IIf([OrgAddress.CountryID_description] &lt;&gt; Null,[OrgAddress.CountryID_description]+',', '')#010;+ IIF([OrgAddress.State]&lt;&gt;Null,[OrgAddress.State]+',','')#010;+ IIf([OrgAddress.PostalCode] &lt;&gt; Null, ' ' + [OrgAddress.PostalCode], '')#010;+ '{br}'#010;+ 'TEL: ' + IIF([OrgContact.Phone1] &lt;&gt; Null, #010;IIF(InStr([OrgContact.Phone1],'#') &lt;&gt; -1,#010; SubString([OrgContact.Phone1],0,InStr([OrgContact.Phone1],'#')),[OrgContact.Phone1]),'')</Value>
                             </TextBox>
                             <TextBox Name="textBox11">
-                                <Location>176px, 232px</Location>
-                                <Size>176px, 20px</Size>
+                                <Location>168px, 232px</Location>
+                                <Size>184px, 20px</Size>
                                 <Style>
                                     <BorderStyle>
                                         <Right>Solid</Right>
@@ -3985,7 +3985,7 @@ c7+6v2ZP1207b03EXAuw1TOjS2SCNkKsVKDlUl9e3ifjiVx4xa9cYz0C1+3trhDQCnUx0epveeTLGgt8
                             </TextBox>
                             <TextBox Name="textBox20">
                                 <Location>368px, 176px</Location>
-                                <Size>320px, 16px</Size>
+                                <Size>328px, 16px</Size>
                                 <Style>
                                     <BackColor>240, 184, 0</BackColor>
                                     <BorderStyle>
@@ -4020,7 +4020,7 @@ c7+6v2ZP1207b03EXAuw1TOjS2SCNkKsVKDlUl9e3ifjiVx4xa9cYz0C1+3trhDQCnUx0epveeTLGgt8
                                 <Value>Tomofun Co., Ltd.</Value>
                             </TextBox>
                             <TextBox Name="textBox29">
-                                <Location>8px, 192px</Location>
+                                <Location>0px, 192px</Location>
                                 <Size>168px, 20px</Size>
                                 <Style>
                                     <BorderStyle>
@@ -4039,8 +4039,8 @@ c7+6v2ZP1207b03EXAuw1TOjS2SCNkKsVKDlUl9e3ifjiVx4xa9cYz0C1+3trhDQCnUx0epveeTLGgt8
                             </TextBox>
                             <TextBox Name="textBox3">
                                 <Format>='yyyy.MM.dd'</Format>
-                                <Location>176px, 212px</Location>
-                                <Size>176px, 20px</Size>
+                                <Location>168px, 212px</Location>
+                                <Size>184px, 20px</Size>
                                 <Style>
                                     <BorderStyle>
                                         <Right>Solid</Right>
@@ -4055,7 +4055,7 @@ c7+6v2ZP1207b03EXAuw1TOjS2SCNkKsVKDlUl9e3ifjiVx4xa9cYz0C1+3trhDQCnUx0epveeTLGgt8
                                 <Value>=[POOrder.OrderDate]</Value>
                             </TextBox>
                             <TextBox Name="textBox30">
-                                <Location>8px, 212px</Location>
+                                <Location>0px, 212px</Location>
                                 <Size>168px, 20px</Size>
                                 <Style>
                                     <BorderStyle>
@@ -4073,7 +4073,7 @@ c7+6v2ZP1207b03EXAuw1TOjS2SCNkKsVKDlUl9e3ifjiVx4xa9cYz0C1+3trhDQCnUx0epveeTLGgt8
                                 <Value>PO Date:</Value>
                             </TextBox>
                             <TextBox Name="textBox31">
-                                <Location>8px, 232px</Location>
+                                <Location>0px, 232px</Location>
                                 <Size>168px, 20px</Size>
                                 <Style>
                                     <BorderStyle>
@@ -4091,7 +4091,7 @@ c7+6v2ZP1207b03EXAuw1TOjS2SCNkKsVKDlUl9e3ifjiVx4xa9cYz0C1+3trhDQCnUx0epveeTLGgt8
                                 <Value>Paynent Terms:</Value>
                             </TextBox>
                             <TextBox Name="textBox32">
-                                <Location>8px, 252px</Location>
+                                <Location>0px, 252px</Location>
                                 <Size>168px, 20px</Size>
                                 <Style>
                                     <BorderStyle>
@@ -4109,8 +4109,8 @@ c7+6v2ZP1207b03EXAuw1TOjS2SCNkKsVKDlUl9e3ifjiVx4xa9cYz0C1+3trhDQCnUx0epveeTLGgt8
                                 <Value>Trade Terms:</Value>
                             </TextBox>
                             <TextBox Name="textBox33">
-                                <Location>8px, 176px</Location>
-                                <Size>344px, 16px</Size>
+                                <Location>0px, 176px</Location>
+                                <Size>352px, 16px</Size>
                                 <Style>
                                     <BackColor>240, 184, 0</BackColor>
                                     <BorderStyle>
@@ -4135,8 +4135,8 @@ c7+6v2ZP1207b03EXAuw1TOjS2SCNkKsVKDlUl9e3ifjiVx4xa9cYz0C1+3trhDQCnUx0epveeTLGgt8
                             </TextBox>
                             <TextBox Name="textBox34">
                                 <Format>='yyyy.MM.dd'</Format>
-                                <Location>176px, 272px</Location>
-                                <Size>176px, 20px</Size>
+                                <Location>168px, 272px</Location>
+                                <Size>184px, 20px</Size>
                                 <Style>
                                     <BorderStyle>
                                         <Bottom>Solid</Bottom>
@@ -4153,7 +4153,7 @@ c7+6v2ZP1207b03EXAuw1TOjS2SCNkKsVKDlUl9e3ifjiVx4xa9cYz0C1+3trhDQCnUx0epveeTLGgt8
                                 <Value>=[POOrder.ExpectedDate]</Value>
                             </TextBox>
                             <TextBox Name="textBox56">
-                                <Location>8px, 272px</Location>
+                                <Location>0px, 272px</Location>
                                 <Size>168px, 20px</Size>
                                 <Style>
                                     <BorderStyle>
@@ -4173,8 +4173,8 @@ c7+6v2ZP1207b03EXAuw1TOjS2SCNkKsVKDlUl9e3ifjiVx4xa9cYz0C1+3trhDQCnUx0epveeTLGgt8
                                 <Value>Request Delivery Date:</Value>
                             </TextBox>
                             <TextBox Name="textBox57">
-                                <Location>8px, 312px</Location>
-                                <Size>344px, 118px</Size>
+                                <Location>0px, 312px</Location>
+                                <Size>352px, 118px</Size>
                                 <Style>
                                     <BorderStyle>
                                         <Bottom>Solid</Bottom>
@@ -4198,8 +4198,8 @@ c7+6v2ZP1207b03EXAuw1TOjS2SCNkKsVKDlUl9e3ifjiVx4xa9cYz0C1+3trhDQCnUx0epveeTLGgt8
                                 <Value>=IIf([RemitContact.FullName]&lt;&gt;null,[RemitContact.FullName], iif([RemitContact.Attention]&lt;&gt;null,[RemitContact.Attention] , '')) +'{br}'#010;+'{br}'#010;+IIf([RemitAddress.AddressLine1]&lt;&gt;null,[RemitAddress.AddressLine1] + '{br}','')#010;+IIf([RemitAddress.AddressLine2]&lt;&gt;null,[RemitAddress.AddressLine2] +'{br}','')#010;+IIf([RemitAddress.City]&lt;&gt;null, [RemitAddress.City]+' ', '')#010;+IIf([RemitAddress.State]&lt;&gt;null, [RemitAddress.State]+' ','')#010;+IIf([RemitAddress.PostalCode]&lt;&gt;null, [RemitAddress.PostalCode],'')#010;+IIf([RemitAddress.City]&lt;&gt;null OR [RemitAddress.State]&lt;&gt;null OR [RemitAddress.PostalCode]&lt;&gt;null,'{br}','') #010;+IIf([RemitAddress.CountryID]&lt;&gt;null,   [RemitAddress.CountryID_Country_description], '')#010;+'{br}Email: '+IIf([RemitContact.Email]&lt;&gt;null,[RemitContact.Email],'')#010;+'{br}Phone: '+IIf([RemitContact.Phone1]&lt;&gt;null,[RemitContact.Phone1],'')</Value>
                             </TextBox>
                             <TextBox Name="textBox58">
-                                <Location>8px, 296px</Location>
-                                <Size>344px, 16px</Size>
+                                <Location>0px, 296px</Location>
+                                <Size>352px, 16px</Size>
                                 <Style>
                                     <BackColor>240, 184, 0</BackColor>
                                     <BorderStyle>
@@ -4224,7 +4224,7 @@ c7+6v2ZP1207b03EXAuw1TOjS2SCNkKsVKDlUl9e3ifjiVx4xa9cYz0C1+3trhDQCnUx0epveeTLGgt8
                             </TextBox>
                             <TextBox Name="textBox59">
                                 <Location>368px, 296px</Location>
-                                <Size>320px, 16px</Size>
+                                <Size>328px, 16px</Size>
                                 <Style>
                                     <BackColor>240, 184, 0</BackColor>
                                     <BorderStyle>
@@ -4249,7 +4249,7 @@ c7+6v2ZP1207b03EXAuw1TOjS2SCNkKsVKDlUl9e3ifjiVx4xa9cYz0C1+3trhDQCnUx0epveeTLGgt8
                             </TextBox>
                             <TextBox Name="textBox60">
                                 <Location>368px, 312px</Location>
-                                <Size>320px, 118px</Size>
+                                <Size>328px, 118px</Size>
                                 <Style>
                                     <BorderStyle>
                                         <Bottom>Solid</Bottom>
@@ -4273,8 +4273,8 @@ c7+6v2ZP1207b03EXAuw1TOjS2SCNkKsVKDlUl9e3ifjiVx4xa9cYz0C1+3trhDQCnUx0epveeTLGgt8
                                 <Value>=IIf([ShippingContact.FullName]&lt;&gt;null,    [ShippingContact.FullName]+'{br}','') #010;+'{br}'#010;+IIf([ShippingAddress.AddressLine1]&lt;&gt;null,[ShippingAddress.AddressLine1]+'{br}','')#010;+IIf([ShippingAddress.AddressLine2]&lt;&gt;null,[ShippingAddress.AddressLine2]+'{br}','')#010;+IIF([ShippingAddress.City]&lt;&gt;null,[ShippingAddress.City]+',','')#010;+IIf([ShippingAddress.CountryID]&lt;&gt;null,   [ShippingAddress.CountryID]+',','')#010;+IIF([ShippingAddress.State]&lt;&gt;null,[ShippingAddress.State]+',','')#010;+IIf([ShippingAddress.PostalCode]&lt;&gt;null,  [ShippingAddress.PostalCode],'')#010;</Value>
                             </TextBox>
                             <TextBox Name="textBox7">
-                                <Location>176px, 252px</Location>
-                                <Size>176px, 20px</Size>
+                                <Location>168px, 252px</Location>
+                                <Size>184px, 20px</Size>
                                 <Style>
                                     <BorderStyle>
                                         <Right>Solid</Right>
@@ -4314,14 +4314,14 @@ c7+6v2ZP1207b03EXAuw1TOjS2SCNkKsVKDlUl9e3ifjiVx4xa9cYz0C1+3trhDQCnUx0epveeTLGgt8
                             </PictureBox>
                             <TextBox Name="textBox12">
                                 <Format>#,##0.00;-#,##0.00</Format>
-                                <Location>568px, 16px</Location>
+                                <Location>560px, 16px</Location>
                                 <Size>96px, 16px</Size>
                                 <Style>
                                     <Font>
                                         <Size>12px</Size>
                                         <Style>Bold</Style>
                                     </Font>
-                                    <TextAlign>Center</TextAlign>
+                                    <TextAlign>Right</TextAlign>
                                 </Style>
                                 <Value>=Round([POOrder.CuryOrderTotal] - [POOrder.CuryTaxTotal], 2)</Value>
                             </TextBox>
@@ -4345,13 +4345,14 @@ c7+6v2ZP1207b03EXAuw1TOjS2SCNkKsVKDlUl9e3ifjiVx4xa9cYz0C1+3trhDQCnUx0epveeTLGgt8
                                 <Value>Tomofun Co., Ltd</Value>
                             </TextBox>
                             <TextBox Name="textBox24">
-                                <Location>664px, 16px</Location>
-                                <Size>32px, 16px</Size>
+                                <Location>656px, 16px</Location>
+                                <Size>40px, 16px</Size>
                                 <Style>
                                     <Font>
                                         <Size>12px</Size>
                                         <Style>Bold</Style>
                                     </Font>
+                                    <TextAlign>Center</TextAlign>
                                 </Style>
                                 <Value>=[POOrder.CuryID]</Value>
                             </TextBox>
@@ -4380,7 +4381,7 @@ c7+6v2ZP1207b03EXAuw1TOjS2SCNkKsVKDlUl9e3ifjiVx4xa9cYz0C1+3trhDQCnUx0epveeTLGgt8
                                 <Value>='Page: ' + [PageOf]</Value>
                             </TextBox>
                             <TextBox Name="textBox6">
-                                <Location>520px, 16px</Location>
+                                <Location>512px, 16px</Location>
                                 <Size>48px, 16px</Size>
                                 <Style>
                                     <Font>
@@ -4492,7 +4493,7 @@ c7+6v2ZP1207b03EXAuw1TOjS2SCNkKsVKDlUl9e3ifjiVx4xa9cYz0C1+3trhDQCnUx0epveeTLGgt8
                                     <VerticalAlign>Middle</VerticalAlign>
                                 </Style>
                                 <StyleName>Normal</StyleName>
-                                <Value>=IIf([POLine.InventoryID]&lt;&gt;Null, Format( '{0}: {1}', [POLine.InventoryID],[POLine.TranDesc]),[POLine.TranDesc])</Value>
+                                <Value>=[POLine.TranDesc]/*IIf([POLine.InventoryID]&lt;&gt;Null, Format( '{0}: {1}', [POLine.InventoryID],[POLine.TranDesc]),[POLine.TranDesc])*/</Value>
                             </TextBox>
                             <TextBox Name="textBox26">
                                 <Format>#,##0.00;-#,##0.00</Format>
