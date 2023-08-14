@@ -189,10 +189,10 @@ namespace LumTomofunCustomization.Graph
                         PXProcessing.SetError(errorMessge);
                     else
                         PXProcessing.SetProcessed();
+                    lock (this)
+                        baseGraph.Actions.PressSave();
                 }
             }
-            lock (thisLock)
-                baseGraph.Actions.PressSave();
         }
 
         #endregion
