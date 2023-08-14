@@ -24,8 +24,7 @@ namespace LUMTomofunCustomization.Graph
         #region Features
         public PXCancel<SettlementFilter> Cancel;
         public PXFilter<SettlementFilter> Filter;
-        public PXFilteredProcessing<LUMAmzINReconcilition, SettlementFilter, Where<LUMAmzINReconcilition.reportID, IsNotNull,
-                                                                                   Or<LUMAmzINReconcilition.iNDate, Equal<Current<SettlementFilter.fromDate>>>>,
+        public PXFilteredProcessing<LUMAmzINReconcilition, SettlementFilter, Where<LUMAmzINReconcilition.iNDate, Equal<Current<SettlementFilter.fromDate>>>,
                                                                              OrderBy<Desc<LUMAmzINReconcilition.iNDate>>> Reconcilition;
         public PXSetup<LUMMWSPreference> Setup;
         #endregion
