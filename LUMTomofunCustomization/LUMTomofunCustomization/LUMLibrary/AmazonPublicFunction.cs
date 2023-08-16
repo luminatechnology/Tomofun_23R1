@@ -241,7 +241,7 @@ namespace LumTomofunCustomization.LUMLibrary
                         #region Header
                         var soDoc = soGraph.Document.Cache.CreateInstance() as SOOrder;
                         soDoc.OrderType = "CM";
-                        soDoc.CustomerOrderNbr = amazonData?.Api_orderid;
+                        soDoc.CustomerOrderNbr = amazonData?.Api_orderid + "_" + GetUNIXTimestamp(amazonData?.Api_date);
                         soDoc.OrderDate = amazonData?.Api_date;
                         soDoc.RequestDate = amazonData?.Api_date;
                         soDoc.CustomerID = AmazonPublicFunction.GetMarketplaceCustomer(_marketplace);
@@ -546,7 +546,7 @@ namespace LumTomofunCustomization.LUMLibrary
                             soDoc = soGraph.Document.Cache.CreateInstance() as SOOrder;
                             soDoc.OrderType = "CM";
                             soDoc = soGraph.Document.Cache.Insert(soDoc) as SOOrder;
-                            soDoc.CustomerOrderNbr = amazonData?.Api_orderid;
+                            soDoc.CustomerOrderNbr = amazonData?.Api_orderid + "_" + GetUNIXTimestamp(amazonData?.Api_date);
                             soDoc.OrderDate = amazonData?.Api_date;
                             soDoc.RequestDate = amazonData?.Api_date;
                             soDoc.CustomerID = AmazonPublicFunction.GetMarketplaceCustomer(_marketplace);
@@ -645,7 +645,7 @@ namespace LumTomofunCustomization.LUMLibrary
                             #region Header
                             soDoc = soGraph.Document.Cache.CreateInstance() as SOOrder;
                             soDoc.OrderType = "IN";
-                            soDoc.CustomerOrderNbr = amazonData?.Api_orderid;
+                            soDoc.CustomerOrderNbr = amazonData?.Api_orderid + "_" + GetUNIXTimestamp(amazonData?.Api_date);
                             soDoc.OrderDate = amazonData?.Api_date;
                             soDoc.RequestDate = amazonData?.Api_date;
                             soDoc.CustomerID = AmazonPublicFunction.GetMarketplaceCustomer(_marketplace);
@@ -734,7 +734,7 @@ namespace LumTomofunCustomization.LUMLibrary
                             #region Header
                             soDoc = soGraph.Document.Cache.CreateInstance() as SOOrder;
                             soDoc.OrderType = "CM";
-                            soDoc.CustomerOrderNbr = amazonData?.Api_orderid;
+                            soDoc.CustomerOrderNbr = amazonData?.Api_orderid + "_" + GetUNIXTimestamp(amazonData?.Api_date);
                             soDoc.OrderDate = amazonData?.Api_date;
                             soDoc.RequestDate = amazonData?.Api_date;
                             soDoc.CustomerID = SelectFrom<BAccount>.Where<BAccount.acctCD.IsEqual<P.AsString>>.View.Select(baseGraph, "SPFJP").TopFirst?.BAccountID;
@@ -813,7 +813,7 @@ namespace LumTomofunCustomization.LUMLibrary
                             soDoc = soGraph.Document.Cache.CreateInstance() as SOOrder;
                             soDoc.OrderType = "CM";
                             soDoc = soGraph.Document.Cache.Insert(soDoc) as SOOrder;
-                            soDoc.CustomerOrderNbr = amazonData?.Api_orderid;
+                            soDoc.CustomerOrderNbr = amazonData?.Api_orderid + "_" + GetUNIXTimestamp(amazonData?.Api_date);
                             soDoc.OrderDate = amazonData?.Api_date;
                             soDoc.RequestDate = amazonData?.Api_date;
                             soDoc.CustomerID = AmazonPublicFunction.GetMarketplaceCustomer(_marketplace);
@@ -881,7 +881,7 @@ namespace LumTomofunCustomization.LUMLibrary
                         #region Header
                         soDoc = soGraph.Document.Cache.CreateInstance() as SOOrder;
                         soDoc.OrderType = "CM";
-                        soDoc.CustomerOrderNbr = amazonData?.Api_orderid;
+                        soDoc.CustomerOrderNbr = amazonData?.Api_orderid + "_" + GetUNIXTimestamp(amazonData?.Api_date);
                         soDoc.OrderDate = amazonData?.Api_date;
                         soDoc.RequestDate = amazonData?.Api_date;
                         soDoc.CustomerID = AmazonPublicFunction.GetMarketplaceCustomer(_marketplace);
@@ -969,7 +969,7 @@ namespace LumTomofunCustomization.LUMLibrary
                         #region Header
                         soDoc = soGraph.Document.Cache.CreateInstance() as SOOrder;
                         soDoc.OrderType = "IN";
-                        soDoc.CustomerOrderNbr = amazonData?.Api_orderid;
+                        soDoc.CustomerOrderNbr = amazonData?.Api_orderid + "_" + GetUNIXTimestamp(amazonData?.Api_date);
                         soDoc.OrderDate = amazonData?.Api_date;
                         soDoc.RequestDate = amazonData?.Api_date;
                         soDoc.CustomerID = AmazonPublicFunction.GetMarketplaceCustomer(_marketplace);
@@ -1310,6 +1310,19 @@ namespace LumTomofunCustomization.LUMLibrary
             soGraph.Save.Press();
         }
 
+
+        public static string GetUNIXTimestamp(DateTime? _data)
+        {
+            if (!_data.HasValue)
+                return string.Empty;
+            // Get the offset from current time in UTC time
+            DateTimeOffset dto = new DateTimeOffset(_data.Value);
+            // Get the unix timestamp in seconds
+            string unixTime = dto.ToUnixTimeSeconds().ToString();
+            // Get the unix timestamp in seconds, and add the milliseconds
+            string unixTimeMilliSeconds = dto.ToUnixTimeMilliseconds().ToString();
+            return unixTimeMilliSeconds;
+        }
     }
 
     public partial class AmazonPaymentUploadFileter : IBqlTable
