@@ -1067,7 +1067,7 @@ namespace LumTomofunCustomization.LUMLibrary
                         #region Header
                         soDoc = soGraph.Document.Cache.CreateInstance() as SOOrder;
                         soDoc.OrderType = amazonData?.Api_total > 0 ? "IN" : "CM";
-                        soDoc.CustomerOrderNbr = amazonData?.Api_orderid;
+                        soDoc.CustomerOrderNbr = amazonData?.Api_orderid + "_" + GetUNIXTimestamp(amazonData?.Api_date); ;
                         soDoc.OrderDate = amazonData?.Api_date;
                         soDoc.RequestDate = amazonData?.Api_date;
                         soDoc.CustomerID = AmazonPublicFunction.GetMarketplaceCustomer(_marketplace);
@@ -1157,7 +1157,7 @@ namespace LumTomofunCustomization.LUMLibrary
                         #region Header
                         soDoc = soGraph.Document.Cache.CreateInstance() as SOOrder;
                         soDoc.OrderType = amazonData?.Api_total > 0 ? "IN" : "CM";
-                        soDoc.CustomerOrderNbr = amazonData?.Api_orderid;
+                        soDoc.CustomerOrderNbr = amazonData?.Api_orderid + "_" + GetUNIXTimestamp(amazonData?.Api_date); ;
                         soDoc.OrderDate = amazonData?.Api_date;
                         soDoc.RequestDate = amazonData?.Api_date;
                         soDoc.CustomerID = AmazonPublicFunction.GetMarketplaceCustomer(_marketplace);

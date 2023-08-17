@@ -129,6 +129,8 @@
     <Compile Include="DAC\v_OpenTRDetail.cs" />
     <Compile Include="DAC\v_OpenTRSourceData.cs" />
     <Compile Include="DAC\v_ToDayInventoryAllocationResult.cs" />
+    <Compile Include="DAC_Extension\ARInvoiceExtension.cs" />
+    <Compile Include="DAC_Extension\SOOrderExtension.cs" />
     <Compile Include="Graph\Amazon Payment Excel Process\LUMAmazon_AUPaymentUploadProcess.cs" />
     <Compile Include="Graph\Amazon Payment Excel Process\LUMAmazon_BEPaymentReport.cs" />
     <Compile Include="Graph\Amazon Payment Excel Process\LUMAmazon_CAPaymentUploadProcess.cs" />
@@ -189,6 +191,7 @@
       <Name>LUMLocalization</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
