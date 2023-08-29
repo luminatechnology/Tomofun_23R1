@@ -54,11 +54,12 @@ namespace LumTomofunCustomization.Graph
         public virtual void _(Events.RowInserted<LUMAmazonPaymentTransData> e)
         {
             var row = e.Row as LUMAmazonPaymentTransData;
-            if (row.SellerOrderId.IndexOf("#") != -1)
+            // DEBT 允許 SellerOrderId = null
+            if (row?.TransactionType?.ToUpper() != "DEBT" && row?.SellerOrderId?.IndexOf("#") != -1)
                 row.OrderID = row.SellerOrderId.Substring(row.SellerOrderId.IndexOf("#") + 1);
             // 新的Payment method 所提供的Excel SellerOrderID 不會有'#' 所以需要放入'OrderID'
             else
-                row.OrderID = row.SellerOrderId;
+                row.OrderID = row?.SellerOrderId;
         }
 
         #endregion
@@ -206,7 +207,7 @@ namespace LumTomofunCustomization.Graph
                                 #region Header
                                 var soDoc = soGraph.Document.Cache.CreateInstance() as SOOrder;
                                 soDoc.OrderType = "CM";
-                                soDoc.CustomerOrderNbr = row.OrderID;
+                                soDoc.CustomerOrderNbr = row.OrderID + "_" + ShopifyPublicFunction.GetUNIXTimestamp(row?.TransactionPostedDate); ;
                                 soDoc.OrderDate = row.TransactionPostedDate;
                                 soDoc.RequestDate = row.TransactionPostedDate;
                                 soDoc.CustomerID = ShopifyPublicFunction.GetMarketplaceCustomer(row.Marketplace);
@@ -363,7 +364,7 @@ namespace LumTomofunCustomization.Graph
                                 #region Header
                                 soDoc = soGraph.Document.Cache.CreateInstance() as SOOrder;
                                 soDoc.OrderType = "IN";
-                                soDoc.CustomerOrderNbr = row.OrderID;
+                                soDoc.CustomerOrderNbr = row?.OrderID + "_" + ShopifyPublicFunction.GetUNIXTimestamp(row?.TransactionPostedDate); ;
                                 soDoc.OrderDate = row.TransactionPostedDate;
                                 soDoc.RequestDate = row.TransactionPostedDate;
                                 soDoc.CustomerID = ShopifyPublicFunction.GetMarketplaceCustomer(row.Marketplace);

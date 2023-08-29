@@ -236,7 +236,7 @@ namespace LumTomofunCustomization.Graph
                                 #region Header
                                 var soDoc = soGraph.Document.Cache.CreateInstance() as SOOrder;
                                 soDoc.OrderType = "CM";
-                                soDoc.CustomerOrderNbr = row.OrderID;
+                                soDoc.CustomerOrderNbr = row?.OrderID + "_" + ShopifyPublicFunction.GetUNIXTimestamp(row?.TransactionDate); ;
                                 soDoc.OrderDate = row.TransactionDate;
                                 soDoc.RequestDate = row.TransactionDate;
                                 soDoc.CustomerID = ShopifyPublicFunction.GetMarketplaceCustomer(row.Marketplace);
@@ -383,7 +383,7 @@ namespace LumTomofunCustomization.Graph
                                 #region Header
                                 soDoc = soGraph.Document.Cache.CreateInstance() as SOOrder;
                                 soDoc.OrderType = "IN";
-                                soDoc.CustomerOrderNbr = row.OrderID;
+                                soDoc.CustomerOrderNbr = row?.OrderID + "_" + ShopifyPublicFunction.GetUNIXTimestamp(row?.TransactionDate); ;
                                 soDoc.OrderDate = row.TransactionDate;
                                 soDoc.RequestDate = row.TransactionDate;
                                 soDoc.CustomerID = ShopifyPublicFunction.GetMarketplaceCustomer(row.Marketplace);

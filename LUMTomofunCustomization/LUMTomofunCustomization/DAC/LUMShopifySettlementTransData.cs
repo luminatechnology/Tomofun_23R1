@@ -88,7 +88,7 @@ namespace LUMTomofunCustomization.DAC
         #region PaymentMethodName
         [PXDBString(200, IsUnicode = true, InputMask = "")]
         [PXUIField(DisplayName = "Payment Method Name")]
-        [PXDefault]
+        [PXDefault(PersistingCheck = PXPersistingCheck.Nothing)]
         public virtual string PaymentMethodName { get; set; }
         public abstract class paymentMethodName : PX.Data.BQL.BqlString.Field<paymentMethodName> { }
         #endregion

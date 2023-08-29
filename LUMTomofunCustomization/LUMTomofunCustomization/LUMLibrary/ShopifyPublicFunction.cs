@@ -72,5 +72,18 @@ namespace LumTomofunCustomization.LUMLibrary
             else
                 return InventoryItem.PK.Find(graph, inventoryID)?.SalesSubID;
         }
+
+        public static string GetUNIXTimestamp(DateTime? _data)
+        {
+            if (!_data.HasValue)
+                return string.Empty;
+            // Get the offset from current time in UTC time
+            DateTimeOffset dto = new DateTimeOffset(_data.Value);
+            // Get the unix timestamp in seconds
+            string unixTime = dto.ToUnixTimeSeconds().ToString();
+            // Get the unix timestamp in seconds, and add the milliseconds
+            string unixTimeMilliSeconds = dto.ToUnixTimeMilliseconds().ToString();
+            return unixTimeMilliSeconds;
+        }
     }
 }

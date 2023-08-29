@@ -193,7 +193,7 @@ namespace LumTomofunCustomization.Graph
                                 #region Header
                                 var soDoc = soGraph.Document.Cache.CreateInstance() as SOOrder;
                                 soDoc.OrderType = "CM";
-                                soDoc.CustomerOrderNbr = row.Checkout;
+                                soDoc.CustomerOrderNbr = row?.Checkout + "_" + ShopifyPublicFunction.GetUNIXTimestamp(row?.TransactionDate);
                                 soDoc.OrderDate = row.TransactionDate;
                                 soDoc.RequestDate = row.TransactionDate;
                                 soDoc.CustomerID = ShopifyPublicFunction.GetMarketplaceCustomer(row.Marketplace);
@@ -338,7 +338,7 @@ namespace LumTomofunCustomization.Graph
                                 #region Header
                                 soDoc = soGraph.Document.Cache.CreateInstance() as SOOrder;
                                 soDoc.OrderType = "IN";
-                                soDoc.CustomerOrderNbr = row.Checkout;
+                                soDoc.CustomerOrderNbr = row?.Checkout + "_" + ShopifyPublicFunction.GetUNIXTimestamp(row?.TransactionDate); ;
                                 soDoc.OrderDate = row.TransactionDate;
                                 soDoc.RequestDate = row.TransactionDate;
                                 soDoc.CustomerID = ShopifyPublicFunction.GetMarketplaceCustomer(row.Marketplace);
@@ -404,6 +404,222 @@ namespace LumTomofunCustomization.Graph
                                     soTrans.InventoryID = ShopifyPublicFunction.GetInvetoryitemID(soGraph, "EC-COMMISSION");
                                     soTrans.OrderQty = 1;
                                     soTrans.CuryUnitPrice = row.Fee;
+                                    soGraph.Transactions.Insert(soTrans);
+                                }
+                                #endregion
+
+                                #region Update Tax
+                                if (isTaxCalculate)
+                                    soGraph.Document.Cache.SetValue<SOOrder.disableAutomaticTaxCalculation>(soGraph.Document.Current, false);
+                                soGraph.Document.UpdateCurrent();
+
+                                // Setting SO Tax
+                                soGraph.Taxes.Current = soGraph.Taxes.Current ?? soGraph.Taxes.Insert(soGraph.Taxes.Cache.CreateInstance() as SOTaxTran);
+                                soGraph.Taxes.Cache.SetValueExt<SOTaxTran.taxID>(soGraph.Taxes.Current, row.Marketplace + "EC");
+                                soGraph.Taxes.Update(soGraph.Taxes.Current);
+                                #endregion
+
+                                // Sales Order Save
+                                soGraph.Save.Press();
+
+                                #region Create PaymentRefund
+                                paymentExt = soGraph.GetExtension<CreatePaymentExt>();
+                                paymentExt.SetDefaultValues(paymentExt.QuickPayment.Current, soGraph.Document.Current);
+                                paymentExt.QuickPayment.Current.RefundAmt = row.Net * -1;
+                                paymentExt.QuickPayment.Current.CashAccountID = spCashAccount.CashAccountID;
+                                paymentExt.QuickPayment.Current.ExtRefNbr = row.Checkout;
+                                paymentEntry = paymentExt.CreatePayment(paymentExt.QuickPayment.Current, soGraph.Document.Current, ARPaymentType.Payment);
+                                paymentEntry.Document.Cache.SetValueExt<ARPayment.adjDate>(paymentEntry.Document.Current, row.TransactionDate);
+                                paymentEntry.Save.Press();
+                                paymentEntry.releaseFromHold.Press();
+                                paymentEntry.release.Press();
+                                #endregion
+
+                                // Prepare Invoice
+                                PrepareInvoiceAndOverrideTax(soGraph, soDoc);
+                                #endregion
+                                break;
+                            case "SHOP_CASH_CREDIT":
+                                #region TransactionType: SHOP_CASH_CREDIT
+                                soGraph = PXGraph.CreateInstance<SOOrderEntry>();
+
+                                #region Header
+                                soDoc = soGraph.Document.Cache.CreateInstance() as SOOrder;
+                                soDoc.OrderType = "IN";
+                                soDoc.CustomerOrderNbr = row?.Checkout + "_" + ShopifyPublicFunction.GetUNIXTimestamp(row?.TransactionDate); ;
+                                soDoc.OrderDate = row.TransactionDate;
+                                soDoc.RequestDate = row.TransactionDate;
+                                soDoc.CustomerID = ShopifyPublicFunction.GetMarketplaceCustomer(row.Marketplace);
+                                soDoc.OrderDesc = $"Shopify Payment Gateway {row.TransactionType} {row.Checkout}";
+                                #endregion
+
+                                #region User-Defined
+                                // UserDefined - ORDERTYPE
+                                soGraph.Document.Cache.SetValueExt(soDoc, PX.Objects.CS.Messages.Attribute + "ORDERTYPE", $"Shopify Refund");
+                                // UserDefined - MKTPLACE
+                                soGraph.Document.Cache.SetValueExt(soDoc, PX.Objects.CS.Messages.Attribute + "MKTPLACE", row.Marketplace);
+                                // UserDefined - ORDERAMT
+                                soGraph.Document.Cache.SetValueExt(soDoc, PX.Objects.CS.Messages.Attribute + "ORDERAMT", Math.Abs(row.Net ?? 0));
+                                // UserDefined - ORDTAAMT
+                                soGraph.Document.Cache.SetValueExt(soDoc, PX.Objects.CS.Messages.Attribute + "ORDTAXAMT", 0);
+                                // UserDefined - TAXCOLLECT
+                                soGraph.Document.Cache.SetValueExt(soDoc, PX.Objects.CS.Messages.Attribute + "TAXCOLLECT", 0);
+                                #endregion
+
+                                // Insert SOOrder
+                                soGraph.Document.Insert(soDoc);
+
+                                #region Set Currency
+                                info = CurrencyInfoAttribute.SetDefaults<SOOrder.curyInfoID>(soGraph.Document.Cache, soGraph.Document.Current);
+                                if (info != null)
+                                    soGraph.Document.Cache.SetValueExt<SOOrder.curyID>(soGraph.Document.Current, info.CuryID);
+                                #endregion
+
+                                #region Address
+                                soGraph_SP = PXGraph.CreateInstance<SOOrderEntry>();
+                                soGraph_SP.Document.Current = oldShopifySOOrder;
+                                if (soGraph_SP.Document.Current != null)
+                                {
+                                    // Setting Shipping_Address
+                                    var soAddress = soGraph.Shipping_Address.Current;
+                                    soGraph_SP.Shipping_Address.Current = soGraph_SP.Shipping_Address.Select();
+                                    soAddress.OverrideAddress = true;
+                                    soAddress.PostalCode = soGraph_SP.Shipping_Address.Current?.PostalCode;
+                                    soAddress.CountryID = soGraph_SP.Shipping_Address.Current?.CountryID;
+                                    soAddress.State = soGraph_SP.Shipping_Address.Current?.State;
+                                    soAddress.City = soGraph_SP.Shipping_Address.Current?.City;
+                                    soAddress.RevisionID = 1;
+                                    // Setting Shipping_Contact
+                                    var soContact = soGraph.Shipping_Contact.Current;
+                                    soGraph_SP.Shipping_Contact.Current = soGraph_SP.Shipping_Contact.Select();
+                                    soContact.OverrideContact = true;
+                                    soContact.Email = soGraph_SP.Shipping_Contact.Current?.Email;
+                                    soContact.RevisionID = 1;
+                                }
+                                #endregion
+
+                                #region SOLine
+                                // Amount
+                                soTrans = soGraph.Transactions.Cache.CreateInstance() as SOLine;
+                                soTrans.InventoryID = ShopifyPublicFunction.GetInvetoryitemID(soGraph, "SHOP-CASH");
+                                soTrans.OrderQty = 1;
+                                soTrans.CuryUnitPrice = row.Amount;
+                                soGraph.Transactions.Insert(soTrans);
+                                // Fee
+                                if ((row?.Fee ?? 0) != 0)
+                                {
+                                    soTrans = soGraph.Transactions.Cache.CreateInstance() as SOLine;
+                                    soTrans.InventoryID = ShopifyPublicFunction.GetInvetoryitemID(soGraph, "SHOP-CASH");
+                                    soTrans.OrderQty = 1;
+                                    soTrans.CuryUnitPrice = row.Fee;
+                                    soGraph.Transactions.Insert(soTrans);
+                                }
+                                #endregion
+
+                                #region Update Tax
+                                if (isTaxCalculate)
+                                    soGraph.Document.Cache.SetValue<SOOrder.disableAutomaticTaxCalculation>(soGraph.Document.Current, false);
+                                soGraph.Document.UpdateCurrent();
+
+                                // Setting SO Tax
+                                soGraph.Taxes.Current = soGraph.Taxes.Current ?? soGraph.Taxes.Insert(soGraph.Taxes.Cache.CreateInstance() as SOTaxTran);
+                                soGraph.Taxes.Cache.SetValueExt<SOTaxTran.taxID>(soGraph.Taxes.Current, row.Marketplace + "EC");
+                                soGraph.Taxes.Update(soGraph.Taxes.Current);
+                                #endregion
+
+                                // Sales Order Save
+                                soGraph.Save.Press();
+
+                                #region Create PaymentRefund
+                                paymentExt = soGraph.GetExtension<CreatePaymentExt>();
+                                paymentExt.SetDefaultValues(paymentExt.QuickPayment.Current, soGraph.Document.Current);
+                                paymentExt.QuickPayment.Current.RefundAmt = row.Net * -1;
+                                paymentExt.QuickPayment.Current.CashAccountID = spCashAccount.CashAccountID;
+                                paymentExt.QuickPayment.Current.ExtRefNbr = row.Checkout;
+                                paymentEntry = paymentExt.CreatePayment(paymentExt.QuickPayment.Current, soGraph.Document.Current, ARPaymentType.Payment);
+                                paymentEntry.Document.Cache.SetValueExt<ARPayment.adjDate>(paymentEntry.Document.Current, row.TransactionDate);
+                                paymentEntry.Save.Press();
+                                paymentEntry.releaseFromHold.Press();
+                                paymentEntry.release.Press();
+                                #endregion
+
+                                // Prepare Invoice
+                                PrepareInvoiceAndOverrideTax(soGraph, soDoc);
+                                #endregion
+                                break;
+                            case "SHOP_CASH_REFUND_DEBIT":
+                                #region TransactionType: SHOP_CASH_CREDIT
+                                soGraph = PXGraph.CreateInstance<SOOrderEntry>();
+
+                                #region Header
+                                soDoc = soGraph.Document.Cache.CreateInstance() as SOOrder;
+                                soDoc.OrderType = "CM";
+                                soDoc.CustomerOrderNbr = row?.Checkout + "_" + ShopifyPublicFunction.GetUNIXTimestamp(row?.TransactionDate); ;
+                                soDoc.OrderDate = row.TransactionDate;
+                                soDoc.RequestDate = row.TransactionDate;
+                                soDoc.CustomerID = ShopifyPublicFunction.GetMarketplaceCustomer(row.Marketplace);
+                                soDoc.OrderDesc = $"Shopify Payment Gateway {row.TransactionType} {row.Checkout}";
+                                #endregion
+
+                                #region User-Defined
+                                // UserDefined - ORDERTYPE
+                                soGraph.Document.Cache.SetValueExt(soDoc, PX.Objects.CS.Messages.Attribute + "ORDERTYPE", $"Shopify Refund");
+                                // UserDefined - MKTPLACE
+                                soGraph.Document.Cache.SetValueExt(soDoc, PX.Objects.CS.Messages.Attribute + "MKTPLACE", row.Marketplace);
+                                // UserDefined - ORDERAMT
+                                soGraph.Document.Cache.SetValueExt(soDoc, PX.Objects.CS.Messages.Attribute + "ORDERAMT", Math.Abs(row.Net ?? 0));
+                                // UserDefined - ORDTAAMT
+                                soGraph.Document.Cache.SetValueExt(soDoc, PX.Objects.CS.Messages.Attribute + "ORDTAXAMT", 0);
+                                // UserDefined - TAXCOLLECT
+                                soGraph.Document.Cache.SetValueExt(soDoc, PX.Objects.CS.Messages.Attribute + "TAXCOLLECT", 0);
+                                #endregion
+
+                                // Insert SOOrder
+                                soGraph.Document.Insert(soDoc);
+
+                                #region Set Currency
+                                info = CurrencyInfoAttribute.SetDefaults<SOOrder.curyInfoID>(soGraph.Document.Cache, soGraph.Document.Current);
+                                if (info != null)
+                                    soGraph.Document.Cache.SetValueExt<SOOrder.curyID>(soGraph.Document.Current, info.CuryID);
+                                #endregion
+
+                                #region Address
+                                soGraph_SP = PXGraph.CreateInstance<SOOrderEntry>();
+                                soGraph_SP.Document.Current = oldShopifySOOrder;
+                                if (soGraph_SP.Document.Current != null)
+                                {
+                                    // Setting Shipping_Address
+                                    var soAddress = soGraph.Shipping_Address.Current;
+                                    soGraph_SP.Shipping_Address.Current = soGraph_SP.Shipping_Address.Select();
+                                    soAddress.OverrideAddress = true;
+                                    soAddress.PostalCode = soGraph_SP.Shipping_Address.Current?.PostalCode;
+                                    soAddress.CountryID = soGraph_SP.Shipping_Address.Current?.CountryID;
+                                    soAddress.State = soGraph_SP.Shipping_Address.Current?.State;
+                                    soAddress.City = soGraph_SP.Shipping_Address.Current?.City;
+                                    soAddress.RevisionID = 1;
+                                    // Setting Shipping_Contact
+                                    var soContact = soGraph.Shipping_Contact.Current;
+                                    soGraph_SP.Shipping_Contact.Current = soGraph_SP.Shipping_Contact.Select();
+                                    soContact.OverrideContact = true;
+                                    soContact.Email = soGraph_SP.Shipping_Contact.Current?.Email;
+                                    soContact.RevisionID = 1;
+                                }
+                                #endregion
+
+                                #region SOLine
+                                // Amount
+                                soTrans = soGraph.Transactions.Cache.CreateInstance() as SOLine;
+                                soTrans.InventoryID = ShopifyPublicFunction.GetInvetoryitemID(soGraph, "SHOP-CASH");
+                                soTrans.OrderQty = 1;
+                                soTrans.CuryUnitPrice = row?.Amount;
+                                soGraph.Transactions.Insert(soTrans);
+                                // Fee
+                                if ((row?.Fee ?? 0) != 0)
+                                {
+                                    soTrans = soGraph.Transactions.Cache.CreateInstance() as SOLine;
+                                    soTrans.InventoryID = ShopifyPublicFunction.GetInvetoryitemID(soGraph, "SHOP-CASH");
+                                    soTrans.OrderQty = 1;
+                                    soTrans.CuryUnitPrice = row?.Fee;
                                     soGraph.Transactions.Insert(soTrans);
                                 }
                                 #endregion
@@ -505,6 +721,9 @@ namespace LumTomofunCustomization.Graph
             {
                 decimal _amount;
                 decimal _presentmentAmount;
+                // If type = ‘shop_cash_credit’ or ‘shop_cash_refund_debit’, then "Presentment Amount " could be null
+                if (values["TransactionType"]?.ToString()?.ToUpper() == "SHOP_CASH_CREDIT" || values["TransactionType"]?.ToString()?.ToUpper() == "SHOP_CASH_REFUND_DEBIT")
+                    return true;
                 if (decimal.TryParse(values["Amount"].ToString(), out _amount) && decimal.TryParse(values["PresentmentAmount"].ToString(), out _presentmentAmount))
                 {
                     var calculateResult = Math.Abs(_presentmentAmount / _amount);

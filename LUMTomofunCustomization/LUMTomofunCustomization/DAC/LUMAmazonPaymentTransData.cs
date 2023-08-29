@@ -66,7 +66,7 @@ namespace LUMTomofunCustomization.DAC
         #region OrderID
         [PXDBString(100, IsUnicode = true, InputMask = "")]
         [PXUIField(DisplayName = "OrderID")]
-        [PXDefault]
+        [PXDefault(PersistingCheck = PXPersistingCheck.Nothing)]
         public virtual string OrderID { get; set; }
         public abstract class orderID : PX.Data.BQL.BqlString.Field<orderID> { }
         #endregion
