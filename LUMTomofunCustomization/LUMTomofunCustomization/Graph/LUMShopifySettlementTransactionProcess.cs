@@ -511,7 +511,7 @@ namespace LumTomofunCustomization.Graph
                                     soTrans = soGraph.Transactions.Cache.CreateInstance() as SOLine;
                                     soTrans.InventoryID = ShopifyPublicFunction.GetInvetoryitemID(soGraph, "SHOP-CASH");
                                     soTrans.OrderQty = 1;
-                                    soTrans.CuryUnitPrice = row.Fee;
+                                    soTrans.CuryUnitPrice = row?.Fee * -1;
                                     soGraph.Transactions.Insert(soTrans);
                                 }
                                 #endregion
@@ -619,7 +619,7 @@ namespace LumTomofunCustomization.Graph
                                     soTrans = soGraph.Transactions.Cache.CreateInstance() as SOLine;
                                     soTrans.InventoryID = ShopifyPublicFunction.GetInvetoryitemID(soGraph, "SHOP-CASH");
                                     soTrans.OrderQty = 1;
-                                    soTrans.CuryUnitPrice = row?.Fee * -1;
+                                    soTrans.CuryUnitPrice = row?.Fee;
                                     soGraph.Transactions.Insert(soTrans);
                                 }
                                 #endregion
