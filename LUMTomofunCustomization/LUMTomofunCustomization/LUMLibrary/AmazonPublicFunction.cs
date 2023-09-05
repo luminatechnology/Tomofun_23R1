@@ -17,6 +17,7 @@ using PX.Objects.SO.GraphExtensions.SOOrderEntryExt;
 using PX.Objects.AR.GraphExtensions;
 using PX.Objects.AR;
 using PX.Common;
+using PX.Objects.CA;
 
 namespace LumTomofunCustomization.LUMLibrary
 {
@@ -127,7 +128,7 @@ namespace LumTomofunCustomization.LUMLibrary
                         { "Saldo descubierto","Debt"},
                         { "Tarifa de Oferta flash","Lightning Deal Fee"},
                         { "Tarifa de prestación de servicio","Service Fee"},
-                        { "Tarifas de inventario de Logística de Amazon","FBA inventory fees"},
+                        { "Tarifas de inventario de Logística de Amazon","FBA Inventory Fee"},
                         { "Transferir","Transfer"}
                     };
                     break;
@@ -137,7 +138,7 @@ namespace LumTomofunCustomization.LUMLibrary
                         { "Ajustement","Adjustment"},
                         { "Commande","Order"},
                         { "Frais de service","Service Fee"},
-                        { "Frais de stock Expédié par Amazon","FBA inventory fee"},
+                        { "Frais de stock Expédié par Amazon","FBA Inventory Fee"},
                         { "Remboursement","Refund"},
                         { "Solde négatif","Debt"},
                         { "Tarif de la Vente Flash","Lightning Deal Fee"},
@@ -147,8 +148,8 @@ namespace LumTomofunCustomization.LUMLibrary
                 case "IT":
                     ordertypeDic = new Dictionary<string, string>()
                     {
-                        { "Commissione di servizio","Service fee"},
-                        { "Costo di stoccaggio Logistica di Amazon","FBA inventory fee"},
+                        { "Commissione di servizio","Service Fee"},
+                        { "Costo di stoccaggio Logistica di Amazon","FBA Inventory Fee"},
                         { "Modifica","Adjustment"},
                         { "Ordine","Order"},
                         { "Rimborso","Refund"},
@@ -162,12 +163,12 @@ namespace LumTomofunCustomization.LUMLibrary
                 case "JP":
                     ordertypeDic = new Dictionary<string, string>()
                     {
-                        { "FBA 在庫関連の手数料","FBA inventory fee"},
+                        { "FBA 在庫関連の手数料","FBA Inventory Fee"},
                         { "注文","Order"},
-                        { "注文外料金","Service fee"},
+                        { "注文外料金","Service Fee"},
                         { "返金","Refund"},
                         { "振込み","Transfer"},
-                        { "数量限定タイムセール手数料","Lightning Deal Fees"},
+                        { "数量限定タイムセール手数料","Lightning Deal Fee"},
                         { "調整","Adjustment"}
                     };
                     break;
@@ -190,7 +191,8 @@ namespace LumTomofunCustomization.LUMLibrary
                         { "Bestelling","Order"},
                         { "Overboeking","Transfer"},
                         { "Servicekosten","Service Fee"},
-                        { "Terugbetaling","Refund"}
+                        { "Terugbetaling","Refund"},
+                        { "Schuld","Debt"}
                     };
                     break;
                 case "SE":
@@ -200,7 +202,8 @@ namespace LumTomofunCustomization.LUMLibrary
                         { "Överföring","Transfer"},
                         { "Serviceavgift","Service Fee"},
                         { "Återbetalning","Refund"},
-                        { "Skuld","Debt"}
+                        { "Skuld","Debt"},
+                        { "Lageravgift för FBA","FBA Inventory Fee"}
                     };
                     break;
                 case "BE":
@@ -464,14 +467,29 @@ namespace LumTomofunCustomization.LUMLibrary
                             if (arDoc.DepositDate == null)
                                 throw new Exception($"can not find Deposit Date({amazonData?.Api_settlementid})");
 
+                            var paycheck = $"{amazonData?.Api_date?.ToString("yyyyMMddHHmmss")}_{amazonData?.Api_trantype}_{amazonData?.Api_orderid}_{amazonData.Api_sku}_{amazonData?.Api_total?.ToString()}";
                             #region User-Defiend
 
                             // UserDefined - ECNETPAY
                             arGraph.Document.Cache.SetValueExt(arDoc, PX.Objects.CS.Messages.Attribute + "ECNETPAY", amazonData?.Api_total);
-
+                            // UserDefined - PAYCHECK
+                            arGraph.Document.Cache.SetValueExt(arDoc, PX.Objects.CS.Messages.Attribute + "PAYCHECK", paycheck);
                             #endregion
 
                             arGraph.Document.Insert(arDoc);
+                            #endregion
+
+                            #region Valid Payment check
+
+                            var cashAcctInfo = CashAccount.PK.Find(baseGraph, arGraph.Document.Current?.CashAccountID);
+
+                            var existsPayment = SelectFrom<ARRegisterKvExt>
+                                             .Where<ARRegisterKvExt.fieldName.IsEqual<P.AsString>
+                                               .And<ARRegisterKvExt.valueString.IsEqual<P.AsString>>>
+                                             .View.Select(arGraph, PX.Objects.CS.Messages.Attribute + "PAYCHECK", paycheck).TopFirst;
+                            if ((cashAcctInfo.GetExtension<CashAccountExtension>()?.UsrCheckPaymentUnique ?? false) && existsPayment != null)
+                                throw new PXException($"Duplicate Payment: {paycheck} has been created");
+
                             #endregion
 
                             #region Adjustments
@@ -1332,6 +1350,19 @@ namespace LumTomofunCustomization.LUMLibrary
         [PXUIField(DisplayName = "API Total", Enabled = false)]
         public virtual decimal? ApiTotal { get; set; }
         public abstract class apiTotal : PX.Data.BQL.BqlDecimal.Field<apiTotal> { }
+    }
+
+    public class LUMApiDeleteFilter : IBqlTable
+    {
+        [PXDate]
+        [PXUIField(DisplayName = "Delete From")]
+        public virtual DateTime? DeleteFrom { get; set; }
+        public abstract class deleteFrom : PX.Data.BQL.BqlDateTime.Field<deleteFrom> { }
+
+        [PXDate]
+        [PXUIField(DisplayName = "Delete To")]
+        public virtual DateTime? DeleteTo { get; set; }
+        public abstract class deleteTo : PX.Data.BQL.BqlDateTime.Field<deleteTo> { }
     }
 
     public class AmazonExcelEntity

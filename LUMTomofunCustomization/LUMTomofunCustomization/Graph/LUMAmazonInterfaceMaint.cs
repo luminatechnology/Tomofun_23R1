@@ -1,8 +1,11 @@
-﻿using LUMTomofunCustomization.DAC;
+﻿using LumTomofunCustomization.LUMLibrary;
+using LUMTomofunCustomization.DAC;
 using Newtonsoft.Json;
 using PX.Data;
 using PX.Data.BQL.Fluent;
+using PX.Objects.Common.Tools;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,6 +17,8 @@ namespace LumTomofunCustomization.Graph
     {
         public PXSave<LUMAmazonSourceData> Save;
         public PXCancel<LUMAmazonSourceData> Cancel;
+
+        public PXFilter<LUMApiDeleteFilter> DeleteFilter;
 
         public PXProcessing<LUMAmazonSourceData> AmazonSourceData;
         public SelectFrom<LUMAmazonSourceData>
@@ -46,6 +51,36 @@ namespace LumTomofunCustomization.Graph
         {
             if (JsonViewer.AskExt(true) != WebDialogResult.OK) return;
         }
+
+        public PXAction<LUMAmazonSourceData> deleteRecord;
+        [PXButton]
+        [PXUIField(DisplayName = "Delete Data", MapEnableRights = PXCacheRights.Delete, MapViewRights = PXCacheRights.Delete)]
+        public virtual IEnumerable DeleteRecord(PXAdapter adapter)
+        {
+            var filter = this.DeleteFilter.Current;
+            if (!filter.DeleteFrom.HasValue || !filter.DeleteTo.HasValue)
+                throw new Exception("Please select delete period");
+
+            string warningMessage;
+            if (filter?.DeleteFrom.Value.Date > DateTime.Now.AddMonths(-9).Date || filter?.DeleteTo.Value.Date > DateTime.Now.AddMonths(-9).Date)
+                warningMessage = "The selected date is less than 9 months from now, are you sure to delete it? \r\n (Please Export the data before deletion)";
+            else
+                warningMessage = $"Do you want to delete data during \r\n {filter?.DeleteFrom?.ToString("yyyy/MM/dd")} - {filter?.DeleteTo?.ToString("yyyy/MM/dd")}?  \r\n  (Please Export the data before deletion)";
+
+            WebDialogResult result = this.AmazonSourceData.Ask(ActionsMessages.Warning, PXMessages.LocalizeFormatNoPrefix(warningMessage),
+                MessageButtons.OKCancel, MessageIcon.Warning, true);
+
+            if (result != WebDialogResult.OK)
+                return adapter.Get();
+
+            PXDatabase.Delete<LUMAmazonTransData>(
+                 new PXDataFieldRestrict("CreatedDateTime", PXDbType.DateTime, 8, filter.DeleteFrom.Value.ToUniversalTime(), PXComp.GE),
+                 new PXDataFieldRestrict("CreatedDateTime", PXDbType.DateTime, 8, filter.DeleteTo.Value.ToUniversalTime(), PXComp.LE)
+                 );
+            this.AmazonSourceData.Cache.Clear();
+            return adapter.Get();
+        }
+
 
         #endregion
 

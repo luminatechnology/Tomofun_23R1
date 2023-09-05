@@ -12,6 +12,8 @@ using System.Threading.Tasks;
 using PX.Objects.IN;
 using PX.Objects.AR;
 using PX.Objects.CM;
+using System.Collections;
+using LumTomofunCustomization.LUMLibrary;
 
 namespace LumTomofunCustomization.Graph
 {
@@ -19,12 +21,15 @@ namespace LumTomofunCustomization.Graph
     {
         public PXSave<LUMAmazonTransData> Save;
         public PXCancel<LUMAmazonTransData> Cancel;
+        public PXFilter<LUMApiDeleteFilter> DeleteFilter;
+
         public PXProcessing<LUMAmazonTransData> AmazonTransaction;
         public SelectFrom<LUMAmazonFulfillmentTransData>.View FulfillmentTransactions;
 
         public LUMAmazonTransactionProcess()
         {
             AmazonTransaction.Cache.AllowUpdate = true;
+            this.deleteRecord.SetEnabled(true);
             AmazonTransaction.SetProcessDelegate(delegate (List<LUMAmazonTransData> list)
             {
                 GoProcessing(list);
@@ -45,6 +50,39 @@ namespace LumTomofunCustomization.Graph
                 }
                 catch (Exception) { }
             }
+        }
+
+        #endregion
+
+        #region Action
+
+        public PXAction<LUMAmazonTransData> deleteRecord;
+        [PXButton]
+        [PXUIField(DisplayName = "Delete Data", MapEnableRights = PXCacheRights.Delete, MapViewRights = PXCacheRights.Delete)]
+        public virtual IEnumerable DeleteRecord(PXAdapter adapter)
+        {
+            var filter = this.DeleteFilter.Current;
+            if (!filter.DeleteFrom.HasValue || !filter.DeleteTo.HasValue)
+                throw new Exception("Please select delete period");
+
+            string warningMessage;
+            if (filter?.DeleteFrom.Value.Date > DateTime.Now.AddMonths(-9).Date || filter?.DeleteTo.Value.Date > DateTime.Now.AddMonths(-9).Date)
+                warningMessage = "The selected date is less than 9 months from now, are you sure to delete it? \r\n (Please Export the data before deletion)";
+            else
+                warningMessage = $"Do you want to delete data during \r\n {filter?.DeleteFrom?.ToString("yyyy/MM/dd")} - {filter?.DeleteTo?.ToString("yyyy/MM/dd")}?  \r\n  (Please Export the data before deletion)";
+
+            WebDialogResult result = this.AmazonTransaction.Ask(ActionsMessages.Warning, PXMessages.LocalizeFormatNoPrefix(warningMessage),
+                MessageButtons.OKCancel, MessageIcon.Warning, true);
+
+            if (result != WebDialogResult.OK)
+                return adapter.Get();
+
+            PXDatabase.Delete<LUMAmazonTransData>(
+                new PXDataFieldRestrict("CreatedDateTime", PXDbType.DateTime, 8, filter.DeleteFrom.Value.ToUniversalTime(), PXComp.GE),
+                new PXDataFieldRestrict("CreatedDateTime", PXDbType.DateTime, 8, filter.DeleteTo.Value.ToUniversalTime(), PXComp.LE)
+                );
+            this.AmazonTransaction.Cache.Clear();
+            return adapter.Get();
         }
 
         #endregion

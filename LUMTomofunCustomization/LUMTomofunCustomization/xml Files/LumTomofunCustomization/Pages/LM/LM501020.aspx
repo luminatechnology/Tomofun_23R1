@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" MasterPageFile="~/MasterPages/ListView.master" AutoEventWireup="true" ValidateRequest="false" CodeFile="LM501020.aspx.cs" Inherits="Pages_LM501020" Title="Untitled Page" %>
+﻿<%@ Page Language="C#" MasterPageFile="~/MasterPages/FormDetail.master" AutoEventWireup="true" ValidateRequest="false" CodeFile="LM501020.aspx.cs" Inherits="Pages_LM501020" Title="Untitled Page" %>
 
 <%@ MasterType VirtualPath="~/MasterPages/ListView.master" %>
 
@@ -8,15 +8,16 @@
         </CallbackCommands>
     </px:PXDataSource>
 </asp:Content>
-<%--<asp:Content ID="cont2" ContentPlaceHolderID="phF" Runat="Server">
-	<px:PXFormView ID="form" runat="server" DataSourceID="ds" DataMember="Filter" Width="100%" Height="50px" AllowAutoHide="false">
-		<Template>
-			<px:PXDateTimeEdit runat="server" ID="CstPXDateTimeEdit2" DataField="StartDate" CommitChanges="True" ></px:PXDateTimeEdit>
-			<px:PXLayoutRule runat="server" ID="CstPXLayoutRule3" StartColumn="True" ></px:PXLayoutRule>
-			<px:PXDateTimeEdit CommitChanges="True" runat="server" ID="CstPXDateTimeEdit1" DataField="EndDate" ></px:PXDateTimeEdit></Template>
-	</px:PXFormView>
-</asp:Content>--%>
-<asp:Content ID="cont3" ContentPlaceHolderID="phL" runat="Server">
+<asp:Content ID="cont2" ContentPlaceHolderID="phF" runat="Server">
+    <px:PXFormView ID="form" runat="server" DataSourceID="ds" DataMember="DeleteFilter" Width="100%" Height="50px" AllowAutoHide="false">
+        <Template>
+            <px:PXDateTimeEdit runat="server" ID="edDeleteFrom" DataField="DeleteFrom"></px:PXDateTimeEdit>
+            <px:PXLayoutRule runat="server" ID="CstPXLayoutRule3" StartColumn="True"></px:PXLayoutRule>
+            <px:PXDateTimeEdit runat="server" ID="edDeleteTo" DataField="DeleteTo"></px:PXDateTimeEdit>
+        </Template>
+    </px:PXFormView>
+</asp:Content>
+<asp:Content ID="cont3" ContentPlaceHolderID="phG" runat="Server">
     <px:PXGrid AllowPaging="True" AdjustPageSize="Auto" SyncPosition="True" ID="grid" runat="server" DataSourceID="ds" Width="100%" Height="150px" SkinID="Primary" AllowAutoHide="false">
         <Levels>
             <px:PXGridLevel DataMember="AmazonTransaction">

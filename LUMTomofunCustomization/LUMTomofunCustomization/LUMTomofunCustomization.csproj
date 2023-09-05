@@ -96,6 +96,7 @@
     <Compile Include="DAC\Amazon Payment DAC\LUMAmazonSGPaymentReport.cs" />
     <Compile Include="DAC\Amazon Payment DAC\LUMAmazonUKPaymentReport.cs" />
     <Compile Include="DAC\Amazon Payment DAC\LUMAmazonUSPaymentReport.cs" />
+    <Compile Include="DAC\ARRegisterKvExt.cs" />
     <Compile Include="DAC\LUM3PLINReconciliation.cs" />
     <Compile Include="DAC\LUM3PLSetup.cs" />
     <Compile Include="DAC\LUM3PLWarehouseMapping.cs" />
@@ -130,6 +131,7 @@
     <Compile Include="DAC\v_OpenTRSourceData.cs" />
     <Compile Include="DAC\v_ToDayInventoryAllocationResult.cs" />
     <Compile Include="DAC_Extension\ARInvoiceExtension.cs" />
+    <Compile Include="DAC_Extension\CashAccountExtension.cs" />
     <Compile Include="DAC_Extension\SOOrderExtension.cs" />
     <Compile Include="Graph\Amazon Payment Excel Process\LUMAmazon_AUPaymentUploadProcess.cs" />
     <Compile Include="Graph\Amazon Payment Excel Process\LUMAmazon_BEPaymentReport.cs" />

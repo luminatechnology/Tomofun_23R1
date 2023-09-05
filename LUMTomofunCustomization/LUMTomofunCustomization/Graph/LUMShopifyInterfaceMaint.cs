@@ -9,6 +9,8 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using PX.Objects.SO;
 using PX.Data.BQL;
+using System.Collections;
+using LumTomofunCustomization.LUMLibrary;
 
 namespace LumTomofunCustomization.Graph
 {
@@ -16,6 +18,8 @@ namespace LumTomofunCustomization.Graph
     {
         public PXSave<LUMShopifySourceData> Save;
         public PXCancel<LUMShopifySourceData> Cancel;
+        public PXFilter<LUMApiDeleteFilter> DeleteFilter;
+
         public PXProcessing<LUMShopifySourceData> ShopifySourceData;
         public SelectFrom<LUMShopifySourceData>
                .Where<LUMShopifySourceData.sequenceNumber.IsEqual<LUMShopifySourceData.sequenceNumber.FromCurrent>>
@@ -46,6 +50,35 @@ namespace LumTomofunCustomization.Graph
         protected void viewJson()
         {
             if (JsonViewer.AskExt(true) != WebDialogResult.OK) return;
+        }
+
+        public PXAction<LUMShopifySourceData> deleteRecord;
+        [PXButton]
+        [PXUIField(DisplayName = "Delete Data", MapEnableRights = PXCacheRights.Delete, MapViewRights = PXCacheRights.Delete)]
+        public virtual IEnumerable DeleteRecord(PXAdapter adapter)
+        {
+            var filter = this.DeleteFilter.Current;
+            if (!filter.DeleteFrom.HasValue || !filter.DeleteTo.HasValue)
+                throw new Exception("Please select delete period");
+
+            string warningMessage;
+            if (filter?.DeleteFrom.Value.Date > DateTime.Now.AddMonths(-9).Date || filter?.DeleteTo.Value.Date > DateTime.Now.AddMonths(-9).Date)
+                warningMessage = "The selected date is less than 9 months from now, are you sure to delete it? \r\n (Please Export the data before deletion)";
+            else
+                warningMessage = $"Do you want to delete data during \r\n {filter?.DeleteFrom?.ToString("yyyy/MM/dd")} - {filter?.DeleteTo?.ToString("yyyy/MM/dd")}?  \r\n  (Please Export the data before deletion)";
+
+            WebDialogResult result = this.ShopifySourceData.Ask(ActionsMessages.Warning, PXMessages.LocalizeFormatNoPrefix(warningMessage),
+                MessageButtons.OKCancel, MessageIcon.Warning, true);
+
+            if (result != WebDialogResult.OK)
+                return adapter.Get();
+
+            PXDatabase.Delete<LUMShopifySourceData>(
+                 new PXDataFieldRestrict("CreatedDateTime", PXDbType.DateTime, 8, filter.DeleteFrom.Value.ToUniversalTime(), PXComp.GE),
+                 new PXDataFieldRestrict("CreatedDateTime", PXDbType.DateTime, 8, filter.DeleteTo.Value.ToUniversalTime(), PXComp.LE)
+                 );
+            this.ShopifySourceData.Cache.Clear();
+            return adapter.Get();
         }
 
         #endregion
@@ -79,12 +112,12 @@ namespace LumTomofunCustomization.Graph
                                                  .Where<SOOrder.customerOrderNbr.IsEqual<P.AsString>
                                                     .Or<SOOrder.customerRefNbr.IsEqual<P.AsString>>>
                                                  .View.Select(this, order.id, order.id).TopFirst;
-                            if(shopifySOOrder != null && order.financial_status?.ToUpper() == "PAID" && string.IsNullOrEmpty(order.fulfillment_status))
-                            { 
+                            if (shopifySOOrder != null && order.financial_status?.ToUpper() == "PAID" && string.IsNullOrEmpty(order.fulfillment_status))
+                            {
                                 //data.SkipReason = $"Sales Order is Exsits : {shopifySOOrder.OrderNbr}";
                                 continue;
                             }
-                            else if(shopifySOOrder != null && shopifySOOrder.Status != "N" && order.fulfillment_status?.ToUpper() == "FULFILLED")
+                            else if (shopifySOOrder != null && shopifySOOrder.Status != "N" && order.fulfillment_status?.ToUpper() == "FULFILLED")
                             {
                                 //data.SkipReason = $"Sales Order Status is not equeal OPEN : {shopifySOOrder.OrderNbr}";
                                 continue;
