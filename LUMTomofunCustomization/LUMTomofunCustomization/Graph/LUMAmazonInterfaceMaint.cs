@@ -73,7 +73,7 @@ namespace LumTomofunCustomization.Graph
             if (result != WebDialogResult.OK)
                 return adapter.Get();
 
-            PXDatabase.Delete<LUMAmazonTransData>(
+            PXDatabase.Delete<LUMAmazonSourceData>(
                  new PXDataFieldRestrict("CreatedDateTime", PXDbType.DateTime, 8, filter.DeleteFrom.Value.ToUniversalTime(), PXComp.GE),
                  new PXDataFieldRestrict("CreatedDateTime", PXDbType.DateTime, 8, filter.DeleteTo.Value.ToUniversalTime(), PXComp.LE)
                  );
