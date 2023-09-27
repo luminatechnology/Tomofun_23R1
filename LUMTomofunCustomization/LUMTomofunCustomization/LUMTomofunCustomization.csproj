@@ -122,6 +122,7 @@
     <Compile Include="DAC\LUMShopifySettlementTransData.cs" />
     <Compile Include="DAC\LUMShopifySourceData.cs" />
     <Compile Include="DAC\LUMShopifyTransData.cs" />
+    <Compile Include="DAC\SOOrderKvExt.cs" />
     <Compile Include="DAC\v_AmazonSettlementReportQuery.cs" />
     <Compile Include="DAC\v_GlobalINItemSiteHistDay.cs" />
     <Compile Include="DAC\v_MRPResultQuery.cs" />

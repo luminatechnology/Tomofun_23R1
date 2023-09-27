@@ -234,6 +234,8 @@ namespace LumTomofunCustomization.LUMLibrary
             //var amzTotalTax = amzGroupOrderData.Where(x => x.AmountDescription == "Tax" || x.AmountDescription == "ShippingTax" || x.AmountDescription == "TaxDiscount" || x.AmountType == "ItemWithheldTax").Sum(x => (x.Amount ?? 0) * -1);
             using (new PXCommandScope(300))
             {
+                var paycheck = $"{amazonData?.Api_date?.ToString("yyyyMMddHHmmss")}_{amazonData?.Api_trantype}_{amazonData?.Api_orderid}_{amazonData.Api_sku}_{amazonData?.Api_total?.ToString()}";
+
                 switch (amazonData.Api_trantype?.ToUpper())
                 {
                     case "REFUND":
@@ -244,7 +246,7 @@ namespace LumTomofunCustomization.LUMLibrary
                         #region Header
                         var soDoc = soGraph.Document.Cache.CreateInstance() as SOOrder;
                         soDoc.OrderType = "CM";
-                        soDoc.CustomerOrderNbr = amazonData?.Api_orderid + "_" + GetUNIXTimestamp(amazonData?.Api_date);
+                        soDoc.CustomerOrderNbr = amazonData?.Api_orderid;
                         soDoc.OrderDate = amazonData?.Api_date;
                         soDoc.RequestDate = amazonData?.Api_date;
                         soDoc.CustomerID = AmazonPublicFunction.GetMarketplaceCustomer(_marketplace);
@@ -258,6 +260,14 @@ namespace LumTomofunCustomization.LUMLibrary
                         soGraph.Document.Cache.SetValueExt(soDoc, PX.Objects.CS.Messages.Attribute + "MKTPLACE", _marketplace);
                         // UserDefined - ORDERAMT
                         soGraph.Document.Cache.SetValueExt(soDoc, PX.Objects.CS.Messages.Attribute + "ORDERAMT", Math.Abs(amazonData?.Api_total ?? 0));
+                        // UserDefined - PAYCHECK
+                        soGraph.Document.Cache.SetValueExt(soDoc, PX.Objects.CS.Messages.Attribute + "PAYCHECK", paycheck);
+                        #endregion
+
+                        #region Valid Payment check
+
+                        ValidPaymentCheck(paycheck, GetCustomerDefaultPaymentMethodInfo(soDoc.CustomerID, baseGraph)?.CashAccountID, "Order", baseGraph);
+
                         #endregion
 
                         // Insert SOOrder
@@ -467,9 +477,7 @@ namespace LumTomofunCustomization.LUMLibrary
                             if (arDoc.DepositDate == null)
                                 throw new Exception($"can not find Deposit Date({amazonData?.Api_settlementid})");
 
-                            var paycheck = $"{amazonData?.Api_date?.ToString("yyyyMMddHHmmss")}_{amazonData?.Api_trantype}_{amazonData?.Api_orderid}_{amazonData.Api_sku}_{amazonData?.Api_total?.ToString()}";
                             #region User-Defiend
-
                             // UserDefined - ECNETPAY
                             arGraph.Document.Cache.SetValueExt(arDoc, PX.Objects.CS.Messages.Attribute + "ECNETPAY", amazonData?.Api_total);
                             // UserDefined - PAYCHECK
@@ -481,26 +489,19 @@ namespace LumTomofunCustomization.LUMLibrary
 
                             #region Valid Payment check
 
-                            var cashAcctInfo = CashAccount.PK.Find(baseGraph, arGraph.Document.Current?.CashAccountID);
-
-                            var existsPayment = SelectFrom<ARRegisterKvExt>
-                                             .Where<ARRegisterKvExt.fieldName.IsEqual<P.AsString>
-                                               .And<ARRegisterKvExt.valueString.IsEqual<P.AsString>>>
-                                             .View.Select(arGraph, PX.Objects.CS.Messages.Attribute + "PAYCHECK", paycheck).TopFirst;
-                            if ((cashAcctInfo.GetExtension<CashAccountExtension>()?.UsrCheckPaymentUnique ?? false) && existsPayment != null)
-                                throw new PXException($"Duplicate Payment: {paycheck} has been created");
+                            ValidPaymentCheck(paycheck, arGraph.Document.Current?.CashAccountID, "Payment", baseGraph);
 
                             #endregion
 
                             #region Adjustments
                             var mapInvoice = SelectFrom<ARInvoice>
-                                                  .InnerJoin<ARTran>.On<ARInvoice.docType.IsEqual<ARTran.tranType>
-                                                        .And<ARInvoice.refNbr.IsEqual<ARTran.refNbr>>>
-                                                  .InnerJoin<SOOrder>.On<ARTran.sOOrderNbr.IsEqual<SOOrder.orderNbr>>
-                                                  .Where<ARInvoice.invoiceNbr.IsEqual<P.AsString>
-                                                    .And<SOOrder.orderType.IsEqual<P.AsString>>>
-                                                  .OrderBy<Desc<ARInvoice.createdDateTime>>
-                                                  .View.SelectSingleBound(baseGraph, null, amazonData?.Api_orderid, "FA").TopFirst;
+                                                 .InnerJoin<ARTran>.On<ARInvoice.docType.IsEqual<ARTran.tranType>
+                                                       .And<ARInvoice.refNbr.IsEqual<ARTran.refNbr>>>
+                                                 .InnerJoin<SOOrder>.On<ARTran.sOOrderNbr.IsEqual<SOOrder.orderNbr>>
+                                                 .Where<ARInvoice.invoiceNbr.IsEqual<P.AsString>
+                                                   .And<SOOrder.orderType.IsEqual<P.AsString>>>
+                                                 .OrderBy<Desc<ARInvoice.createdDateTime>>
+                                                 .View.SelectSingleBound(baseGraph, null, amazonData?.Api_orderid, "FA").TopFirst;
                             if (mapInvoice == null)
                                 throw new Exception($"Can not Find Invoice (OrderID: {amazonData?.Api_orderid})");
                             var adjTrans = arGraph.Adjustments.Cache.CreateInstance() as ARAdjust;
@@ -564,7 +565,7 @@ namespace LumTomofunCustomization.LUMLibrary
                             soDoc = soGraph.Document.Cache.CreateInstance() as SOOrder;
                             soDoc.OrderType = "CM";
                             soDoc = soGraph.Document.Cache.Insert(soDoc) as SOOrder;
-                            soDoc.CustomerOrderNbr = amazonData?.Api_orderid + "_" + GetUNIXTimestamp(amazonData?.Api_date);
+                            soDoc.CustomerOrderNbr = amazonData?.Api_orderid;
                             soDoc.OrderDate = amazonData?.Api_date;
                             soDoc.RequestDate = amazonData?.Api_date;
                             soDoc.CustomerID = AmazonPublicFunction.GetMarketplaceCustomer(_marketplace);
@@ -579,6 +580,14 @@ namespace LumTomofunCustomization.LUMLibrary
                             soGraph.Document.Cache.SetValueExt(soDoc, PX.Objects.CS.Messages.Attribute + "MKTPLACE", _marketplace);
                             // UserDefined - ORDERAMT
                             soGraph.Document.Cache.SetValueExt(soDoc, PX.Objects.CS.Messages.Attribute + "ORDERAMT", Math.Abs(amazonData?.Api_total ?? 0));
+                            // UserDefined - PAYCHECK
+                            soGraph.Document.Cache.SetValueExt(soDoc, PX.Objects.CS.Messages.Attribute + "PAYCHECK", paycheck);
+                            #endregion
+
+                            #region Valid Payment check
+
+                            ValidPaymentCheck(paycheck, GetCustomerDefaultPaymentMethodInfo(soDoc.CustomerID, baseGraph)?.CashAccountID, "Order", baseGraph);
+
                             #endregion
 
                             // Insert SOOrder
@@ -663,7 +672,7 @@ namespace LumTomofunCustomization.LUMLibrary
                             #region Header
                             soDoc = soGraph.Document.Cache.CreateInstance() as SOOrder;
                             soDoc.OrderType = "IN";
-                            soDoc.CustomerOrderNbr = amazonData?.Api_orderid + "_" + GetUNIXTimestamp(amazonData?.Api_date);
+                            soDoc.CustomerOrderNbr = amazonData?.Api_orderid;
                             soDoc.OrderDate = amazonData?.Api_date;
                             soDoc.RequestDate = amazonData?.Api_date;
                             soDoc.CustomerID = AmazonPublicFunction.GetMarketplaceCustomer(_marketplace);
@@ -677,6 +686,14 @@ namespace LumTomofunCustomization.LUMLibrary
                             soGraph.Document.Cache.SetValueExt(soDoc, PX.Objects.CS.Messages.Attribute + "MKTPLACE", _marketplace);
                             // UserDefined - ORDERAMT
                             soGraph.Document.Cache.SetValueExt(soDoc, PX.Objects.CS.Messages.Attribute + "ORDERAMT", Math.Abs(amazonData?.Api_total ?? 0));
+                            // UserDefined - PAYCHECK
+                            soGraph.Document.Cache.SetValueExt(soDoc, PX.Objects.CS.Messages.Attribute + "PAYCHECK", paycheck);
+                            #endregion
+
+                            #region Valid Payment check
+
+                            ValidPaymentCheck(paycheck, GetCustomerDefaultPaymentMethodInfo(soDoc.CustomerID, baseGraph)?.CashAccountID, "Order", baseGraph);
+
                             #endregion
 
                             // Insert SOOrder
@@ -752,7 +769,7 @@ namespace LumTomofunCustomization.LUMLibrary
                             #region Header
                             soDoc = soGraph.Document.Cache.CreateInstance() as SOOrder;
                             soDoc.OrderType = "CM";
-                            soDoc.CustomerOrderNbr = amazonData?.Api_orderid + "_" + GetUNIXTimestamp(amazonData?.Api_date);
+                            soDoc.CustomerOrderNbr = amazonData?.Api_orderid;
                             soDoc.OrderDate = amazonData?.Api_date;
                             soDoc.RequestDate = amazonData?.Api_date;
                             soDoc.CustomerID = SelectFrom<BAccount>.Where<BAccount.acctCD.IsEqual<P.AsString>>.View.Select(baseGraph, "SPFJP").TopFirst?.BAccountID;
@@ -831,7 +848,7 @@ namespace LumTomofunCustomization.LUMLibrary
                             soDoc = soGraph.Document.Cache.CreateInstance() as SOOrder;
                             soDoc.OrderType = "CM";
                             soDoc = soGraph.Document.Cache.Insert(soDoc) as SOOrder;
-                            soDoc.CustomerOrderNbr = amazonData?.Api_orderid + "_" + GetUNIXTimestamp(amazonData?.Api_date);
+                            soDoc.CustomerOrderNbr = amazonData?.Api_orderid;
                             soDoc.OrderDate = amazonData?.Api_date;
                             soDoc.RequestDate = amazonData?.Api_date;
                             soDoc.CustomerID = AmazonPublicFunction.GetMarketplaceCustomer(_marketplace);
@@ -845,6 +862,14 @@ namespace LumTomofunCustomization.LUMLibrary
                             soGraph.Document.Cache.SetValueExt(soDoc, PX.Objects.CS.Messages.Attribute + "MKTPLACE", _marketplace);
                             // UserDefined - ORDERAMT
                             soGraph.Document.Cache.SetValueExt(soDoc, PX.Objects.CS.Messages.Attribute + "ORDERAMT", Math.Abs(amazonData?.Api_total ?? 0));
+                            // UserDefined - PAYCHECK
+                            soGraph.Document.Cache.SetValueExt(soDoc, PX.Objects.CS.Messages.Attribute + "PAYCHECK", paycheck);
+                            #endregion
+
+                            #region Valid Payment check
+
+                            ValidPaymentCheck(paycheck, GetCustomerDefaultPaymentMethodInfo(soDoc.CustomerID, baseGraph)?.CashAccountID, "Order", baseGraph);
+
                             #endregion
 
                             // Insert SOOrder
@@ -899,7 +924,7 @@ namespace LumTomofunCustomization.LUMLibrary
                         #region Header
                         soDoc = soGraph.Document.Cache.CreateInstance() as SOOrder;
                         soDoc.OrderType = "CM";
-                        soDoc.CustomerOrderNbr = amazonData?.Api_orderid + "_" + GetUNIXTimestamp(amazonData?.Api_date);
+                        soDoc.CustomerOrderNbr = amazonData?.Api_orderid;
                         soDoc.OrderDate = amazonData?.Api_date;
                         soDoc.RequestDate = amazonData?.Api_date;
                         soDoc.CustomerID = AmazonPublicFunction.GetMarketplaceCustomer(_marketplace);
@@ -913,6 +938,14 @@ namespace LumTomofunCustomization.LUMLibrary
                         soGraph.Document.Cache.SetValueExt(soDoc, PX.Objects.CS.Messages.Attribute + "MKTPLACE", _marketplace);
                         // UserDefined - ORDERAMT
                         soGraph.Document.Cache.SetValueExt(soDoc, PX.Objects.CS.Messages.Attribute + "ORDERAMT", Math.Abs(amazonData?.Api_total ?? 0));
+                        // UserDefined - PAYCHECK
+                        soGraph.Document.Cache.SetValueExt(soDoc, PX.Objects.CS.Messages.Attribute + "PAYCHECK", paycheck);
+                        #endregion
+
+                        #region Valid Payment check
+
+                        ValidPaymentCheck(paycheck, GetCustomerDefaultPaymentMethodInfo(soDoc.CustomerID, baseGraph)?.CashAccountID, "Order", baseGraph);
+
                         #endregion
 
                         // Insert SOOrder
@@ -987,7 +1020,7 @@ namespace LumTomofunCustomization.LUMLibrary
                         #region Header
                         soDoc = soGraph.Document.Cache.CreateInstance() as SOOrder;
                         soDoc.OrderType = "IN";
-                        soDoc.CustomerOrderNbr = amazonData?.Api_orderid + "_" + GetUNIXTimestamp(amazonData?.Api_date);
+                        soDoc.CustomerOrderNbr = amazonData?.Api_orderid;
                         soDoc.OrderDate = amazonData?.Api_date;
                         soDoc.RequestDate = amazonData?.Api_date;
                         soDoc.CustomerID = AmazonPublicFunction.GetMarketplaceCustomer(_marketplace);
@@ -1001,6 +1034,14 @@ namespace LumTomofunCustomization.LUMLibrary
                         soGraph.Document.Cache.SetValueExt(soDoc, PX.Objects.CS.Messages.Attribute + "MKTPLACE", _marketplace);
                         // UserDefined - ORDERAMT
                         soGraph.Document.Cache.SetValueExt(soDoc, PX.Objects.CS.Messages.Attribute + "ORDERAMT", Math.Abs(amazonData?.Api_total ?? 0));
+                        // UserDefined - PAYCHECK
+                        soGraph.Document.Cache.SetValueExt(soDoc, PX.Objects.CS.Messages.Attribute + "PAYCHECK", paycheck);
+                        #endregion
+
+                        #region Valid Payment check
+
+                        ValidPaymentCheck(paycheck, GetCustomerDefaultPaymentMethodInfo(soDoc.CustomerID, baseGraph)?.CashAccountID, "Order", baseGraph);
+
                         #endregion
 
                         // Insert SOOrder
@@ -1076,7 +1117,6 @@ namespace LumTomofunCustomization.LUMLibrary
                     case "LIGHTNING DEAL FEE":
                     case "SERVICE FEE":
                     case "OTHER":
-                    case "":
                     case null:
                         #region Transaction Type: OTHER-TRANSACTION
 
@@ -1085,7 +1125,7 @@ namespace LumTomofunCustomization.LUMLibrary
                         #region Header
                         soDoc = soGraph.Document.Cache.CreateInstance() as SOOrder;
                         soDoc.OrderType = amazonData?.Api_total > 0 ? "IN" : "CM";
-                        soDoc.CustomerOrderNbr = amazonData?.Api_orderid + "_" + GetUNIXTimestamp(amazonData?.Api_date); ;
+                        soDoc.CustomerOrderNbr = amazonData?.Api_orderid; ;
                         soDoc.OrderDate = amazonData?.Api_date;
                         soDoc.RequestDate = amazonData?.Api_date;
                         soDoc.CustomerID = AmazonPublicFunction.GetMarketplaceCustomer(_marketplace);
@@ -1099,6 +1139,14 @@ namespace LumTomofunCustomization.LUMLibrary
                         soGraph.Document.Cache.SetValueExt(soDoc, PX.Objects.CS.Messages.Attribute + "MKTPLACE", _marketplace);
                         // UserDefined - ORDERAMT (CM: Sum Amount * -1)
                         soGraph.Document.Cache.SetValueExt(soDoc, PX.Objects.CS.Messages.Attribute + "ORDERAMT", Math.Abs(amazonData?.Api_total ?? 0));
+                        // UserDefined - PAYCHECK
+                        soGraph.Document.Cache.SetValueExt(soDoc, PX.Objects.CS.Messages.Attribute + "PAYCHECK", paycheck);
+                        #endregion
+
+                        #region Valid Payment check
+
+                        ValidPaymentCheck(paycheck, GetCustomerDefaultPaymentMethodInfo(soDoc.CustomerID, baseGraph)?.CashAccountID, "Order", baseGraph);
+
                         #endregion
 
                         // Insert SOOrder
@@ -1175,7 +1223,7 @@ namespace LumTomofunCustomization.LUMLibrary
                         #region Header
                         soDoc = soGraph.Document.Cache.CreateInstance() as SOOrder;
                         soDoc.OrderType = amazonData?.Api_total > 0 ? "IN" : "CM";
-                        soDoc.CustomerOrderNbr = amazonData?.Api_orderid + "_" + GetUNIXTimestamp(amazonData?.Api_date); ;
+                        soDoc.CustomerOrderNbr = amazonData?.Api_orderid; ;
                         soDoc.OrderDate = amazonData?.Api_date;
                         soDoc.RequestDate = amazonData?.Api_date;
                         soDoc.CustomerID = AmazonPublicFunction.GetMarketplaceCustomer(_marketplace);
@@ -1189,6 +1237,14 @@ namespace LumTomofunCustomization.LUMLibrary
                         soGraph.Document.Cache.SetValueExt(soDoc, PX.Objects.CS.Messages.Attribute + "MKTPLACE", _marketplace);
                         // UserDefined - ORDERAMT (CM: Sum Amount * -1)
                         soGraph.Document.Cache.SetValueExt(soDoc, PX.Objects.CS.Messages.Attribute + "ORDERAMT", Math.Abs(amazonData?.Api_total ?? 0));
+                        // UserDefined - PAYCHECK
+                        soGraph.Document.Cache.SetValueExt(soDoc, PX.Objects.CS.Messages.Attribute + "PAYCHECK", paycheck);
+                        #endregion
+
+                        #region Valid Payment check
+
+                        ValidPaymentCheck(paycheck, GetCustomerDefaultPaymentMethodInfo(soDoc.CustomerID, baseGraph)?.CashAccountID, "Order", baseGraph);
+
                         #endregion
 
                         // Insert SOOrder
@@ -1328,6 +1384,33 @@ namespace LumTomofunCustomization.LUMLibrary
             soGraph.Save.Press();
         }
 
+        /// <summary> 檢查 Payment Check unique </summary>
+        public static void ValidPaymentCheck(string paycheck, int? CashAccountID, string type, PXGraph baseGraph)
+        {
+            object existsPayment = null;
+            var cashAcctInfo = CashAccount.PK.Find(baseGraph, CashAccountID);
+
+            if (type == "Order")
+                existsPayment = SelectFrom<SOOrderKvExt>
+                             .Where<SOOrderKvExt.fieldName.IsEqual<P.AsString>
+                               .And<SOOrderKvExt.valueString.IsEqual<P.AsString>>>
+                             .View.Select(baseGraph, PX.Objects.CS.Messages.Attribute + "PAYCHECK", paycheck).TopFirst;
+            else
+                existsPayment = SelectFrom<ARRegisterKvExt>
+                                 .Where<ARRegisterKvExt.fieldName.IsEqual<P.AsString>
+                                   .And<ARRegisterKvExt.valueString.IsEqual<P.AsString>>>
+                                 .View.Select(baseGraph, PX.Objects.CS.Messages.Attribute + "PAYCHECK", paycheck).TopFirst;
+            if ((cashAcctInfo.GetExtension<CashAccountExtension>()?.UsrCheckPaymentUnique ?? false) && existsPayment != null)
+                throw new PXException($"Duplicate Payment: {paycheck} has been created");
+        }
+
+        /// <summary> 取得 Custoemr Default Payment method Information </summary>
+        public static CustomerPaymentMethod GetCustomerDefaultPaymentMethodInfo(int? CustomerID, PXGraph baseGraph)
+            => SelectFrom<CustomerPaymentMethod>
+                               .InnerJoin<Customer>.On<CustomerPaymentMethod.bAccountID.IsEqual<Customer.bAccountID>
+                                                  .And<CustomerPaymentMethod.paymentMethodID.IsEqual<Customer.defPaymentMethodID>>>
+                               .Where<Customer.bAccountID.IsEqual<P.AsInt>>
+                               .View.Select(baseGraph, CustomerID).TopFirst;
 
         public static string GetUNIXTimestamp(DateTime? _data)
         {
