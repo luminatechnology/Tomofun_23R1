@@ -529,7 +529,7 @@ namespace LumTomofunCustomization.LUMLibrary
                                 arGraph.PaymentCharges.Insert(CreatePaymentCHARGESObject(arGraph, "FBASELLING", amazonData?.Api_sellingfee * -1));
 
                             // FBAFEE
-                            if (amazonData?.Api_fbafee != 0)
+                            if ((amazonData?.Api_fbafee + amazonData?.Api_otherfee) != 0)
                                 arGraph.PaymentCharges.Insert(CreatePaymentCHARGESObject(arGraph, "FBAFEE", (amazonData?.Api_fbafee + amazonData?.Api_otherfee) * -1));
 
                             // FBAOTHTRAN
