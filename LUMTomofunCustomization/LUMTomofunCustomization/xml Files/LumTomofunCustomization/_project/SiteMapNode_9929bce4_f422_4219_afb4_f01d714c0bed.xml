@@ -25,7 +25,7 @@
         </layout>
         <data>
             <SiteMap>
-                <row Title="Daily Inventory" Url="~/Pages/LM/LM401000.aspx" ScreenID="LM401000" NodeID="9929bce4-f422-4219-afb4-f01d714c0bed" ParentID="00000000-0000-0000-0000-000000000000">
+                <row Title="Daily inventory &amp; reconciliation" Url="~/Pages/LM/LM401000.aspx" ScreenID="LM401000" NodeID="9929bce4-f422-4219-afb4-f01d714c0bed" ParentID="00000000-0000-0000-0000-000000000000">
                     <MUIScreen IsPortal="0" WorkspaceID="6557c1c6-747e-45bb-9072-54f096598d61" Order="190" SubcategoryID="98e86774-69e3-41ea-b94f-eb2c7a8426d4" />
                 </row>
             </SiteMap>
