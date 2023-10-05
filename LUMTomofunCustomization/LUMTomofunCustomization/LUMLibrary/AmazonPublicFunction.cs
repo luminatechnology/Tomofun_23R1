@@ -1,28 +1,26 @@
 ﻿using LUMTomofunCustomization.DAC;
+using PX.Common;
 using PX.Data;
 using PX.Data.BQL;
 using PX.Data.BQL.Fluent;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using PX.Objects.CA;
 using PX.Objects.IN;
-using System.Globalization;
-using Newtonsoft.Json;
 using PX.Objects.SO;
 using PX.Objects.CM;
 using PX.Objects.CR;
 using PX.Objects.SO.GraphExtensions.SOOrderEntryExt;
-using PX.Objects.AR.GraphExtensions;
 using PX.Objects.AR;
-using PX.Common;
-using PX.Objects.CA;
+using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Globalization;
 
 namespace LumTomofunCustomization.LUMLibrary
 {
     public static class AmazonPublicFunction
     {
+        #region Static Data Reception
         /// <summary> 轉換Amazon時間格式 </summary>
         public static DateTime CalculateAmazonDateTime(int? amazonDate)
             => DateTime.FromOADate(((amazonDate.Value + 8 * 3600) / 86400 + 70 * 365 + 19));
@@ -64,6 +62,7 @@ namespace LumTomofunCustomization.LUMLibrary
                .Where<INLocation.siteID.IsEqual<P.AsInt>
                  .And<INLocation.locationCD.IsEqual<P.AsString>>>
                .View.SelectSingleBound(new PXGraph(), null, siteid, "RMA").TopFirst?.LocationID;
+        #endregion
 
         /// <summary> 世界各國時區轉換 </summary>
         public static DateTime? DatetimeParseWithCulture(string cultureName, string sourceDatetime)
@@ -77,11 +76,20 @@ namespace LumTomofunCustomization.LUMLibrary
             for (int i = 0; i < AbbreviatedMonthNames.Length - 1; i++)
             {
                 if (sourceDatetime.Contains(AbbreviatedMonthNames[i].Replace(".", "")))
+                {
                     sourceDatetime = sourceDatetime.Replace(AbbreviatedMonthNames[i].Replace(".", ""), AbbreviatedMonthNames[i]);
+
+                    // Since the Italian "March" abbreviated month name will have conversion problems in the .Net framework, simply change all abbreviations to the genitive case.
+                    if (cultureName.Contains("IT"))
+                    {
+                        sourceDatetime = sourceDatetime.Replace(AbbreviatedMonthNames[i], CultureInfo.GetCultureInfo(cultureName).DateTimeFormat.MonthGenitiveNames[i]);
+                    }
+                }
             }
             // 處理"Timezone"文字
             if (sourceDatetime.LastIndexOf(" ") != -1)
                 sourceDatetime = sourceDatetime.Substring(0, sourceDatetime.LastIndexOf(" "));
+
             return DateTime.Parse(sourceDatetime, CultureInfo.GetCultureInfo(cultureName?.ToUpper()));
         }
 
