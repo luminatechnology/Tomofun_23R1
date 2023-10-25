@@ -439,7 +439,7 @@ IeaNdI0J/8AnkfLYH+dZ+vf8FM/FPjbwvPaXltplrK4O1IIWYucEADB96/RqbTZI35ZWb0ES1EulrdE7
                 <ParentName>SOShipment</ParentName>
             </ReportRelation>
         </Relations>
-        <SchemaUrl>https://tomofun.acumatica.com/</SchemaUrl>
+        <SchemaUrl>http://localhost/Tomofun</SchemaUrl>
         <Sorting>
             <SortExp>
                 <DataField>SOShipment.ShipmentNbr</DataField>
@@ -7487,7 +7487,7 @@ IeaNdI0J/8AnkfLYH+dZ+vf8FM/FPjbwvPaXltplrK4O1IIWYucEADB96/RqbTZI35ZWb0ES1EulrdE7
                             </Padding>
                             <TextAlign>Left</TextAlign>
                         </Style>
-                        <Value>=IIF([SOShipment.ShipmentType] = 'I', ISNULL([Location.AttributeWHREGNO],''),#010;[INSite.AttributeWHREGNO])</Value>
+                        <Value>=IIf([SOShipment.ShipmentType] = 'I', IsNull([Location.AttributeWHREGNO],''), '')#010;/*[INSite.AttributeWHREGNO])*/</Value>
                     </TextBox>
                     <TextBox Name="textBox11">
                         <Excel>
@@ -8785,7 +8785,7 @@ IeaNdI0J/8AnkfLYH+dZ+vf8FM/FPjbwvPaXltplrK4O1IIWYucEADB96/RqbTZI35ZWb0ES1EulrdE7
                             </Padding>
                             <TextAlign>Right</TextAlign>
                         </Style>
-                        <Value>=IIF([SOShipment.ShipmentType] = 'I', ISNULL([Location.AttributeWHTAX],''),#010;[INSite.AttributeWHVAT])</Value>
+                        <Value>=IIf([SOShipment.ShipmentType] = 'I', IsNull([Location.AttributeWHTAX],''), [INSite.AttributeWHVAT])</Value>
                     </TextBox>
                 </Items>
             </PageHeader>
