@@ -135,7 +135,7 @@ namespace LumTomofunCustomization.Graph
                             throw new Exception("Legacy Order");
 
                         // Amazon Total Tax Amount
-                        var amzTotalTax = (decimal?)amzOrder.Items.Sum(x => x.ItemTaxAmount - x.PromotionDiscountTaxAmount + x.GiftWrapTaxAmount + (x.ShippingPriceAmount - x.ShippingDiscountAmount == 0 ? 0 : x.ShippingTaxAmount));
+                        var amzTotalTax = (decimal?)(amzOrder.Items.Where(x => (x?.QuantityShipped ?? 0) != 0).Sum(x => x.ItemTaxAmount - x.PromotionDiscountTaxAmount + x.GiftWrapTaxAmount + (x.ShippingPriceAmount - x.ShippingDiscountAmount == 0 ? 0 : x.ShippingTaxAmount)));
 
                         var oldsoOrder = SelectFrom<SOOrder>
                                          .Where<SOOrder.orderType.IsEqual<P.AsString>
@@ -340,6 +340,8 @@ namespace LumTomofunCustomization.Graph
 
         public void CreateSOLine(SOOrderEntry soGraph, LumTomofunCustomization.API_Entity.AmazonOrder.Order amzOrder, LumTomofunCustomization.API_Entity.AmazonOrder.Item item, LUMAmazonTransData row)
         {
+            if(amzOrder?.OrderStatus == "Shipped" && (item?.QuantityShipped ?? 0) == 0)
+                return;
             // Sales Order Line
             var line = soGraph.Transactions.Cache.CreateInstance() as SOLine;
             line.InventoryID = GetInvetoryitemID(soGraph, item.SellerSKU);

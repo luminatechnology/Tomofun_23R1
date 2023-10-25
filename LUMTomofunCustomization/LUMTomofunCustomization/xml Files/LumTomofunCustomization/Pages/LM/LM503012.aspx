@@ -81,6 +81,7 @@
                     <px:PXGridColumn DataField="Api_points"></px:PXGridColumn>
                     <px:PXGridColumn DataField="CreatedDateTime" Width="130" DisplayFormat="g"></px:PXGridColumn>
                     <px:PXGridColumn DataField="CreatedByID" Width="130" DisplayFormat="g"></px:PXGridColumn>
+                    <px:PXGridColumn DataField="StackMessage" />
                 </Columns>
             </px:PXGridLevel>
         </Levels>

@@ -240,7 +240,7 @@ namespace LumTomofunCustomization.LUMLibrary
             var amazonData = JsonConvert.DeserializeObject<AmazonExcelEntity>(JsonConvert.SerializeObject(selectedItem));
             var isTaxCalculate = AmazonPublicFunction.GetMarketplaceTaxCalculation(_marketplace);
             //var amzTotalTax = amzGroupOrderData.Where(x => x.AmountDescription == "Tax" || x.AmountDescription == "ShippingTax" || x.AmountDescription == "TaxDiscount" || x.AmountType == "ItemWithheldTax").Sum(x => (x.Amount ?? 0) * -1);
-            using (new PXCommandScope(300))
+            using (new PXCommandScope(3000))
             {
                 var paycheck = $"{amazonData?.Api_date?.ToString("yyyyMMddHHmmss")}_{amazonData?.Api_trantype}_{amazonData?.Api_orderid}_{amazonData.Api_sku}_{amazonData?.Api_total?.ToString()}";
 
@@ -459,7 +459,8 @@ namespace LumTomofunCustomization.LUMLibrary
                             paymentEntry.Document.Cache.SetValueExt<ARPayment.adjDate>(paymentEntry.Document.Current, amazonData?.Api_date);
                             paymentEntry.Save.Press();
                             paymentEntry.releaseFromHold.Press();
-                            paymentEntry.release.Press();
+                            lock (thisLock)
+                                paymentEntry.release.Press();
                         }
                         #endregion
 
@@ -559,7 +560,8 @@ namespace LumTomofunCustomization.LUMLibrary
                             arGraph.Actions.PressSave();
                             // Release Payment
                             arGraph.releaseFromHold.Press();
-                            arGraph.release.Press();
+                            lock (thisLock)
+                                arGraph.release.Press();
                         }
                         #endregion
 
@@ -661,7 +663,8 @@ namespace LumTomofunCustomization.LUMLibrary
                                 paymentEntry.Document.Cache.SetValueExt<ARPayment.adjDate>(paymentEntry.Document.Current, amazonData?.Api_date);
                                 paymentEntry.Save.Press();
                                 paymentEntry.releaseFromHold.Press();
-                                paymentEntry.release.Press();
+                                lock (thisLock)
+                                    paymentEntry.release.Press();
                             }
                             #endregion
 
@@ -763,7 +766,8 @@ namespace LumTomofunCustomization.LUMLibrary
                                 paymentEntry.Document.Cache.SetValueExt<ARPayment.adjDate>(paymentEntry.Document.Current, amazonData?.Api_date);
                                 paymentEntry.Save.Press();
                                 paymentEntry.releaseFromHold.Press();
-                                paymentEntry.release.Press();
+                                lock (thisLock)
+                                    paymentEntry.release.Press();
                             }
                             #endregion
 
@@ -913,7 +917,8 @@ namespace LumTomofunCustomization.LUMLibrary
                                 paymentEntry.Document.Cache.SetValueExt<ARPayment.adjDate>(paymentEntry.Document.Current, amazonData?.Api_date);
                                 paymentEntry.Save.Press();
                                 paymentEntry.releaseFromHold.Press();
-                                paymentEntry.release.Press();
+                                lock (thisLock)
+                                    paymentEntry.release.Press();
                             }
                             #endregion
 
@@ -1012,7 +1017,8 @@ namespace LumTomofunCustomization.LUMLibrary
                             paymentEntry.Document.Cache.SetValueExt<ARPayment.adjDate>(paymentEntry.Document.Current, amazonData?.Api_date);
                             paymentEntry.Save.Press();
                             paymentEntry.releaseFromHold.Press();
-                            paymentEntry.release.Press();
+                            lock (thisLock)
+                                paymentEntry.release.Press();
                         }
                         #endregion
 
@@ -1213,7 +1219,8 @@ namespace LumTomofunCustomization.LUMLibrary
                             paymentEntry.Document.Cache.SetValueExt<ARPayment.adjDate>(paymentEntry.Document.Current, amazonData?.Api_date);
                             paymentEntry.Save.Press();
                             paymentEntry.releaseFromHold.Press();
-                            paymentEntry.release.Press();
+                            lock (thisLock)
+                                paymentEntry.release.Press();
                         }
                         #endregion
 
@@ -1311,7 +1318,8 @@ namespace LumTomofunCustomization.LUMLibrary
                             paymentEntry.Document.Cache.SetValueExt<ARPayment.adjDate>(paymentEntry.Document.Current, amazonData?.Api_date);
                             paymentEntry.Save.Press();
                             paymentEntry.releaseFromHold.Press();
-                            paymentEntry.release.Press();
+                            lock (thisLock)
+                                paymentEntry.release.Press();
                         }
                         #endregion
 
