@@ -385,6 +385,13 @@ namespace LUMTomofunCustomization.DAC
         public abstract class errorMessage : PX.Data.BQL.BqlString.Field<errorMessage> { }
         #endregion
 
+        #region StackMessage
+        [PXDBString(4000, IsUnicode = true, InputMask = "")]
+        [PXUIField(DisplayName = "Stack Trace", Visible = false, Enabled = false)]
+        public virtual string StackMessage { get; set; }
+        public abstract class stackMessage : PX.Data.BQL.BqlString.Field<stackMessage> { }
+        #endregion
+
         #region CreatedByID
         [PXDBCreatedByID()]
         public virtual Guid? CreatedByID { get; set; }
@@ -427,5 +434,12 @@ namespace LUMTomofunCustomization.DAC
         public virtual byte[] Tstamp { get; set; }
         public abstract class tstamp : PX.Data.BQL.BqlByteArray.Field<tstamp> { }
         #endregion
+
+        #region NoteID
+        [PXNote()]
+        public virtual Guid? NoteID { get; set; }
+        public abstract class noteID : PX.Data.BQL.BqlGuid.Field<noteID> { }
+        #endregion
+
     }
 }

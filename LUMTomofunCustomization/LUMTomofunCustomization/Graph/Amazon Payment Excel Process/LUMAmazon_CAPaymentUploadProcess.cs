@@ -10,6 +10,9 @@ using System.Threading.Tasks;
 
 namespace LumTomofunCustomization.Graph
 {
+    /// <summary>
+    /// ScreenID = LM503012
+    /// </summary>
     public class LUMAmazon_CAPaymentUploadProcess : PXGraph<LUMAmazon_CAPaymentUploadProcess>, PXImportAttribute.IPXPrepareItems
     {
         public PXSave<LUMAmazonCAPaymentReport> Save;
@@ -158,6 +161,7 @@ namespace LumTomofunCustomization.Graph
             {
                 // Initial variable
                 string errorMessge = string.Empty;
+                string stackMessage = string.Empty;
                 // Setting Process Current item
                 PXProcessing.SetCurrentItem(selectedItem);
                 try
@@ -179,11 +183,13 @@ namespace LumTomofunCustomization.Graph
                 catch (Exception ex)
                 {
                     errorMessge = ex.Message;
+                    stackMessage = ex.StackTrace;
                 }
                 finally
                 {
                     // Setting record information
-                    selectedItem.ErrorMessage = errorMessge.Length > 2048 ? errorMessge.Substring(0, 2048) : errorMessge; ;
+                    selectedItem.ErrorMessage = errorMessge.Length > 2048 ? errorMessge.Substring(0, 2048) : errorMessge;
+                    selectedItem.StackMessage = stackMessage.Length > 4000 ? stackMessage.Substring(0, 4000) : stackMessage;
                     selectedItem.IsProcessed = string.IsNullOrEmpty(errorMessge);
                     baseGraph.PaymentTransactions.Update(selectedItem);
                     // Setting Process information
@@ -191,10 +197,10 @@ namespace LumTomofunCustomization.Graph
                         PXProcessing.SetError(errorMessge);
                     else
                         PXProcessing.SetProcessed();
-                    lock (this)
-                        baseGraph.Actions.PressSave();
                 }
             }
+            lock (this)
+                baseGraph.Actions.PressSave();
         }
 
         #endregion
