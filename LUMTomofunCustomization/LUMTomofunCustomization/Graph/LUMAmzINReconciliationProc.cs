@@ -143,14 +143,21 @@ namespace LUMTomofunCustomization.Graph
 
             return new AmazonConnection(new AmazonCredential()
             {
-                AccessKey = isSingapore == false ? preference.AccessKey : preference.SGAccessKey,
-                SecretKey = isSingapore == false ? preference.SecretKey : preference.SGSecretKey,
-                RoleArn = isSingapore == false ? preference.RoleArn : preference.SGRoleArn,
                 ClientId = isSingapore == false ? isMexico == true ? preference.MXClientID : preference.ClientID : preference.SGClientID,
                 ClientSecret = isSingapore == false ? isMexico == true ? preference.MXClientSecret : preference.ClientSecret : preference.SGClientSecret,
                 RefreshToken = refreshToken,
                 MarketPlace = MarketPlace.GetMarketPlaceByID(marketPlaceID),
             });
+            //return new AmazonConnection(new AmazonCredential()
+            //{
+            //    AccessKey = isSingapore == false ? preference.AccessKey : preference.SGAccessKey,
+            //    SecretKey = isSingapore == false ? preference.SecretKey : preference.SGSecretKey,
+            //    RoleArn = isSingapore == false ? preference.RoleArn : preference.SGRoleArn,
+            //    ClientId = isSingapore == false ? isMexico == true ? preference.MXClientID : preference.ClientID : preference.SGClientID,
+            //    ClientSecret = isSingapore == false ? isMexico == true ? preference.MXClientSecret : preference.ClientSecret : preference.SGClientSecret,
+            //    RefreshToken = refreshToken,
+            //    MarketPlace = MarketPlace.GetMarketPlaceByID(marketPlaceID),
+            //});
         }
 
         // Old Amazon API is expired on 2023/01/31
