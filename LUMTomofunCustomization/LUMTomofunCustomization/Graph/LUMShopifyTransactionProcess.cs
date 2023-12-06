@@ -128,7 +128,7 @@ namespace LumTomofunCustomization.Graph
                             shopifySOOrder.TermsID = "0000";
                             #region User-Defined
                             // UserDefined - ORDERTYPE
-                            soGraph.Document.Cache.SetValueExt(shopifySOOrder, PX.Objects.CS.Messages.Attribute + "ORDERTYPE", spOrder.gateway);
+                            soGraph.Document.Cache.SetValueExt(shopifySOOrder, PX.Objects.CS.Messages.Attribute + "ORDERTYPE", spOrder.payment_gateway_names.FirstOrDefault());
                             // UserDefined - MKTPLACE
                             soGraph.Document.Cache.SetValueExt(shopifySOOrder, PX.Objects.CS.Messages.Attribute + "MKTPLACE", $"Shopify.{row.Marketplace}");
                             // UserDefined - ORDERAMT
@@ -214,10 +214,13 @@ namespace LumTomofunCustomization.Graph
                             // Write json into note
                             PXNoteAttribute.SetNote(soGraph.Document.Cache, soGraph.Document.Current, row.TransJson);
 
-                            #region Create Payment
-                            if ((spOrder.gateway ?? string.Empty).ToUpper().Contains("HITRUSTPAY"))
+                            // Sales Order Save
+                            soGraph.Document.UpdateCurrent();
+                            soGraph.Save.Press();
+
+                            #region Create PrePayment
+                            if (row?.Marketplace == "TW" && spOrder.payment_gateway_names.ConvertAll(x => x.ToUpper()).Any(x => x.Contains("HITRUSTPAY")))
                             {
-                                soGraph.Save.Press();
                                 var spCashAccount = SelectFrom<CashAccount>
                                             .Where<CashAccount.cashAccountCD.IsEqual<P.AsString>>
                                             .View.SelectSingleBound(baseGraph, null, $"TWDHITRUST").TopFirst;
@@ -225,16 +228,12 @@ namespace LumTomofunCustomization.Graph
                                 paymentExt.SetDefaultValues(paymentExt.QuickPayment.Current, soGraph.Document.Current);
                                 paymentExt.QuickPayment.Current.CashAccountID = spCashAccount.CashAccountID;
                                 paymentExt.QuickPayment.Current.ExtRefNbr = row.OrderID;
-                                var paymentEntry = paymentExt.CreatePayment(paymentExt.QuickPayment.Current, soGraph.Document.Current, ARPaymentType.Payment);
+                                var paymentEntry = paymentExt.CreatePayment(paymentExt.QuickPayment.Current, soGraph.Document.Current, ARPaymentType.Prepayment);
                                 paymentEntry.Save.Press();
                                 paymentEntry.releaseFromHold.Press();
                                 paymentEntry.release.Press();
                             }
                             #endregion
-
-                            // Sales Order Save
-                            soGraph.Document.UpdateCurrent();
-                            soGraph.Save.Press();
                         }
                         // Assign Document Current
                         else if (GoPrepareInvoice && shopifySOOrder != null && shopifySOOrder.Status == "N")
