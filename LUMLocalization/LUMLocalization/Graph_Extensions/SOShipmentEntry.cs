@@ -15,7 +15,7 @@ namespace PX.Objects.SO
 {
     public class SOShipmentEntry_Extension : PXGraphExtension<SOShipmentEntry>
     {
-        #region Constant Strings
+        #region Constant Strings / Strng array
         public const string Attr_QTYCARTON  = "QTYCARTON";
         public const string Attr_NETWHTCART = "NETWHTCART";
         public const string Attr_GRSWHTCART = "GRSWHTCART";
@@ -29,6 +29,8 @@ namespace PX.Objects.SO
         public const string Attr_PLTWHT     = "PLTWHT";
         public const string Attr_TOTALGW    = "TOTALGW";
         public const string Attr_CBM        = "CBM";
+
+        public string[] InclCountries_EU = new string[] { "BE", "DE", "ES", "FR", "IT", "NL", "SE" };
         #endregion
 
         #region Override Methods
@@ -116,44 +118,6 @@ namespace PX.Objects.SO
             if (_defBoxID != null) e.Cache.SetValueExt<SOPackageDetail.boxID>(e.Row, _defBoxID);
         }
 
-        //protected virtual void _(Events.FieldUpdated<SOPackageDetailExt.qty> e)
-        //{
-        //    if (e.NewValue == null) return;
-
-        //    SOPackageDetailEx curSOPackageDetailExLine = e.Row as SOPackageDetailEx;
-        //    Guid? itemNoteID = InventoryItem.PK.Find(Base, (int)e.NewValue)?.NoteID;
-
-        //    //TotalCartons
-        //    var _QtyPerCarton = SelectFrom<CSAnswers>.LeftJoin<InventoryItem>.On<InventoryItem.noteID.IsEqual<CSAnswers.refNoteID>
-        //                                                                         .And<CSAnswers.attributeID.IsEqual<QtyPerCartonAttr>>>
-        //                                             .Where<InventoryItem.inventoryID.IsEqual<@P.AsInt>>.View
-        //                                             .Select(Base, curSOPackageDetailExLine.InventoryID).TopFirst?.Value;
-
-        //    if (_QtyPerCarton != null)
-        //    {
-        //        if (Convert.ToDecimal(_QtyPerCarton) > 0)
-        //        {
-        //            decimal totalCartons = Convert.ToInt32(Math.Ceiling(Convert.ToDecimal(curSOPackageDetailExLine.Qty) / Convert.ToDecimal(_QtyPerCarton)));
-
-        //            e.Cache.SetValueExt<SOPackageDetailExt.usrTotalCartons>(curSOPackageDetailExLine, totalCartons);
-        //            //Carton No
-        //            e.Cache.SetValueExt<SOPackageDetailExt.customRefNbr2>(curSOPackageDetailExLine, totalCartons);
-
-        //            if (Base.Document.Current?.ShipVia == ShipVia_Air)
-        //            {
-        //                totalCartons = Convert.ToDecimal(CSAnswers.PK.Find(Base, itemNoteID, Base.Shipping_Address.Current?.CountryID == CountryCodes.US ? Attr_PLTAIRUS : Attr_PLTAIREU)?.Value);
-        //            }
-        //            else if (Base.Document?.Current.ShipVia == ShipVia_Ocean)
-        //            {
-        //                totalCartons = Convert.ToDecimal(CSAnswers.PK.Find(Base, itemNoteID, Base.Shipping_Address.Current?.CountryID == CountryCodes.US ? Attr_PLTSEAUS : Attr_PLTSEAEU)?.Value);
-        //            }
-
-        //            e.Cache.SetValueExt<SOPackageDetailExt.usrTotalPallet>(e.Row, Math.Ceiling((e.Row as SOPackageDetailEx).GetExtension<SOPackageDetailExt>().UsrTotalCartons.GetValueOrDefault() / totalCartons));
-        //            e.Cache.SetValueExt<SOPackageDetailExt.customRefNbr1>(e.Row, e.Cache.GetValue<SOPackageDetailExt.usrTotalPallet>(e.Row));
-        //        }
-        //    }
-        //}
-
         protected virtual void _(Events.FieldUpdated<SOPackageDetailEx.inventoryID> e)
         {
             Guid? itemNoteID = InventoryItem.PK.Find(Base, (int)e.NewValue)?.NoteID;
@@ -170,14 +134,18 @@ namespace PX.Objects.SO
             //Carton No
             e.Cache.SetValueExt<SOPackageDetailExt.customRefNbr2>(e.Row, totalCartons);
 
-            if (Base.Document.Current?.ShipVia == ShipVia_Air)
+            string attrPLTValue = null;
+
+            if (InclCountries_EU.Any(a => a == Base.Shipping_Address.Current?.CountryID))
             {
-                totalCartons = Convert.ToDecimal(CSAnswers.PK.Find(Base, itemNoteID, Base.Shipping_Address.Current?.CountryID == CountryCodes.US ? Attr_PLTAIRUS : Attr_PLTAIREU)?.Value);
+                attrPLTValue = Base.Document.Current?.ShipVia == ShipVia_Air ? Attr_PLTAIREU : Attr_PLTSEAEU;
             }
-            else if (Base.Document?.Current.ShipVia == ShipVia_Ocean)
+            else
             {
-                totalCartons = Convert.ToDecimal(CSAnswers.PK.Find(Base, itemNoteID, Base.Shipping_Address.Current?.CountryID == CountryCodes.US ? Attr_PLTSEAUS : Attr_PLTSEAEU)?.Value);
+                attrPLTValue = Base.Document.Current?.ShipVia == ShipVia_Air ? Attr_PLTAIRUS : Attr_PLTSEAUS;
             }
+
+            totalCartons = Convert.ToDecimal(CSAnswers.PK.Find(Base, itemNoteID, attrPLTValue)?.Value);
 
             e.Cache.SetValueExt<SOPackageDetailExt.usrTotalPallet>(e.Row, Math.Ceiling((e.Row as SOPackageDetailEx).GetExtension<SOPackageDetailExt>().UsrTotalCartons.GetValueOrDefault() / totalCartons));
             e.Cache.SetValueExt<SOPackageDetailExt.customRefNbr1>(e.Row, e.Cache.GetValue<SOPackageDetailExt.usrTotalPallet>(e.Row));
@@ -279,8 +247,7 @@ namespace PX.Objects.SO
         }
         #endregion
 
-        #region Other Custom Method
-
+        #region Other Custom Methods
         /// <summary>
         /// Add a new field “Total Shipping Weight” in User-Defined Field, allow user to adjust the final gross weight based on the actual number.
         /// ROUND(Total(SOPackageDetailEx.UsrTotalCartons x SOPackageDetailEx.UsrGWCarton) + Attribute(PLTWHT) x Total(SOPackageDetailEx.UsrTotalPallet), 2)
