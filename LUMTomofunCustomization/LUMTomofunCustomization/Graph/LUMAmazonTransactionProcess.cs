@@ -330,9 +330,15 @@ namespace LumTomofunCustomization.Graph
                         if (invGraph.Document.Current != null)
                             invGraph.release.Press();
                     }
-                    catch (Exception)
+                    catch (Exception ex)
                     {
                         // Do nothing
+                        row.ErrorMessage = ex.Message;
+                        row.IsProcessed = false;
+                        PXProcessing.SetError(row.ErrorMessage);
+                        baseGraph.AmazonTransaction.Update(row);
+                        // Save
+                        baseGraph.Actions.PressSave();
                     }
                 }
             }
@@ -340,7 +346,7 @@ namespace LumTomofunCustomization.Graph
 
         public void CreateSOLine(SOOrderEntry soGraph, LumTomofunCustomization.API_Entity.AmazonOrder.Order amzOrder, LumTomofunCustomization.API_Entity.AmazonOrder.Item item, LUMAmazonTransData row)
         {
-            if(amzOrder?.OrderStatus == "Shipped" && (item?.QuantityShipped ?? 0) == 0)
+            if (amzOrder?.OrderStatus == "Shipped" && (item?.QuantityShipped ?? 0) == 0)
                 return;
             // Sales Order Line
             var line = soGraph.Transactions.Cache.CreateInstance() as SOLine;
