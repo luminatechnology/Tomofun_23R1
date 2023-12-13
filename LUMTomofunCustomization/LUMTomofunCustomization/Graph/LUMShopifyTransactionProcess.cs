@@ -17,6 +17,7 @@ using LumTomofunCustomization.LUMLibrary;
 using PX.Objects.SO.GraphExtensions.SOOrderEntryExt;
 using PX.Objects.CA;
 using System.Collections;
+using PX.Objects.CR;
 
 namespace LumTomofunCustomization.Graph
 {
@@ -162,6 +163,12 @@ namespace LumTomofunCustomization.Graph
                                 soGraph.Document.Cache.SetValueExt<SOOrder.curyID>(soGraph.Document.Current, info.CuryID);
                             #endregion
 
+                            // Get Warehouse according to Shipping_Address_Country Code
+                            var defWarehouse = SelectFrom<LUMShopifyMarketplacePreference>
+                                              .InnerJoin<Location>.On<LUMShopifyMarketplacePreference.bAccountID.IsEqual<Location.bAccountID>>
+                                              .Where<LUMShopifyMarketplacePreference.marketplace.IsEqual<P.AsString>>
+                                              .View.Select(this, spOrder?.shipping_address?.country_code).RowCast<Location>().FirstOrDefault()?.CSiteID;
+
                             #region Create Sales Order Line
                             foreach (var item in spOrder.line_items)
                             {
@@ -172,6 +179,7 @@ namespace LumTomofunCustomization.Graph
                                 line.InventoryID = AmazonPublicFunction.GetInvetoryitemID(soGraph, item.sku);
                                 if (line.InventoryID == null)
                                     throw new Exception($"can not find Inventory item ID({item.sku})");
+                                line.SiteID = defWarehouse;
                                 line.ManualPrice = true;
                                 line.OrderQty = item.quantity;
                                 line.CuryUnitPrice = decimal.Parse(item.pre_tax_price) / item.quantity;
