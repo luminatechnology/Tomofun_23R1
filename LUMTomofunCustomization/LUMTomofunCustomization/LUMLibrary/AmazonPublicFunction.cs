@@ -272,12 +272,6 @@ namespace LumTomofunCustomization.LUMLibrary
                         soGraph.Document.Cache.SetValueExt(soDoc, PX.Objects.CS.Messages.Attribute + "PAYCHECK", paycheck);
                         #endregion
 
-                        #region Valid Payment check
-
-                        ValidPaymentCheck(paycheck, GetCustomerDefaultPaymentMethodInfo(soDoc.CustomerID, baseGraph)?.CashAccountID, "Order", baseGraph);
-
-                        #endregion
-
                         // Insert SOOrder
                         soGraph.Document.Insert(soDoc);
 
@@ -444,8 +438,17 @@ namespace LumTomofunCustomization.LUMLibrary
                         soGraph.Taxes.Cache.SetValueExt<SOTaxTran.taxID>(soGraph.Taxes.Current, isTaxCalculate ? $"{_marketplace}ECZ" : $"{_marketplace}EC");
                         #endregion
 
-                        // Sales Order Save
-                        ValidAndSaveOrder(soGraph, amazonData);
+                        lock (thisLock)
+                        {
+                            #region Valid Payment check
+
+                            ValidPaymentCheck(paycheck, GetCustomerDefaultPaymentMethodInfo(soDoc.CustomerID, baseGraph)?.CashAccountID, "Order", baseGraph);
+
+                            #endregion
+
+                            // Sales Order Save
+                            ValidAndSaveOrder(soGraph, amazonData);
+                        }
 
                         #region Create PaymentRefund
                         var paymentExt = soGraph.GetExtension<CreatePaymentExt>();
@@ -594,12 +597,6 @@ namespace LumTomofunCustomization.LUMLibrary
                             soGraph.Document.Cache.SetValueExt(soDoc, PX.Objects.CS.Messages.Attribute + "PAYCHECK", paycheck);
                             #endregion
 
-                            #region Valid Payment check
-
-                            ValidPaymentCheck(paycheck, GetCustomerDefaultPaymentMethodInfo(soDoc.CustomerID, baseGraph)?.CashAccountID, "Order", baseGraph);
-
-                            #endregion
-
                             // Insert SOOrder
                             soGraph.Document.Cache.Update(soDoc);
 
@@ -650,8 +647,17 @@ namespace LumTomofunCustomization.LUMLibrary
                             }
                             #endregion
 
-                            // Sales Order Save
-                            ValidAndSaveOrder(soGraph, amazonData);
+                            lock (thisLock)
+                            {
+                                #region Valid Payment check
+
+                                ValidPaymentCheck(paycheck, GetCustomerDefaultPaymentMethodInfo(soDoc.CustomerID, baseGraph)?.CashAccountID, "Order", baseGraph);
+
+                                #endregion
+
+                                // Sales Order Save
+                                ValidAndSaveOrder(soGraph, amazonData);
+                            }
 
                             #region Create PaymentRefund
                             if (amazonData?.Api_total != 0)
@@ -701,12 +707,6 @@ namespace LumTomofunCustomization.LUMLibrary
                             soGraph.Document.Cache.SetValueExt(soDoc, PX.Objects.CS.Messages.Attribute + "PAYCHECK", paycheck);
                             #endregion
 
-                            #region Valid Payment check
-
-                            ValidPaymentCheck(paycheck, GetCustomerDefaultPaymentMethodInfo(soDoc.CustomerID, baseGraph)?.CashAccountID, "Order", baseGraph);
-
-                            #endregion
-
                             // Insert SOOrder
                             soGraph.Document.Insert(soDoc);
 
@@ -753,8 +753,17 @@ namespace LumTomofunCustomization.LUMLibrary
                             soGraph.Taxes.Cache.SetValueExt<SOTaxTran.taxID>(soGraph.Taxes.Current, isTaxCalculate ? $"{_marketplace}ECZ" : $"{_marketplace}EC");
                             #endregion
 
-                            // Sales Order Save
-                            ValidAndSaveOrder(soGraph, amazonData);
+                            lock (thisLock)
+                            {
+                                #region Valid Payment check
+
+                                ValidPaymentCheck(paycheck, GetCustomerDefaultPaymentMethodInfo(soDoc.CustomerID, baseGraph)?.CashAccountID, "Order", baseGraph);
+
+                                #endregion
+
+                                // Sales Order Save
+                                ValidAndSaveOrder(soGraph, amazonData);
+                            }
 
                             #region Create PaymentRefund
                             if (amazonData?.Api_total != 0)
@@ -795,6 +804,8 @@ namespace LumTomofunCustomization.LUMLibrary
                             soGraph.Document.Cache.SetValueExt(soDoc, PX.Objects.CS.Messages.Attribute + "MKTPLACE", _marketplace);
                             // UserDefined - ORDERAMT
                             soGraph.Document.Cache.SetValueExt(soDoc, PX.Objects.CS.Messages.Attribute + "ORDERAMT", Math.Abs(amazonData?.Api_total ?? 0));
+                            // UserDefined - PAYCHECK
+                            soGraph.Document.Cache.SetValueExt(soDoc, PX.Objects.CS.Messages.Attribute + "PAYCHECK", paycheck);
                             #endregion
 
                             // Insert SOOrder
@@ -840,8 +851,17 @@ namespace LumTomofunCustomization.LUMLibrary
                             soGraph.Taxes.Cache.SetValueExt<SOTaxTran.taxID>(soGraph.Taxes.Current, isTaxCalculate ? $"{_marketplace}ECZ" : $"{_marketplace}EC");
                             #endregion
 
-                            // Sales Order Save
-                            ValidAndSaveOrder(soGraph, amazonData);
+                            lock (thisLock)
+                            {
+                                #region Valid Payment check
+
+                                ValidPaymentCheck(paycheck, GetCustomerDefaultPaymentMethodInfo(soDoc.CustomerID, baseGraph)?.CashAccountID, "Order", baseGraph);
+
+                                #endregion
+
+                                // Sales Order Save
+                                ValidAndSaveOrder(soGraph, amazonData);
+                            }
 
                             // Prepare Invoice
                             PrepareInvoiceAndOverrideTax(soGraph, soDoc);
@@ -878,12 +898,6 @@ namespace LumTomofunCustomization.LUMLibrary
                             soGraph.Document.Cache.SetValueExt(soDoc, PX.Objects.CS.Messages.Attribute + "PAYCHECK", paycheck);
                             #endregion
 
-                            #region Valid Payment check
-
-                            ValidPaymentCheck(paycheck, GetCustomerDefaultPaymentMethodInfo(soDoc.CustomerID, baseGraph)?.CashAccountID, "Order", baseGraph);
-
-                            #endregion
-
                             // Insert SOOrder
                             soGraph.Document.Cache.Update(soDoc);
                             #region Set Currency
@@ -905,7 +919,18 @@ namespace LumTomofunCustomization.LUMLibrary
 
                             // Sales Order Save
                             soGraph.Document.UpdateCurrent();
-                            ValidAndSaveOrder(soGraph, amazonData);
+
+                            lock (thisLock)
+                            {
+                                #region Valid Payment check
+
+                                ValidPaymentCheck(paycheck, GetCustomerDefaultPaymentMethodInfo(soDoc.CustomerID, baseGraph)?.CashAccountID, "Order", baseGraph);
+
+                                #endregion
+
+                                // Sales Order Save
+                                ValidAndSaveOrder(soGraph, amazonData);
+                            }
 
                             #region Create PaymentRefund
                             if (amazonData?.Api_total != 0)
@@ -955,12 +980,6 @@ namespace LumTomofunCustomization.LUMLibrary
                         soGraph.Document.Cache.SetValueExt(soDoc, PX.Objects.CS.Messages.Attribute + "PAYCHECK", paycheck);
                         #endregion
 
-                        #region Valid Payment check
-
-                        ValidPaymentCheck(paycheck, GetCustomerDefaultPaymentMethodInfo(soDoc.CustomerID, baseGraph)?.CashAccountID, "Order", baseGraph);
-
-                        #endregion
-
                         // Insert SOOrder
                         soGraph.Document.Insert(soDoc);
 
@@ -1004,8 +1023,17 @@ namespace LumTomofunCustomization.LUMLibrary
                         soGraph.Taxes.Cache.SetValueExt<SOTaxTran.taxID>(soGraph.Taxes.Current, isTaxCalculate ? $"{_marketplace}ECZ" : $"{_marketplace}EC");
                         #endregion
 
-                        // Sales Order Save
-                        ValidAndSaveOrder(soGraph, amazonData);
+                        lock (thisLock)
+                        {
+                            #region Valid Payment check
+
+                            ValidPaymentCheck(paycheck, GetCustomerDefaultPaymentMethodInfo(soDoc.CustomerID, baseGraph)?.CashAccountID, "Order", baseGraph);
+
+                            #endregion
+
+                            // Sales Order Save
+                            ValidAndSaveOrder(soGraph, amazonData);
+                        }
 
                         #region Create PaymentRefund
                         if (amazonData?.Api_total != 0)
@@ -1052,12 +1080,6 @@ namespace LumTomofunCustomization.LUMLibrary
                         soGraph.Document.Cache.SetValueExt(soDoc, PX.Objects.CS.Messages.Attribute + "PAYCHECK", paycheck);
                         #endregion
 
-                        #region Valid Payment check
-
-                        ValidPaymentCheck(paycheck, GetCustomerDefaultPaymentMethodInfo(soDoc.CustomerID, baseGraph)?.CashAccountID, "Order", baseGraph);
-
-                        #endregion
-
                         // Insert SOOrder
                         soGraph.Document.Insert(soDoc);
 
@@ -1101,8 +1123,17 @@ namespace LumTomofunCustomization.LUMLibrary
                         soGraph.Taxes.Cache.SetValueExt<SOTaxTran.taxID>(soGraph.Taxes.Current, isTaxCalculate ? $"{_marketplace}ECZ" : $"{_marketplace}EC");
                         #endregion
 
-                        // Sales Order Save
-                        ValidAndSaveOrder(soGraph, amazonData);
+                        lock (thisLock)
+                        {
+                            #region Valid Payment check
+
+                            ValidPaymentCheck(paycheck, GetCustomerDefaultPaymentMethodInfo(soDoc.CustomerID, baseGraph)?.CashAccountID, "Order", baseGraph);
+
+                            #endregion
+
+                            // Sales Order Save
+                            ValidAndSaveOrder(soGraph, amazonData);
+                        }
 
                         #region Create Payment
                         if (amazonData?.Api_total != 0)
@@ -1157,12 +1188,6 @@ namespace LumTomofunCustomization.LUMLibrary
                         soGraph.Document.Cache.SetValueExt(soDoc, PX.Objects.CS.Messages.Attribute + "PAYCHECK", paycheck);
                         #endregion
 
-                        #region Valid Payment check
-
-                        ValidPaymentCheck(paycheck, GetCustomerDefaultPaymentMethodInfo(soDoc.CustomerID, baseGraph)?.CashAccountID, "Order", baseGraph);
-
-                        #endregion
-
                         // Insert SOOrder
                         soGraph.Document.Insert(soDoc);
 
@@ -1206,8 +1231,17 @@ namespace LumTomofunCustomization.LUMLibrary
                         soGraph.Taxes.Cache.SetValueExt<SOTaxTran.taxID>(soGraph.Taxes.Current, isTaxCalculate ? $"{_marketplace}ECZ" : $"{_marketplace}EC");
                         #endregion
 
-                        // Sales Order Save
-                        ValidAndSaveOrder(soGraph, amazonData);
+                        lock (thisLock)
+                        {
+                            #region Valid Payment check
+
+                            ValidPaymentCheck(paycheck, GetCustomerDefaultPaymentMethodInfo(soDoc.CustomerID, baseGraph)?.CashAccountID, "Order", baseGraph);
+
+                            #endregion
+
+                            // Sales Order Save
+                            ValidAndSaveOrder(soGraph, amazonData);
+                        }
 
                         #region Create PaymentRefund
                         if (amazonData?.Api_total != 0)
@@ -1256,12 +1290,6 @@ namespace LumTomofunCustomization.LUMLibrary
                         soGraph.Document.Cache.SetValueExt(soDoc, PX.Objects.CS.Messages.Attribute + "PAYCHECK", paycheck);
                         #endregion
 
-                        #region Valid Payment check
-
-                        ValidPaymentCheck(paycheck, GetCustomerDefaultPaymentMethodInfo(soDoc.CustomerID, baseGraph)?.CashAccountID, "Order", baseGraph);
-
-                        #endregion
-
                         // Insert SOOrder
                         soGraph.Document.Insert(soDoc);
 
@@ -1305,8 +1333,17 @@ namespace LumTomofunCustomization.LUMLibrary
                         soGraph.Taxes.Cache.SetValueExt<SOTaxTran.taxID>(soGraph.Taxes.Current, isTaxCalculate ? $"{_marketplace}ECZ" : $"{_marketplace}EC");
                         #endregion
 
-                        // Sales Order Save
-                        ValidAndSaveOrder(soGraph, amazonData);
+                        lock (thisLock)
+                        {
+                            #region Valid Payment check
+
+                            ValidPaymentCheck(paycheck, GetCustomerDefaultPaymentMethodInfo(soDoc.CustomerID, baseGraph)?.CashAccountID, "Order", baseGraph);
+
+                            #endregion
+
+                            // Sales Order Save
+                            ValidAndSaveOrder(soGraph, amazonData);
+                        }
 
                         #region Create PaymentRefund
                         if (amazonData?.Api_total != 0)
