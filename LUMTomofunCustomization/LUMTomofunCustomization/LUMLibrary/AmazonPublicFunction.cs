@@ -242,7 +242,7 @@ namespace LumTomofunCustomization.LUMLibrary
             //var amzTotalTax = amzGroupOrderData.Where(x => x.AmountDescription == "Tax" || x.AmountDescription == "ShippingTax" || x.AmountDescription == "TaxDiscount" || x.AmountType == "ItemWithheldTax").Sum(x => (x.Amount ?? 0) * -1);
             using (new PXCommandScope(3000))
             {
-                var paycheck = $"{amazonData?.Api_date?.ToString("yyyyMMddHHmmss")}_{amazonData?.Api_trantype}_{amazonData?.Api_orderid}_{amazonData.Api_sku}_{amazonData?.Api_total?.ToString()}";
+                var paycheck = $"{amazonData?.Api_date?.ToString("yyyyMMddHHmmss")}_{amazonData?.Api_trantype}_{amazonData?.Api_orderid}_{amazonData.Api_sku}_{amazonData?.Api_total?.ToString("0.0000")}";
 
                 switch (amazonData.Api_trantype?.ToUpper())
                 {
