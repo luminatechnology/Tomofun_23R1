@@ -3,16 +3,16 @@ using PX.Data.BQL;
 using PX.Data.BQL.Fluent;
 using PX.Objects.IN;
 using System;
-using System.IO;
 using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using FikaAmazonAPI;
-using FikaAmazonAPI.Utils;
 using LUMTomofunCustomization.DAC;
 using LumTomofunCustomization.Graph;
 using LumTomofunCustomization.API_Entity;
+using FikaAmazonAPI;
+using FikaAmazonAPI.Utils;
+using FikaAmazonAPI.Parameter.Report;
 using static FikaAmazonAPI.Utils.Constants;
 
 namespace LUMTomofunCustomization.Graph
@@ -143,10 +143,10 @@ namespace LUMTomofunCustomization.Graph
 
             return new AmazonConnection(new AmazonCredential()
             {
-                ClientId = isSingapore == false ? isMexico == true ? preference.MXClientID : preference.ClientID : preference.SGClientID,
+                ClientId     = isSingapore == false ? isMexico == true ? preference.MXClientID : preference.ClientID : preference.SGClientID,
                 ClientSecret = isSingapore == false ? isMexico == true ? preference.MXClientSecret : preference.ClientSecret : preference.SGClientSecret,
                 RefreshToken = refreshToken,
-                MarketPlace = MarketPlace.GetMarketPlaceByID(marketPlaceID),
+                MarketPlace  = MarketPlace.GetMarketPlaceByID(marketPlaceID),
             });
             //return new AmazonConnection(new AmazonCredential()
             //{
@@ -189,11 +189,38 @@ namespace LUMTomofunCustomization.Graph
 
             reportOptions.Add("aggregatedByTimePeriod", "DAILY");
 
-            var path = await amazonConnection.Reports.CreateReportAndDownloadFileAsync(ReportTypes.GET_LEDGER_SUMMARY_VIEW_DATA, fromDate, toDate, reportOptions);
-       
-            LedgerSummaryReport report = new LedgerSummaryReport(path, amazonConnection.RefNumber, mpIsJP);
+            var parameters = new ParameterReportList
+            {
+                //parameters.pageSize = 100;
+                reportTypes = new List<ReportTypes>
+                {
+                    ReportTypes.GET_LEDGER_SUMMARY_VIEW_DATA
+                },
+                createdSince  = fromDate,
+                createdUntil  = toDate,
+                reportOptions = reportOptions
+            };
 
-            list.AddRange(report.Data);
+            var reports = amazonConnection.Reports.GetReports(parameters);
+            
+            var result = new List<string>();
+            
+            foreach (var reportData in reports.Take(3))
+            {
+                if (!string.IsNullOrEmpty(reportData.ReportDocumentId))
+                {
+                    result.Add(amazonConnection.Reports.GetReportFile(reportData.ReportDocumentId));
+
+                    LedgerSummaryReport report = new LedgerSummaryReport(amazonConnection.Reports.GetReportFile(reportData.ReportDocumentId), amazonConnection.RefNumber, mpIsJP);
+
+                    list.AddRange(report.Data);
+                }
+            }
+            //var reportOptions = new FikaAmazonAPI.AmazonSpApiSDK.Models.Reports.ReportOptions();
+            //reportOptions.Add("aggregatedByTimePeriod", "DAILY");
+            //var path = await amazonConnection.Reports.CreateReportAndDownloadFileAsync(ReportTypes.GET_LEDGER_SUMMARY_VIEW_DATA, fromDate, toDate, reportOptions);     
+            //LedgerSummaryReport report = new LedgerSummaryReport(path, amazonConnection.RefNumber, mpIsJP);
+            //list.AddRange(report.Data);
 
             return list; 
         }
@@ -256,6 +283,9 @@ namespace LUMTomofunCustomization.Graph
             }
         }
 
+        /// <summary>
+        /// No longer used and moved to LUMDailyInventoryQuery graph.
+        /// </summary>
         public virtual void CreateAmzINReconciliation(List<string> list, string reportID)
         {
             string country = list[7].Replace("\r", "");
@@ -355,6 +385,9 @@ namespace LUMTomofunCustomization.Graph
                    SpcialLabel_NoItem;
         }
 
+        /// <summary>
+        /// Get specified location ID from Amazon.
+        /// </summary>
         public virtual int? GetLocationIDByWarehouse(int? warehouse, string locationDescr)
         {
             return SelectFrom<INLocation>.Where<INLocation.siteID.IsEqual<@P.AsInt>.And<INLocation.locationCD.IsEqual<@P.AsString>>>.View
