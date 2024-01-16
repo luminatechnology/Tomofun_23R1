@@ -321,7 +321,7 @@ namespace LumTomofunCustomization.Graph
                     baseGraph.Actions.PressSave();
                 }
                 // 建立Invoice後，在Release。即使失敗也照常產生
-                if (amzFulfillmentDate.HasValue && (row?.IsProcessed ?? false))
+                if (amzFulfillmentDate.HasValue && (row?.IsProcessed ?? false) && row.OrderStatus?.ToUpper() == "SHIPPED")
                 {
                     try
                     {
@@ -329,11 +329,13 @@ namespace LumTomofunCustomization.Graph
                         invGraph.Document.Current = invGraph.Document.Search<ARInvoice.docType, ARInvoice.refNbr>(invType, invNbr);
                         if (invGraph.Document.Current != null)
                             invGraph.release.Press();
+                        else
+                            throw new Exception("Can not Find Invoice..");
                     }
                     catch (Exception ex)
                     {
                         // Do nothing
-                        row.ErrorMessage = ex.Message;
+                        row.ErrorMessage = "Release error: " + ex.Message;
                         row.IsProcessed = false;
                         PXProcessing.SetError(row.ErrorMessage);
                         baseGraph.AmazonTransaction.Update(row);

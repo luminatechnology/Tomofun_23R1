@@ -143,10 +143,11 @@ namespace LUMTomofunCustomization.Graph
 
             return new AmazonConnection(new AmazonCredential()
             {
-                ClientId     = isSingapore == false ? isMexico == true ? preference.MXClientID : preference.ClientID : preference.SGClientID,
+                ClientId = isSingapore == false ? isMexico == true ? preference.MXClientID : preference.ClientID : preference.SGClientID,
                 ClientSecret = isSingapore == false ? isMexico == true ? preference.MXClientSecret : preference.ClientSecret : preference.SGClientSecret,
                 RefreshToken = refreshToken,
-                MarketPlace  = MarketPlace.GetMarketPlaceByID(marketPlaceID),
+                MarketPlace = MarketPlace.GetMarketPlaceByID(marketPlaceID),
+                IsActiveLimitRate = false
             });
             //return new AmazonConnection(new AmazonCredential()
             //{
@@ -160,69 +161,58 @@ namespace LUMTomofunCustomization.Graph
             //});
         }
 
-        // Old Amazon API is expired on 2023/01/31
-        //public virtual List<FikaAmazonAPI.AmazonSpApiSDK.Models.Reports.Report> GetFulfillmentInventoryReports(AmazonConnection amzConnection, DateTime? filterDate, string marketPlace)
-        //{
-        //    var parameters = new ParameterReportList
-        //    {
-        //        //pageSize = 100, // Roy says it's optional, so it doesn't need to be specified.
-        //        reportTypes = new List<ReportTypes>()
-        //    };
-
-        //    parameters.reportTypes.Add(ReportTypes.GET_FBA_FULFILLMENT_CURRENT_INVENTORY_DATA);
-        //    parameters.marketplaceIds = new List<string>
-        //    {
-        //        marketPlace
-        //    };
-        //    parameters.createdSince = filterDate;
-        //    // Add the following parameter to make report data a little more compact.
-        //    parameters.createdUntil = filterDate.Value.AddDays(1);
-
-        //    return amzConnection.Reports.GetReports(parameters);
-        //}
-
         private async Task<List<LedgerSummaryReportRow>> GetLedgerSummaryReport(AmazonConnection amazonConnection, DateTime fromDate, DateTime toDate, bool mpIsJP)
         {
             List<LedgerSummaryReportRow> list = new List<LedgerSummaryReportRow>();
 
-            var reportOptions = new FikaAmazonAPI.AmazonSpApiSDK.Models.Reports.ReportOptions();
-
-            reportOptions.Add("aggregatedByTimePeriod", "DAILY");
-
-            var parameters = new ParameterReportList
-            {
-                //parameters.pageSize = 100;
-                reportTypes = new List<ReportTypes>
-                {
-                    ReportTypes.GET_LEDGER_SUMMARY_VIEW_DATA
-                },
-                createdSince  = fromDate,
-                createdUntil  = toDate,
-                reportOptions = reportOptions
-            };
-
-            var reports = amazonConnection.Reports.GetReports(parameters);
-            
-            var result = new List<string>();
-            
-            foreach (var reportData in reports.Take(3))
-            {
-                if (!string.IsNullOrEmpty(reportData.ReportDocumentId))
-                {
-                    result.Add(amazonConnection.Reports.GetReportFile(reportData.ReportDocumentId));
-
-                    LedgerSummaryReport report = new LedgerSummaryReport(amazonConnection.Reports.GetReportFile(reportData.ReportDocumentId), amazonConnection.RefNumber, mpIsJP);
-
-                    list.AddRange(report.Data);
-                }
-            }
             //var reportOptions = new FikaAmazonAPI.AmazonSpApiSDK.Models.Reports.ReportOptions();
-            //reportOptions.Add("aggregatedByTimePeriod", "DAILY");
-            //var path = await amazonConnection.Reports.CreateReportAndDownloadFileAsync(ReportTypes.GET_LEDGER_SUMMARY_VIEW_DATA, fromDate, toDate, reportOptions);     
-            //LedgerSummaryReport report = new LedgerSummaryReport(path, amazonConnection.RefNumber, mpIsJP);
-            //list.AddRange(report.Data);
 
-            return list; 
+            //reportOptions.Add("aggregatedByTimePeriod", "DAILY");
+            //reportOptions.Add("aggregateByLocation", "COUNTRY");
+
+            //var parameters = new ParameterReportList
+            //{
+            //    //parameters.pageSize = 100;
+            //    reportTypes = new List<ReportTypes>
+            //    {
+            //        ReportTypes.GET_LEDGER_SUMMARY_VIEW_DATA
+            //    },
+            //    createdSince = fromDate,
+            //    createdUntil = toDate,
+            //    reportOptions = reportOptions
+            //};
+
+            //var reports = amazonConnection.Reports.GetReports(parameters);
+
+            //var result = new List<string>();
+
+            //foreach (var reportData in reports)
+            //{
+            //    if (!string.IsNullOrEmpty(reportData.ReportDocumentId))
+            //    {
+            //        //result.Add(amazonConnection.Reports.GetReportFile(reportData.ReportDocumentId));
+
+            //        LedgerSummaryReport report = new LedgerSummaryReport(amazonConnection.Reports.GetReportFile(reportData.ReportDocumentId), amazonConnection.RefNumber, mpIsJP);
+
+            //        list.AddRange(report.Data);
+            //    }
+            //}
+            var parameters = new ParameterCreateReportSpecification();
+            parameters.reportType = ReportTypes.GET_LEDGER_SUMMARY_VIEW_DATA;
+
+            parameters.marketplaceIds = new MarketplaceIds();
+            parameters.marketplaceIds.Add(amazonConnection.GetCurrentMarketplace.ID);
+            parameters.dataStartTime = fromDate;
+            parameters.dataEndTime = toDate.AddDays(1);
+
+            parameters.reportOptions = new FikaAmazonAPI.AmazonSpApiSDK.Models.Reports.ReportOptions();
+            parameters.reportOptions.Add("aggregatedByTimePeriod", "DAILY");
+            parameters.reportOptions.Add("aggregateByLocation", "COUNTRY");
+            var path = await amazonConnection.Reports.CreateReportAndDownloadFileAsync(parameters.reportType, parameters.dataStartTime, parameters.dataEndTime, reportOptions: parameters.reportOptions);
+            LedgerSummaryReport report = new LedgerSummaryReport(path, amazonConnection.RefNumber, mpIsJP);
+            list.AddRange(report.Data);
+
+            return list;
         }
 
         public virtual void ImportAmzRecords(DateTime? endDate)
@@ -251,7 +241,7 @@ namespace LUMTomofunCustomization.Graph
                     {
                         mP_EU_CA = mpID;
 
-                        var reports = GetLedgerSummaryReport(amzConnection, endDate.Value.AddDays(-14), endDate.Value, mfPref.Marketplace == "JP").Result;
+                        var reports = GetLedgerSummaryReport(amzConnection, endDate.Value.AddDays(-3), endDate.Value, mfPref.Marketplace == "JP").Result;
 
                         for (int i = 0; i < reports.Count; i++)
                         {
@@ -289,7 +279,7 @@ namespace LUMTomofunCustomization.Graph
         public virtual void CreateAmzINReconciliation(List<string> list, string reportID)
         {
             string country = list[7].Replace("\r", "");
-
+            country = country.Length > 2 ? country.Substring(0, 2) : country;
             ///<remarks> Country GB = UK, Warehouse ID = AMZUK (這個較特殊)</remarks>
             if (country == "GB") { country = "UK"; }
 
@@ -319,7 +309,14 @@ namespace LUMTomofunCustomization.Graph
                 Reconcilition.Insert(reconcilition);
             }
 
-            DeleteSameOrEmptyData(null, reconcilition.INDate, reconcilition.Sku, reconcilition.Warehouse.Value, reconcilition.Location.Value, reconcilition.FBACenterID);
+            try
+            {
+                DeleteSameOrEmptyData(null, reconcilition.INDate, reconcilition.Sku, (reconcilition?.Warehouse ?? 0), (reconcilition?.Location ?? 0), reconcilition.FBACenterID);
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
         }
 
         /// <summary>
