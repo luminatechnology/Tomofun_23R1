@@ -70,14 +70,6 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                 <Value>@ShipmentNbr</Value>
             </FilterExp>
         </Filters>
-        <PageSettings>
-            <Margins>
-                <Bottom>0.27cm</Bottom>
-                <Left>1cm</Left>
-                <Right>1cm</Right>
-                <Top>0.27cm</Top>
-            </Margins>
-        </PageSettings>
         <Parameters>
             <ReportParameter>
                 <ColumnSpan>2</ColumnSpan>
@@ -325,21 +317,6 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                     </RelationRow>
                 </Links>
                 <ParentName>SOShipment</ParentName>
-            </ReportRelation>
-            <ReportRelation>
-                <ChildAlias>PalltSizeAttr</ChildAlias>
-                <ChildName>CSAttributeDetail</ChildName>
-                <Links>
-                    <RelationRow>
-                        <ChildField>ValueID</ChildField>
-                        <ParentField>UsrPalletSize</ParentField>
-                    </RelationRow>
-                    <RelationRow>
-                        <ChildField>='PALLETSIZE'</ChildField>
-                        <ParentField>PalltSizeAttr.AttributeID</ParentField>
-                    </RelationRow>
-                </Links>
-                <ParentName>SOPackageDetail</ParentName>
             </ReportRelation>
         </Relations>
         <SchemaUrl>http://localhost/Tomofun</SchemaUrl>
@@ -609,9 +586,6 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                     </ReportField>
                     <ReportField Name="Description">
                     </ReportField>
-                    <ReportField Name="Height">
-                        <DataType>Int32</DataType>
-                    </ReportField>
                     <ReportField Name="InventoryID">
                     </ReportField>
                     <ReportField Name="InventoryID_description">
@@ -641,9 +615,6 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                     </ReportField>
                     <ReportField Name="LastModifiedDateTime_Quarter">
                     </ReportField>
-                    <ReportField Name="Length">
-                        <DataType>Int32</DataType>
-                    </ReportField>
                     <ReportField Name="LineNbr">
                         <DataType>Int32</DataType>
                     </ReportField>
@@ -665,8 +636,6 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                     </ReportField>
                     <ReportField Name="QtyUOM">
                     </ReportField>
-                    <ReportField Name="ReturnTrackNumber">
-                    </ReportField>
                     <ReportField Name="ShipmentNbr">
                     </ReportField>
                     <ReportField Name="TrackData">
@@ -677,34 +646,16 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                     </ReportField>
                     <ReportField Name="tstamp">
                     </ReportField>
-                    <ReportField Name="UsrGWCarton">
-                        <DataType>Decimal</DataType>
-                    </ReportField>
-                    <ReportField Name="UsrNWCarton">
-                        <DataType>Decimal</DataType>
-                    </ReportField>
-                    <ReportField Name="UsrPalletSize">
-                    </ReportField>
-                    <ReportField Name="UsrPalletSize_CSAttributeDetail_description">
-                    </ReportField>
-                    <ReportField Name="UsrPalletSize_description">
-                    </ReportField>
                     <ReportField Name="UsrShipmentSplitLineNbr">
                         <DataType>Int32</DataType>
                     </ReportField>
                     <ReportField Name="UsrTotalCartons">
                         <DataType>Int32</DataType>
                     </ReportField>
-                    <ReportField Name="UsrTotalPallet">
-                        <DataType>Decimal</DataType>
-                    </ReportField>
                     <ReportField Name="Weight">
                         <DataType>Decimal</DataType>
                     </ReportField>
                     <ReportField Name="WeightUOM">
-                    </ReportField>
-                    <ReportField Name="Width">
-                        <DataType>Int32</DataType>
                     </ReportField>
                 </Fields>
                 <FullName>PX.Objects.SO.SOPackageDetail</FullName>
@@ -803,8 +754,6 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                     </ReportField>
                     <ReportField Name="LicenseNumber">
                     </ReportField>
-                    <ReportField Name="LinearUOM">
-                    </ReportField>
                     <ReportField Name="LineNbr">
                         <DataType>Int32</DataType>
                     </ReportField>
@@ -832,8 +781,6 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                     </ReportField>
                     <ReportField Name="QtyUOM">
                     </ReportField>
-                    <ReportField Name="ReturnTrackNumber">
-                    </ReportField>
                     <ReportField Name="ShipmentNbr">
                     </ReportField>
                     <ReportField Name="StampsAddOns">
@@ -846,26 +793,11 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                     </ReportField>
                     <ReportField Name="tstamp">
                     </ReportField>
-                    <ReportField Name="UsrGWCarton">
-                        <DataType>Decimal</DataType>
-                    </ReportField>
-                    <ReportField Name="UsrNWCarton">
-                        <DataType>Decimal</DataType>
-                    </ReportField>
-                    <ReportField Name="UsrPalletSize">
-                    </ReportField>
-                    <ReportField Name="UsrPalletSize_CSAttributeDetail_description">
-                    </ReportField>
-                    <ReportField Name="UsrPalletSize_description">
-                    </ReportField>
                     <ReportField Name="UsrShipmentSplitLineNbr">
                         <DataType>Int32</DataType>
                     </ReportField>
                     <ReportField Name="UsrTotalCartons">
                         <DataType>Int32</DataType>
-                    </ReportField>
-                    <ReportField Name="UsrTotalPallet">
-                        <DataType>Decimal</DataType>
                     </ReportField>
                     <ReportField Name="Weight">
                         <DataType>Decimal</DataType>
@@ -903,24 +835,11 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                     <ReportField Name="BaseShippedQty">
                         <DataType>Decimal</DataType>
                     </ReportField>
-                    <ReportField Name="BlanketLineNbr">
-                        <DataType>Int32</DataType>
-                    </ReportField>
-                    <ReportField Name="BlanketNbr">
-                    </ReportField>
-                    <ReportField Name="BlanketSplitLineNbr">
-                        <DataType>Int32</DataType>
-                    </ReportField>
-                    <ReportField Name="BlanketType">
-                    </ReportField>
                     <ReportField Name="CompleteQtyMin">
                         <DataType>Decimal</DataType>
                     </ReportField>
                     <ReportField Name="Confirmed">
                         <DataType>Boolean</DataType>
-                    </ReportField>
-                    <ReportField Name="CostCenterID">
-                        <DataType>Int32</DataType>
                     </ReportField>
                     <ReportField Name="CostCodeID">
                     </ReportField>
@@ -1011,12 +930,6 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                         <DataType>Boolean</DataType>
                     </ReportField>
                     <ReportField Name="IsIntercompany">
-                        <DataType>Boolean</DataType>
-                    </ReportField>
-                    <ReportField Name="IsSpecialOrder">
-                        <DataType>Boolean</DataType>
-                    </ReportField>
-                    <ReportField Name="IsStockItem">
                         <DataType>Boolean</DataType>
                     </ReportField>
                     <ReportField Name="IsUnassigned">
@@ -1160,9 +1073,6 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                     </ReportField>
                     <ReportField Name="SiteID_Segment1">
                     </ReportField>
-                    <ReportField Name="SOLineSign">
-                        <DataType>Int16</DataType>
-                    </ReportField>
                     <ReportField Name="SortOrder">
                         <DataType>Int32</DataType>
                     </ReportField>
@@ -1213,27 +1123,10 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                     <ReportField Name="ApprovedCreditAmt">
                         <DataType>Decimal</DataType>
                     </ReportField>
-                    <ReportField Name="ApprovedCreditByPayment">
-                        <DataType>Boolean</DataType>
-                    </ReportField>
                     <ReportField Name="ARDocType">
                     </ReportField>
                     <ReportField Name="ArePaymentsApplicable">
                         <DataType>Boolean</DataType>
-                    </ReportField>
-                    <ReportField Name="AttributeMKTPLACE">
-                    </ReportField>
-                    <ReportField Name="AttributeORDERAMT">
-                    </ReportField>
-                    <ReportField Name="AttributeORDERTAGS">
-                    </ReportField>
-                    <ReportField Name="AttributeORDERTYPE">
-                    </ReportField>
-                    <ReportField Name="AttributeORDTAXAMT">
-                    </ReportField>
-                    <ReportField Name="AttributePAYGATE">
-                    </ReportField>
-                    <ReportField Name="AttributeTAXCOLLECT">
                     </ReportField>
                     <ReportField Name="AvalaraCustomerUsageType">
                     </ReportField>
@@ -1257,12 +1150,6 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                     <ReportField Name="BillSeparately">
                         <DataType>Boolean</DataType>
                     </ReportField>
-                    <ReportField Name="BlanketLineCntr">
-                        <DataType>Int32</DataType>
-                    </ReportField>
-                    <ReportField Name="BlanketOpenQty">
-                        <DataType>Decimal</DataType>
-                    </ReportField>
                     <ReportField Name="BranchID">
                     </ReportField>
                     <ReportField Name="BranchID_Branch_acctName">
@@ -1285,6 +1172,8 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                     <ReportField Name="Cancelled">
                         <DataType>Boolean</DataType>
                     </ReportField>
+                    <ReportField Name="CaptureTranNumber">
+                    </ReportField>
                     <ReportField Name="CashAccountID">
                     </ReportField>
                     <ReportField Name="CashAccountID_CashAccount_descr">
@@ -1293,11 +1182,29 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                     </ReportField>
                     <ReportField Name="CashAccountID_Segment1">
                     </ReportField>
+                    <ReportField Name="CCAuthExpirationDate">
+                        <DataType>DateTime</DataType>
+                    </ReportField>
+                    <ReportField Name="CCAuthExpirationDate_Day">
+                    </ReportField>
+                    <ReportField Name="CCAuthExpirationDate_Hour">
+                    </ReportField>
+                    <ReportField Name="CCAuthExpirationDate_Month">
+                    </ReportField>
+                    <ReportField Name="CCAuthExpirationDate_Quarter">
+                    </ReportField>
                     <ReportField Name="CCAuthorizedAmt">
                         <DataType>Decimal</DataType>
                     </ReportField>
-                    <ReportField Name="ChildLineCntr">
+                    <ReportField Name="CCAuthTranNbr">
                         <DataType>Int32</DataType>
+                    </ReportField>
+                    <ReportField Name="CCCapturedAmt">
+                        <DataType>Decimal</DataType>
+                    </ReportField>
+                    <ReportField Name="CCCardNumber">
+                    </ReportField>
+                    <ReportField Name="CCPaymentStateDescr">
                     </ReportField>
                     <ReportField Name="CommnPct">
                         <DataType>Decimal</DataType>
@@ -1336,6 +1243,9 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                     </ReportField>
                     <ReportField Name="CreatedDateTime_Quarter">
                     </ReportField>
+                    <ReportField Name="CreatePMInstance">
+                        <DataType>Boolean</DataType>
+                    </ReportField>
                     <ReportField Name="CreditHold">
                         <DataType>Boolean</DataType>
                     </ReportField>
@@ -1343,6 +1253,12 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                         <DataType>Decimal</DataType>
                     </ReportField>
                     <ReportField Name="CuryCCAuthorizedAmt">
+                        <DataType>Decimal</DataType>
+                    </ReportField>
+                    <ReportField Name="CuryCCCapturedAmt">
+                        <DataType>Decimal</DataType>
+                    </ReportField>
+                    <ReportField Name="CuryCCPreAuthAmount">
                         <DataType>Decimal</DataType>
                     </ReportField>
                     <ReportField Name="CuryControlTotal">
@@ -1355,6 +1271,9 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                         <DataType>Decimal</DataType>
                     </ReportField>
                     <ReportField Name="CuryDocBal">
+                        <DataType>Decimal</DataType>
+                    </ReportField>
+                    <ReportField Name="CuryDocDisc">
                         <DataType>Decimal</DataType>
                     </ReportField>
                     <ReportField Name="CuryFreightAmt">
@@ -1422,9 +1341,6 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                     <ReportField Name="CuryTermsDiscAmt">
                         <DataType>Decimal</DataType>
                     </ReportField>
-                    <ReportField Name="CuryTransferredToChildrenPaymentTotal">
-                        <DataType>Decimal</DataType>
-                    </ReportField>
                     <ReportField Name="CuryUnbilledDiscTotal">
                         <DataType>Decimal</DataType>
                     </ReportField>
@@ -1441,9 +1357,6 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                         <DataType>Decimal</DataType>
                     </ReportField>
                     <ReportField Name="CuryUnpaidBalance">
-                        <DataType>Decimal</DataType>
-                    </ReportField>
-                    <ReportField Name="CuryUnrefundedBalance">
                         <DataType>Decimal</DataType>
                     </ReportField>
                     <ReportField Name="CuryUnreleasedPaymentAmt">
@@ -1495,9 +1408,6 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                     </ReportField>
                     <ReportField Name="DefaultTranType">
                     </ReportField>
-                    <ReportField Name="DeferPriceDiscountRecalculation">
-                        <DataType>Boolean</DataType>
-                    </ReportField>
                     <ReportField Name="DeliveryConfirmation">
                     </ReportField>
                     <ReportField Name="DestinationSiteID">
@@ -1511,9 +1421,6 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                     <ReportField Name="DestinationSiteIdErrorMessage">
                     </ReportField>
                     <ReportField Name="DisableAutomaticDiscountCalculation">
-                        <DataType>Boolean</DataType>
-                    </ReportField>
-                    <ReportField Name="DisableAutomaticTaxCalculation">
                         <DataType>Boolean</DataType>
                     </ReportField>
                     <ReportField Name="DiscBal">
@@ -1541,6 +1448,9 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                     </ReportField>
                     <ReportField Name="DocDesc">
                     </ReportField>
+                    <ReportField Name="DocDisc">
+                        <DataType>Decimal</DataType>
+                    </ReportField>
                     <ReportField Name="DocType">
                     </ReportField>
                     <ReportField Name="DontApprove">
@@ -1564,17 +1474,6 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                         <DataType>Int32</DataType>
                     </ReportField>
                     <ReportField Name="EndorsementService">
-                    </ReportField>
-                    <ReportField Name="ExpireDate">
-                        <DataType>DateTime</DataType>
-                    </ReportField>
-                    <ReportField Name="ExpireDate_Day">
-                    </ReportField>
-                    <ReportField Name="ExpireDate_Hour">
-                    </ReportField>
-                    <ReportField Name="ExpireDate_Month">
-                    </ReportField>
-                    <ReportField Name="ExpireDate_Quarter">
                     </ReportField>
                     <ReportField Name="ExtCarrierPlugIn">
                     </ReportField>
@@ -1620,18 +1519,10 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                     <ReportField Name="FreightTot">
                         <DataType>Decimal</DataType>
                     </ReportField>
-                    <ReportField Name="GotReadyForArchiveAt">
-                        <DataType>DateTime</DataType>
-                    </ReportField>
-                    <ReportField Name="GotReadyForArchiveAt_Day">
-                    </ReportField>
-                    <ReportField Name="GotReadyForArchiveAt_Hour">
-                    </ReportField>
-                    <ReportField Name="GotReadyForArchiveAt_Month">
-                    </ReportField>
-                    <ReportField Name="GotReadyForArchiveAt_Quarter">
-                    </ReportField>
                     <ReportField Name="GroundCollect">
+                        <DataType>Boolean</DataType>
+                    </ReportField>
+                    <ReportField Name="HasLegacyCCTran">
                         <DataType>Boolean</DataType>
                     </ReportField>
                     <ReportField Name="Hold">
@@ -1668,19 +1559,19 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                     <ReportField Name="IsCashSaleOrder">
                         <DataType>Boolean</DataType>
                     </ReportField>
+                    <ReportField Name="IsCCAuthorized">
+                        <DataType>Boolean</DataType>
+                    </ReportField>
+                    <ReportField Name="IsCCCaptured">
+                        <DataType>Boolean</DataType>
+                    </ReportField>
+                    <ReportField Name="IsCCCaptureFailed">
+                        <DataType>Boolean</DataType>
+                    </ReportField>
                     <ReportField Name="IsCreditMemoOrder">
                         <DataType>Boolean</DataType>
                     </ReportField>
                     <ReportField Name="IsDebitMemoOrder">
-                        <DataType>Boolean</DataType>
-                    </ReportField>
-                    <ReportField Name="IsExpired">
-                        <DataType>Boolean</DataType>
-                    </ReportField>
-                    <ReportField Name="IsFreightAvailable">
-                        <DataType>Boolean</DataType>
-                    </ReportField>
-                    <ReportField Name="IsFullyPaid">
                         <DataType>Boolean</DataType>
                     </ReportField>
                     <ReportField Name="IsIntercompany">
@@ -1690,12 +1581,6 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                         <DataType>Boolean</DataType>
                     </ReportField>
                     <ReportField Name="IsManualPackage">
-                        <DataType>Boolean</DataType>
-                    </ReportField>
-                    <ReportField Name="IsManualTaxesValid">
-                        <DataType>Boolean</DataType>
-                    </ReportField>
-                    <ReportField Name="IsMixedOrder">
                         <DataType>Boolean</DataType>
                     </ReportField>
                     <ReportField Name="IsNoAROrder">
@@ -1708,9 +1593,6 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                         <DataType>Boolean</DataType>
                     </ReportField>
                     <ReportField Name="IsPaymentInfoEnabled">
-                        <DataType>Boolean</DataType>
-                    </ReportField>
-                    <ReportField Name="IsPriceAndDiscountsValid">
                         <DataType>Boolean</DataType>
                     </ReportField>
                     <ReportField Name="IsRMAOrder">
@@ -1772,17 +1654,6 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                     <ReportField Name="ManDisc">
                         <DataType>Decimal</DataType>
                     </ReportField>
-                    <ReportField Name="MinSchedOrderDate">
-                        <DataType>DateTime</DataType>
-                    </ReportField>
-                    <ReportField Name="MinSchedOrderDate_Day">
-                    </ReportField>
-                    <ReportField Name="MinSchedOrderDate_Hour">
-                    </ReportField>
-                    <ReportField Name="MinSchedOrderDate_Month">
-                    </ReportField>
-                    <ReportField Name="MinSchedOrderDate_Quarter">
-                    </ReportField>
                     <ReportField Name="MiscTot">
                         <DataType>Decimal</DataType>
                     </ReportField>
@@ -1818,9 +1689,6 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                     <ReportField Name="OpenShipmentCntr">
                         <DataType>Int32</DataType>
                     </ReportField>
-                    <ReportField Name="OpenSiteCntr">
-                        <DataType>Int32</DataType>
-                    </ReportField>
                     <ReportField Name="OpenTaxTotal">
                         <DataType>Decimal</DataType>
                     </ReportField>
@@ -1841,9 +1709,6 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                     </ReportField>
                     <ReportField Name="OrderQty">
                         <DataType>Decimal</DataType>
-                    </ReportField>
-                    <ReportField Name="OrderTaxAllocated">
-                        <DataType>Boolean</DataType>
                     </ReportField>
                     <ReportField Name="OrderTotal">
                         <DataType>Decimal</DataType>
@@ -1902,11 +1767,15 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                     <ReportField Name="PaymentOverall">
                         <DataType>Decimal</DataType>
                     </ReportField>
+                    <ReportField Name="PaymentProfileID">
+                    </ReportField>
                     <ReportField Name="PaymentsNeedValidationCntr">
                         <DataType>Int32</DataType>
                     </ReportField>
                     <ReportField Name="PaymentTotal">
                         <DataType>Decimal</DataType>
+                    </ReportField>
+                    <ReportField Name="PCResponseReasonText">
                     </ReportField>
                     <ReportField Name="PMInstanceID">
                         <DataType>Int32</DataType>
@@ -1914,6 +1783,8 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                     <ReportField Name="PMInstanceID_CustomerPaymentMethod_descr">
                     </ReportField>
                     <ReportField Name="PMInstanceID_description">
+                    </ReportField>
+                    <ReportField Name="PreAuthTranNumber">
                     </ReportField>
                     <ReportField Name="PremiumFreightAmt">
                         <DataType>Decimal</DataType>
@@ -1927,9 +1798,6 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                     <ReportField Name="PrepaymentReqSatisfied">
                         <DataType>Boolean</DataType>
                     </ReportField>
-                    <ReportField Name="Printed">
-                        <DataType>Boolean</DataType>
-                    </ReportField>
                     <ReportField Name="Priority">
                         <DataType>Int16</DataType>
                     </ReportField>
@@ -1941,10 +1809,9 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                     </ReportField>
                     <ReportField Name="ProjectID_Segment1">
                     </ReportField>
-                    <ReportField Name="QtyOnOrders">
-                        <DataType>Decimal</DataType>
-                    </ReportField>
                     <ReportField Name="RefNbr">
+                    </ReportField>
+                    <ReportField Name="RefTranExtNbr">
                     </ReportField>
                     <ReportField Name="Rejected">
                         <DataType>Boolean</DataType>
@@ -2029,18 +1896,6 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                     </ReportField>
                     <ReportField Name="ShipZoneID_ShippingZone_description">
                     </ReportField>
-                    <ReportField Name="ShowDiscountsTab">
-                        <DataType>Boolean</DataType>
-                    </ReportField>
-                    <ReportField Name="ShowOrdersTab">
-                        <DataType>Boolean</DataType>
-                    </ReportField>
-                    <ReportField Name="ShowShipmentsTab">
-                        <DataType>Boolean</DataType>
-                    </ReportField>
-                    <ReportField Name="SiteCntr">
-                        <DataType>Int32</DataType>
-                    </ReportField>
                     <ReportField Name="Status">
                     </ReportField>
                     <ReportField Name="SuggestRelatedItems">
@@ -2066,9 +1921,6 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                     </ReportField>
                     <ReportField Name="TermsID_Terms_descr">
                     </ReportField>
-                    <ReportField Name="TransferredToChildrenPaymentTotal">
-                        <DataType>Decimal</DataType>
-                    </ReportField>
                     <ReportField Name="tstamp">
                     </ReportField>
                     <ReportField Name="UnbilledDiscTotal">
@@ -2090,9 +1942,6 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                         <DataType>Decimal</DataType>
                     </ReportField>
                     <ReportField Name="UnpaidBalance">
-                        <DataType>Decimal</DataType>
-                    </ReportField>
-                    <ReportField Name="UnrefundedBalance">
                         <DataType>Decimal</DataType>
                     </ReportField>
                     <ReportField Name="UnreleasedPaymentAmt">
@@ -2140,12 +1989,6 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                     <ReportField Name="AcctName">
                     </ReportField>
                     <ReportField Name="AcctReferenceNbr">
-                    </ReportField>
-                    <ReportField Name="AllowOverrideCury">
-                        <DataType>Boolean</DataType>
-                    </ReportField>
-                    <ReportField Name="AllowOverrideRate">
-                        <DataType>Boolean</DataType>
                     </ReportField>
                     <ReportField Name="BAccountID">
                         <DataType>Int32</DataType>
@@ -2202,10 +2045,6 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                     <ReportField Name="CreatedDateTime_Month">
                     </ReportField>
                     <ReportField Name="CreatedDateTime_Quarter">
-                    </ReportField>
-                    <ReportField Name="CuryID">
-                    </ReportField>
-                    <ReportField Name="CuryRateTypeID">
                     </ReportField>
                     <ReportField Name="DefAddressID">
                         <DataType>Int32</DataType>
@@ -2315,6 +2154,12 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                     <ReportField Name="Status">
                     </ReportField>
                     <ReportField Name="TaxRegistrationID">
+                    </ReportField>
+                    <ReportField Name="TaxZoneID">
+                    </ReportField>
+                    <ReportField Name="TaxZoneID_description">
+                    </ReportField>
+                    <ReportField Name="TaxZoneID_TaxZone_descr">
                     </ReportField>
                     <ReportField Name="tstamp">
                     </ReportField>
@@ -2625,9 +2470,6 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                     <ReportField Name="IsActive">
                         <DataType>Boolean</DataType>
                     </ReportField>
-                    <ReportField Name="IsAddedAsExt">
-                        <DataType>Boolean</DataType>
-                    </ReportField>
                     <ReportField Name="IsAddressSameAsMain">
                         <DataType>Boolean</DataType>
                     </ReportField>
@@ -2904,9 +2746,6 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                     <ReportField Name="OrderNoteID">
                         <DataType>Object</DataType>
                     </ReportField>
-                    <ReportField Name="OrderTaxAllocated">
-                        <DataType>Boolean</DataType>
-                    </ReportField>
                     <ReportField Name="OrderType">
                     </ReportField>
                     <ReportField Name="ProjectID">
@@ -3014,6 +2853,16 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                     </ReportField>
                     <ReportField Name="COGSAcctID_Segment1">
                     </ReportField>
+                    <ReportField Name="COGSSubID">
+                    </ReportField>
+                    <ReportField Name="COGSSubID_description">
+                    </ReportField>
+                    <ReportField Name="COGSSubID_Segment1">
+                    </ReportField>
+                    <ReportField Name="COGSSubID_Segment2">
+                    </ReportField>
+                    <ReportField Name="COGSSubID_Sub_description">
+                    </ReportField>
                     <ReportField Name="ConsolidateStatements">
                         <DataType>Boolean</DataType>
                     </ReportField>
@@ -3072,8 +2921,6 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                     <ReportField Name="CustomerClassID_CustomerClass_descr">
                     </ReportField>
                     <ReportField Name="CustomerClassID_description">
-                    </ReportField>
-                    <ReportField Name="CustomerKind">
                     </ReportField>
                     <ReportField Name="DefAddressID">
                         <DataType>Int32</DataType>
@@ -3333,6 +3180,12 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                     </ReportField>
                     <ReportField Name="TaxRegistrationID">
                     </ReportField>
+                    <ReportField Name="TaxZoneID">
+                    </ReportField>
+                    <ReportField Name="TaxZoneID_description">
+                    </ReportField>
+                    <ReportField Name="TaxZoneID_TaxZone_descr">
+                    </ReportField>
                     <ReportField Name="TermsID">
                     </ReportField>
                     <ReportField Name="TermsID_description">
@@ -3379,8 +3232,6 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                     </ReportField>
                     <ReportField Name="AttributeDescriptionGroupID">
                         <DataType>Int32</DataType>
-                    </ReportField>
-                    <ReportField Name="AUHSCODE_Attributes">
                     </ReportField>
                     <ReportField Name="Availability">
                     </ReportField>
@@ -3433,8 +3284,6 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                     <ReportField Name="Commisionable">
                         <DataType>Boolean</DataType>
                     </ReportField>
-                    <ReportField Name="CommodityCodeType">
-                    </ReportField>
                     <ReportField Name="CompletePOLine">
                     </ReportField>
                     <ReportField Name="CostBasis">
@@ -3483,13 +3332,13 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                     </ReportField>
                     <ReportField Name="DefaultColumnMatrixAttributeID">
                     </ReportField>
-                    <ReportField Name="DefaultColumnMatrixAttributeID_CSAnswers_description">
+                    <ReportField Name="DefaultColumnMatrixAttributeID_CSAttribute_description">
                     </ReportField>
                     <ReportField Name="DefaultColumnMatrixAttributeID_description">
                     </ReportField>
                     <ReportField Name="DefaultRowMatrixAttributeID">
                     </ReportField>
-                    <ReportField Name="DefaultRowMatrixAttributeID_CSAnswers_description">
+                    <ReportField Name="DefaultRowMatrixAttributeID_CSAttribute_description">
                     </ReportField>
                     <ReportField Name="DefaultRowMatrixAttributeID_description">
                     </ReportField>
@@ -3562,8 +3411,6 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                     <ReportField Name="EntityTypeID">
                         <DataType>Int32</DataType>
                     </ReportField>
-                    <ReportField Name="ESHSCODE_Attributes">
-                    </ReportField>
                     <ReportField Name="ExpenseAccrualAcctID">
                         <DataType>Int32</DataType>
                     </ReportField>
@@ -3578,8 +3425,6 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                     </ReportField>
                     <ReportField Name="ExportToExternal">
                         <DataType>Boolean</DataType>
-                    </ReportField>
-                    <ReportField Name="FRHSCODE_Attributes">
                     </ReportField>
                     <ReportField Name="GBHSCODE_Attributes">
                     </ReportField>
@@ -3626,15 +3471,6 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                     </ReportField>
                     <ReportField Name="InvtSubID_Sub_description">
                     </ReportField>
-                    <ReportField Name="IsConversionMode">
-                        <DataType>Boolean</DataType>
-                    </ReportField>
-                    <ReportField Name="IsConverted">
-                        <DataType>Boolean</DataType>
-                    </ReportField>
-                    <ReportField Name="IsSpecialOrderItem">
-                        <DataType>Boolean</DataType>
-                    </ReportField>
                     <ReportField Name="IsSplitted">
                         <DataType>Boolean</DataType>
                     </ReportField>
@@ -3652,8 +3488,6 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                     <ReportField Name="ItemStatus">
                     </ReportField>
                     <ReportField Name="ItemType">
-                    </ReportField>
-                    <ReportField Name="ITHSCODE_Attributes">
                     </ReportField>
                     <ReportField Name="JPHSCODE_Attributes">
                     </ReportField>
@@ -3711,6 +3545,8 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                     </ReportField>
                     <ReportField Name="LotSerClassID_INLotSerClass_descr">
                     </ReportField>
+                    <ReportField Name="LotSerNumberResult">
+                    </ReportField>
                     <ReportField Name="MarkupPct">
                         <DataType>Decimal</DataType>
                     </ReportField>
@@ -3725,8 +3561,6 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                     </ReportField>
                     <ReportField Name="MovementClassIsFixed">
                         <DataType>Boolean</DataType>
-                    </ReportField>
-                    <ReportField Name="MXHSCODE_Attributes">
                     </ReportField>
                     <ReportField Name="NegQty">
                         <DataType>Boolean</DataType>
@@ -3925,8 +3759,6 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                     <ReportField Name="Secured">
                         <DataType>Boolean</DataType>
                     </ReportField>
-                    <ReportField Name="SEHSCODE_Attributes">
-                    </ReportField>
                     <ReportField Name="Selected">
                         <DataType>Boolean</DataType>
                     </ReportField>
@@ -4104,14 +3936,6 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                     <ReportField Name="DefaultRUTROTType">
                         <DataType>Object</DataType>
                     </ReportField>
-                    <ReportField Name="DunningFeeBranchID">
-                    </ReportField>
-                    <ReportField Name="DunningFeeBranchID_Branch_acctName">
-                    </ReportField>
-                    <ReportField Name="DunningFeeBranchID_description">
-                    </ReportField>
-                    <ReportField Name="DunningFeeBranchID_Segment1">
-                    </ReportField>
                     <ReportField Name="FileTaxesByBranches">
                         <DataType>Boolean</DataType>
                     </ReportField>
@@ -4181,8 +4005,6 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                     <ReportField Name="OrganizationID">
                         <DataType>Int32</DataType>
                     </ReportField>
-                    <ReportField Name="OrganizationLocalizationCode">
-                    </ReportField>
                     <ReportField Name="OrganizationName">
                     </ReportField>
                     <ReportField Name="OrganizationType">
@@ -4239,8 +4061,6 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                     <ReportField Name="Selected">
                         <DataType>Boolean</DataType>
                     </ReportField>
-                    <ReportField Name="Status">
-                    </ReportField>
                     <ReportField Name="TaxAgencyAccountID">
                         <DataType>Object</DataType>
                     </ReportField>
@@ -4257,9 +4077,6 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                         <DataType>Decimal</DataType>
                     </ReportField>
                     <ReportField Name="BaseBilledQty">
-                        <DataType>Decimal</DataType>
-                    </ReportField>
-                    <ReportField Name="BaseOpenQty">
                         <DataType>Decimal</DataType>
                     </ReportField>
                     <ReportField Name="BaseOrderQty">
@@ -4292,9 +4109,6 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                     <ReportField Name="CuryInfoID">
                         <DataType>Int64</DataType>
                     </ReportField>
-                    <ReportField Name="CuryOpenAmt">
-                        <DataType>Decimal</DataType>
-                    </ReportField>
                     <ReportField Name="CuryRate">
                         <DataType>Decimal</DataType>
                     </ReportField>
@@ -4305,9 +4119,6 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                         <DataType>Decimal</DataType>
                     </ReportField>
                     <ReportField Name="CuryViewState">
-                        <DataType>Boolean</DataType>
-                    </ReportField>
-                    <ReportField Name="DisableAutomaticTaxCalculation">
                         <DataType>Boolean</DataType>
                     </ReportField>
                     <ReportField Name="DiscPct">
@@ -4346,16 +4157,7 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                     <ReportField Name="LineNbr">
                         <DataType>Int32</DataType>
                     </ReportField>
-                    <ReportField Name="LineSign">
-                        <DataType>Int16</DataType>
-                    </ReportField>
                     <ReportField Name="LineType">
-                    </ReportField>
-                    <ReportField Name="OpenAmt">
-                        <DataType>Decimal</DataType>
-                    </ReportField>
-                    <ReportField Name="OpenQty">
-                        <DataType>Decimal</DataType>
                     </ReportField>
                     <ReportField Name="Operation">
                     </ReportField>
@@ -4402,8 +4204,6 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                         <DataType>Int32</DataType>
                     </ReportField>
                     <ReportField Name="TaxCategoryID">
-                    </ReportField>
-                    <ReportField Name="TaxZoneID">
                     </ReportField>
                     <ReportField Name="TranDesc">
                     </ReportField>
@@ -4497,8 +4297,6 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                     <ReportField Name="AttributeWHCONTACT">
                     </ReportField>
                     <ReportField Name="AttributeWHEMAIL">
-                    </ReportField>
-                    <ReportField Name="AttributeWHLEADTIME">
                     </ReportField>
                     <ReportField Name="AttributeWHPHONE">
                     </ReportField>
@@ -4840,7 +4638,7 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                     </ReportField>
                     <ReportField Name="AttributeAMZSHIPID">
                     </ReportField>
-                    <ReportField Name="AttributeCBM">
+                    <ReportField Name="AttributeAPCURRENCY">
                     </ReportField>
                     <ReportField Name="AttributeCMINVOICE1">
                     </ReportField>
@@ -4878,8 +4676,6 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                     </ReportField>
                     <ReportField Name="AttributePLTWHT">
                     </ReportField>
-                    <ReportField Name="AttributePOUNITCOST">
-                    </ReportField>
                     <ReportField Name="AttributeSHIPMARK1">
                     </ReportField>
                     <ReportField Name="AttributeSHIPMARK2">
@@ -4888,15 +4684,10 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                     </ReportField>
                     <ReportField Name="AttributeSPINSUR">
                     </ReportField>
-                    <ReportField Name="AttributeTOTALGW">
-                    </ReportField>
                     <ReportField Name="BilledOrderCntr">
                         <DataType>Int32</DataType>
                     </ReportField>
                     <ReportField Name="BillSeparately">
-                        <DataType>Boolean</DataType>
-                    </ReportField>
-                    <ReportField Name="CommercialInvoicesPrinted">
                         <DataType>Boolean</DataType>
                     </ReportField>
                     <ReportField Name="ConfirmationPrinted">
@@ -5040,17 +4831,6 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                     </ReportField>
                     <ReportField Name="FreightCost">
                         <DataType>Decimal</DataType>
-                    </ReportField>
-                    <ReportField Name="GotReadyForArchiveAt">
-                        <DataType>DateTime</DataType>
-                    </ReportField>
-                    <ReportField Name="GotReadyForArchiveAt_Day">
-                    </ReportField>
-                    <ReportField Name="GotReadyForArchiveAt_Hour">
-                    </ReportField>
-                    <ReportField Name="GotReadyForArchiveAt_Month">
-                    </ReportField>
-                    <ReportField Name="GotReadyForArchiveAt_Quarter">
                     </ReportField>
                     <ReportField Name="GroundCollect">
                         <DataType>Boolean</DataType>
@@ -5236,17 +5016,11 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                     </ReportField>
                     <ReportField Name="ShipVia_description">
                     </ReportField>
-                    <ReportField Name="ShipViaUpdateFromShopForRate">
-                        <DataType>Boolean</DataType>
-                    </ReportField>
                     <ReportField Name="ShipZoneID">
                     </ReportField>
                     <ReportField Name="ShipZoneID_description">
                     </ReportField>
                     <ReportField Name="ShipZoneID_ShippingZone_description">
-                    </ReportField>
-                    <ReportField Name="SiteBranchID">
-                        <DataType>Int32</DataType>
                     </ReportField>
                     <ReportField Name="SiteID">
                     </ReportField>
@@ -6063,11 +5837,10 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                 <FullName>PX.Objects.CR.Location</FullName>
             </ReportTable>
         </Tables>
-        <Version>20230713</Version>
+        <Version>20201103</Version>
         <Sections>
             <PageHeader Name="pageHeaderSection1">
-                <Expanded>False</Expanded>
-                <Height>13.12169cm</Height>
+                <Height>13.75661cm</Height>
                 <Items>
                     <PictureBox Name="pictureBox3">
                         <Excel>
@@ -6100,7 +5873,7 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                             <row>17</row>
                             <width>4</width>
                         </Excel>
-                        <Location>0px, 376px</Location>
+                        <Location>0px, 400px</Location>
                         <Size>304px, 16px</Size>
                         <Style>
                             <BorderStyle>
@@ -6126,7 +5899,7 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                             <row>18</row>
                             <width>4</width>
                         </Excel>
-                        <Location>0px, 360px</Location>
+                        <Location>0px, 384px</Location>
                         <Size>304px, 16px</Size>
                         <Style>
                             <BorderStyle>
@@ -6145,7 +5918,7 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                                 <Left>1px</Left>
                             </Padding>
                         </Style>
-                        <Value>=IIf([SOShipment.ShipmentType] = 'I', IsNull([Location.AttributeWHREGNO],''), '')</Value>
+                        <Value>=IIF([SOShipment.ShipmentType] = 'I', ISNULL([Location.AttributeWHREGNO],''),#010;[INSite.AttributeWHREGNO])</Value>
                     </TextBox>
                     <TextBox Name="textBox12">
                         <Excel>
@@ -6153,7 +5926,7 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                             <width>4</width>
                             <height>2</height>
                         </Excel>
-                        <Location>0px, 392px</Location>
+                        <Location>0px, 416px</Location>
                         <Size>304px, 32px</Size>
                         <Style>
                             <BorderStyle>
@@ -6179,7 +5952,7 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                             <row>21</row>
                             <width>4</width>
                         </Excel>
-                        <Location>0px, 424px</Location>
+                        <Location>0px, 448px</Location>
                         <Size>304px, 16px</Size>
                         <Style>
                             <BorderStyle>
@@ -6205,7 +5978,7 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                             <row>22</row>
                             <width>4</width>
                         </Excel>
-                        <Location>0px, 440px</Location>
+                        <Location>0px, 464px</Location>
                         <Size>304px, 16px</Size>
                         <Style>
                             <BorderStyle>
@@ -6231,7 +6004,7 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                             <row>23</row>
                             <width>4</width>
                         </Excel>
-                        <Location>0px, 456px</Location>
+                        <Location>0px, 480px</Location>
                         <Size>304px, 16px</Size>
                         <Style>
                             <BorderStyle>
@@ -6258,7 +6031,7 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                             <column>6</column>
                             <row>4</row>
                         </Excel>
-                        <Location>328px, 136px</Location>
+                        <Location>328px, 160px</Location>
                         <Size>368px, 16px</Size>
                         <Style>
                             <Font>
@@ -6273,7 +6046,7 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                             <row>5</row>
                             <width>2</width>
                         </Excel>
-                        <Location>328px, 152px</Location>
+                        <Location>328px, 176px</Location>
                         <Size>184px, 16px</Size>
                         <Style>
                             <BorderStyle>
@@ -6300,7 +6073,7 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                             <row>5</row>
                             <width>2</width>
                         </Excel>
-                        <Location>512px, 152px</Location>
+                        <Location>512px, 176px</Location>
                         <Size>184px, 16px</Size>
                         <Style>
                             <BorderStyle>
@@ -6330,7 +6103,7 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                             <width>2</width>
                         </Excel>
                         <Format>='MMM dd, yyyy'</Format>
-                        <Location>328px, 168px</Location>
+                        <Location>328px, 192px</Location>
                         <Size>184px, 16px</Size>
                         <Style>
                             <BorderStyle>
@@ -6368,7 +6141,7 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                             <row>6</row>
                             <width>2</width>
                         </Excel>
-                        <Location>512px, 168px</Location>
+                        <Location>512px, 192px</Location>
                         <Size>184px, 16px</Size>
                         <Style>
                             <BorderStyle>
@@ -6394,7 +6167,7 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                             <row>7</row>
                             <width>2</width>
                         </Excel>
-                        <Location>328px, 184px</Location>
+                        <Location>328px, 208px</Location>
                         <Size>184px, 16px</Size>
                         <Style>
                             <BorderStyle>
@@ -6421,7 +6194,7 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                             <row>7</row>
                             <width>2</width>
                         </Excel>
-                        <Location>512px, 184px</Location>
+                        <Location>512px, 208px</Location>
                         <Size>184px, 16px</Size>
                         <Style>
                             <BorderStyle>
@@ -6450,7 +6223,7 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                             <row>8</row>
                             <width>2</width>
                         </Excel>
-                        <Location>328px, 200px</Location>
+                        <Location>328px, 224px</Location>
                         <Size>184px, 16px</Size>
                         <Style>
                             <BorderStyle>
@@ -6474,7 +6247,7 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                             <row>8</row>
                             <width>2</width>
                         </Excel>
-                        <Location>512px, 200px</Location>
+                        <Location>512px, 224px</Location>
                         <Size>184px, 16px</Size>
                         <Style>
                             <BorderStyle>
@@ -6500,7 +6273,7 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                             <row>9</row>
                             <width>2</width>
                         </Excel>
-                        <Location>328px, 216px</Location>
+                        <Location>328px, 240px</Location>
                         <Size>184px, 16px</Size>
                         <Style>
                             <BorderStyle>
@@ -6527,7 +6300,7 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                             <row>9</row>
                             <width>2</width>
                         </Excel>
-                        <Location>512px, 216px</Location>
+                        <Location>512px, 240px</Location>
                         <Size>184px, 16px</Size>
                         <Style>
                             <BorderStyle>
@@ -6556,7 +6329,7 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                             <row>10</row>
                             <width>2</width>
                         </Excel>
-                        <Location>328px, 232px</Location>
+                        <Location>328px, 256px</Location>
                         <Size>184px, 16px</Size>
                         <Style>
                             <BorderStyle>
@@ -6580,7 +6353,7 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                             <row>10</row>
                             <width>2</width>
                         </Excel>
-                        <Location>512px, 232px</Location>
+                        <Location>512px, 256px</Location>
                         <Size>184px, 16px</Size>
                         <Style>
                             <BorderStyle>
@@ -6606,7 +6379,7 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                             <row>11</row>
                             <width>2</width>
                         </Excel>
-                        <Location>328px, 248px</Location>
+                        <Location>328px, 272px</Location>
                         <Size>184px, 16px</Size>
                         <Style>
                             <BorderStyle>
@@ -6633,7 +6406,7 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                             <width>9</width>
                         </Excel>
                         <Location>0px, 104px</Location>
-                        <Size>696px, 24px</Size>
+                        <Size>696px, 40px</Size>
                         <Style>
                             <Font>
                                 <Size>20px</Size>
@@ -6650,7 +6423,7 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                             <row>11</row>
                             <width>2</width>
                         </Excel>
-                        <Location>512px, 248px</Location>
+                        <Location>512px, 272px</Location>
                         <Size>184px, 16px</Size>
                         <Style>
                             <BorderStyle>
@@ -6679,7 +6452,7 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                             <row>12</row>
                             <width>2</width>
                         </Excel>
-                        <Location>328px, 264px</Location>
+                        <Location>328px, 288px</Location>
                         <Size>184px, 16px</Size>
                         <Style>
                             <BorderStyle>
@@ -6703,7 +6476,7 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                             <row>12</row>
                             <width>2</width>
                         </Excel>
-                        <Location>512px, 264px</Location>
+                        <Location>512px, 288px</Location>
                         <Size>184px, 16px</Size>
                         <Style>
                             <BorderStyle>
@@ -6729,7 +6502,7 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                             <row>13</row>
                             <width>2</width>
                         </Excel>
-                        <Location>328px, 280px</Location>
+                        <Location>328px, 304px</Location>
                         <Size>184px, 16px</Size>
                         <Style>
                             <BorderStyle>
@@ -6756,7 +6529,7 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                             <row>13</row>
                             <width>2</width>
                         </Excel>
-                        <Location>512px, 280px</Location>
+                        <Location>512px, 304px</Location>
                         <Size>184px, 16px</Size>
                         <Style>
                             <BorderStyle>
@@ -6785,7 +6558,7 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                             <row>14</row>
                             <width>2</width>
                         </Excel>
-                        <Location>328px, 296px</Location>
+                        <Location>328px, 320px</Location>
                         <Size>184px, 16px</Size>
                         <Style>
                             <BorderStyle>
@@ -6810,7 +6583,7 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                             <column>8</column>
                             <row>14</row>
                         </Excel>
-                        <Location>512px, 296px</Location>
+                        <Location>512px, 320px</Location>
                         <Size>40px, 16px</Size>
                         <Style>
                             <BorderStyle>
@@ -6837,7 +6610,7 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                             <row>16</row>
                             <width>4</width>
                         </Excel>
-                        <Location>328px, 328px</Location>
+                        <Location>328px, 352px</Location>
                         <Size>368px, 16px</Size>
                         <Style>
                             <BorderStyle>
@@ -6866,7 +6639,7 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                             <row>17</row>
                             <width>4</width>
                         </Excel>
-                        <Location>328px, 344px</Location>
+                        <Location>328px, 368px</Location>
                         <Size>368px, 16px</Size>
                         <Style>
                             <BorderStyle>
@@ -6894,7 +6667,7 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                             <width>4</width>
                             <height>3</height>
                         </Excel>
-                        <Location>328px, 360px</Location>
+                        <Location>328px, 384px</Location>
                         <Size>368px, 48px</Size>
                         <Style>
                             <BorderStyle>
@@ -6913,14 +6686,14 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                                 <Left>1px</Left>
                             </Padding>
                         </Style>
-                        <Value>= IsNull([SOShipmentAddress.AddressLine1], '')+ '{br}' #010;+ IsNull([SOShipmentAddress.AddressLine2], '')#010;+ IIf([SOShipmentAddress.City] &lt;&gt; Null, ', ' + [SOShipmentAddress.City], '')#010;+ IIf([SOShipmentAddress.State] &lt;&gt; Null, ', ' + [SOShipmentAddress.State], '')#010;+ IIF([SOShipmentAddress.PostalCode] &lt;&gt; Null, ', ' + [SOShipmentAddress.PostalCode],'')#010;+ IIf([SOShipmentAddress.CountryID_description] &lt;&gt; Null, ', ' + [SOShipmentAddress.CountryID_description], '')#010;</Value>
+                        <Value>= IsNull([SOShipmentAddress.AddressLine1], '')#010;+ '{br}' + IsNull([SOShipmentAddress.AddressLine2], '')#010;+ IIf([SOShipmentAddress.City] &lt;&gt; Null, '{br}' + [SOShipmentAddress.City], '')#010;+ IIf([SOShipmentAddress.CountryID_description] &lt;&gt; Null, ',' + [SOShipmentAddress.CountryID_description], '')#010;+ IIf([SOShipmentAddress.State] &lt;&gt; Null, ',' + [SOShipmentAddress.State], '')#010;+ IIF([SOShipmentAddress.PostalCode] &lt;&gt; Null, ',' + [SOShipmentAddress.PostalCode],'')#010;</Value>
                     </TextBox>
                     <TextBox Name="textBox4">
                         <Excel>
                             <row>5</row>
                             <width>4</width>
                         </Excel>
-                        <Location>0px, 152px</Location>
+                        <Location>0px, 176px</Location>
                         <Size>304px, 16px</Size>
                         <Style>
                             <BorderStyle>
@@ -6949,7 +6722,7 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                             <row>21</row>
                             <width>4</width>
                         </Excel>
-                        <Location>328px, 456px</Location>
+                        <Location>328px, 480px</Location>
                         <Size>368px, 16px</Size>
                         <Style>
                             <BorderStyle>
@@ -6976,7 +6749,7 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                             <row>22</row>
                             <width>4</width>
                         </Excel>
-                        <Location>328px, 472px</Location>
+                        <Location>328px, 496px</Location>
                         <Size>368px, 16px</Size>
                         <Style>
                             <BorderStyle>
@@ -7004,7 +6777,7 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                             <row>6</row>
                             <width>4</width>
                         </Excel>
-                        <Location>0px, 168px</Location>
+                        <Location>0px, 192px</Location>
                         <Size>304px, 16px</Size>
                         <Style>
                             <BorderStyle>
@@ -7029,7 +6802,7 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                             <width>4</width>
                             <height>3</height>
                         </Excel>
-                        <Location>0px, 208px</Location>
+                        <Location>0px, 232px</Location>
                         <Size>304px, 64px</Size>
                         <Style>
                             <BorderStyle>
@@ -7054,7 +6827,7 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                             <row>11</row>
                             <width>4</width>
                         </Excel>
-                        <Location>0px, 272px</Location>
+                        <Location>0px, 296px</Location>
                         <Size>304px, 16px</Size>
                         <Style>
                             <BorderStyle>
@@ -7079,7 +6852,7 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                             <row>12</row>
                             <width>4</width>
                         </Excel>
-                        <Location>0px, 288px</Location>
+                        <Location>0px, 312px</Location>
                         <Size>304px, 24px</Size>
                         <Style>
                             <BorderStyle>
@@ -7107,7 +6880,7 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                             <row>7</row>
                             <width>4</width>
                         </Excel>
-                        <Location>0px, 184px</Location>
+                        <Location>0px, 208px</Location>
                         <Size>304px, 24px</Size>
                         <Style>
                             <BorderStyle>
@@ -7132,7 +6905,7 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                             <row>16</row>
                             <width>4</width>
                         </Excel>
-                        <Location>0px, 328px</Location>
+                        <Location>0px, 352px</Location>
                         <Size>304px, 16px</Size>
                         <Style>
                             <BorderStyle>
@@ -7160,7 +6933,7 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                             <column>9</column>
                             <row>14</row>
                         </Excel>
-                        <Location>552px, 296px</Location>
+                        <Location>552px, 320px</Location>
                         <Size>144px, 16px</Size>
                         <Style>
                             <BorderStyle>
@@ -7185,7 +6958,7 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                             <row>23</row>
                             <width>4</width>
                         </Excel>
-                        <Location>0px, 472px</Location>
+                        <Location>0px, 496px</Location>
                         <Size>304px, 16px</Size>
                         <Style>
                             <BorderStyle>
@@ -7213,7 +6986,7 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                             <row>21</row>
                             <width>4</width>
                         </Excel>
-                        <Location>328px, 408px</Location>
+                        <Location>328px, 432px</Location>
                         <Size>368px, 16px</Size>
                         <Style>
                             <BorderStyle>
@@ -7239,7 +7012,7 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                             <row>22</row>
                             <width>4</width>
                         </Excel>
-                        <Location>328px, 424px</Location>
+                        <Location>328px, 448px</Location>
                         <Size>368px, 16px</Size>
                         <Style>
                             <BorderStyle>
@@ -7265,7 +7038,7 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                             <row>23</row>
                             <width>4</width>
                         </Excel>
-                        <Location>328px, 440px</Location>
+                        <Location>328px, 464px</Location>
                         <Size>368px, 16px</Size>
                         <Style>
                             <BorderStyle>
@@ -7292,7 +7065,7 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                             <row>17</row>
                             <width>4</width>
                         </Excel>
-                        <Location>0px, 344px</Location>
+                        <Location>0px, 368px</Location>
                         <Size>304px, 16px</Size>
                         <Style>
                             <BorderStyle>
@@ -7316,7 +7089,7 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                 </Items>
             </PageHeader>
             <Detail Name="detailSection1">
-                <Height>1.42cm</Height>
+                <Height>1.48148cm</Height>
                 <Variables>
                     <ReportVariable>
                         <Name>SumTotalCTNS</Name>
@@ -7328,29 +7101,17 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                     </ReportVariable>
                     <ReportVariable>
                         <Name>SumNW</Name>
-                        <ValueExpr>=$SumNW + ([SOPackageDetail.UsrNWCarton] * CDec([SOPackageDetail.UsrTotalCartons]))</ValueExpr>
+                        <ValueExpr>= $SumNW + (CDec([InventoryItem.NETWHTCART_Attributes]) * CDec([SOPackageDetail.UsrTotalCartons]))</ValueExpr>
                     </ReportVariable>
                     <ReportVariable>
                         <Name>SumGW</Name>
-                        <ValueExpr>=$SumGW + ([SOPackageDetail.UsrGWCarton] * CDec([SOPackageDetail.UsrTotalCartons]))</ValueExpr>
-                    </ReportVariable>
-                    <ReportVariable>
-                        <Name>SumPallet</Name>
-                        <ValueExpr>=Round($SumPallet + [SOPackageDetail.UsrTotalPallet], 0)</ValueExpr>
-                    </ReportVariable>
-                    <ReportVariable>
-                        <Name>Volumn_CBM</Name>
-                        <ValueExpr>=$Volumn_CBM + IIf([PalltSizeAttr.NoteText] = null, 0, CDec([PalltSizeAttr.NoteText]) / 1000000 * [SOPackageDetail.UsrTotalPallet])</ValueExpr>
-                    </ReportVariable>
-                    <ReportVariable>
-                        <Name>SummaryPalletSzie</Name>
-                        <ValueExpr>=$SummaryPalletSzie + [PalltSizeAttr.Description] + ' / '</ValueExpr>
+                        <ValueExpr>= $SumGW + (CDec([InventoryItem.GRSWHTCART_Attributes]) * CDec([SOPackageDetail.UsrTotalCartons]))</ValueExpr>
                     </ReportVariable>
                 </Variables>
                 <Items>
                     <TextBox Name="textBox49">
                         <Location>0px, 0px</Location>
-                        <Size>88px, 52px</Size>
+                        <Size>88px, 56px</Size>
                         <Style>
                             <TextAlign>Center</TextAlign>
                             <VerticalAlign>Middle</VerticalAlign>
@@ -7362,7 +7123,7 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                             <column>2</column>
                         </Excel>
                         <Location>88px, 0px</Location>
-                        <Size>88px, 52px</Size>
+                        <Size>88px, 56px</Size>
                         <Style>
                             <TextAlign>Center</TextAlign>
                             <VerticalAlign>Middle</VerticalAlign>
@@ -7374,7 +7135,7 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                             <column>3</column>
                         </Excel>
                         <Location>176px, 0px</Location>
-                        <Size>88px, 52px</Size>
+                        <Size>88px, 56px</Size>
                         <Style>
                             <TextAlign>Center</TextAlign>
                             <VerticalAlign>Middle</VerticalAlign>
@@ -7388,7 +7149,7 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                             <height>2</height>
                         </Excel>
                         <Location>264px, 0px</Location>
-                        <Size>168px, 52px</Size>
+                        <Size>168px, 56px</Size>
                         <Style>
                             <TextAlign>Center</TextAlign>
                             <VerticalAlign>Middle</VerticalAlign>
@@ -7400,7 +7161,7 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                             <column>6</column>
                         </Excel>
                         <Location>432px, 0px</Location>
-                        <Size>80px, 24px</Size>
+                        <Size>80px, 32px</Size>
                         <Style>
                             <TextAlign>Center</TextAlign>
                             <VerticalAlign>Middle</VerticalAlign>
@@ -7413,7 +7174,7 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                             <row>2</row>
                         </Excel>
                         <Format>#,##0;-#,##0</Format>
-                        <Location>432px, 24px</Location>
+                        <Location>432px, 32px</Location>
                         <Size>80px, 24px</Size>
                         <Style>
                             <Font>
@@ -7429,20 +7190,19 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                             <column>7</column>
                         </Excel>
                         <Location>512px, 0px</Location>
-                        <Size>80px, 24px</Size>
+                        <Size>80px, 32px</Size>
                         <Style>
                             <TextAlign>Center</TextAlign>
                             <VerticalAlign>Middle</VerticalAlign>
                         </Style>
-                        <Value>= '@' + [SOPackageDetail.UsrNWCarton]</Value>
+                        <Value>= '@' + [InventoryItem.NETWHTCART_Attributes]</Value>
                     </TextBox>
                     <TextBox Name="textBox56">
                         <Excel>
                             <column>7</column>
                             <row>2</row>
                         </Excel>
-                        <Format>#,##0;-#,##0</Format>
-                        <Location>512px, 24px</Location>
+                        <Location>512px, 32px</Location>
                         <Size>80px, 24px</Size>
                         <Style>
                             <Font>
@@ -7451,27 +7211,26 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                             <TextAlign>Center</TextAlign>
                             <VerticalAlign>Middle</VerticalAlign>
                         </Style>
-                        <Value>= [SOPackageDetail.UsrNWCarton] * CDec([SOPackageDetail.UsrTotalCartons])</Value>
+                        <Value>= CDec([InventoryItem.NETWHTCART_Attributes]) * CDec([SOPackageDetail.UsrTotalCartons])</Value>
                     </TextBox>
                     <TextBox Name="textBox57">
                         <Excel>
                             <column>8</column>
                         </Excel>
                         <Location>592px, 0px</Location>
-                        <Size>80px, 24px</Size>
+                        <Size>80px, 32px</Size>
                         <Style>
                             <TextAlign>Center</TextAlign>
                             <VerticalAlign>Middle</VerticalAlign>
                         </Style>
-                        <Value>= '@' + [SOPackageDetail.UsrGWCarton]</Value>
+                        <Value>= '@' + [InventoryItem.GRSWHTCART_Attributes]</Value>
                     </TextBox>
                     <TextBox Name="textBox87">
                         <Excel>
                             <column>8</column>
                             <row>2</row>
                         </Excel>
-                        <Format>#,##0;-#,##0</Format>
-                        <Location>592px, 24px</Location>
+                        <Location>592px, 32px</Location>
                         <Size>80px, 24px</Size>
                         <Style>
                             <Font>
@@ -7480,7 +7239,7 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                             <TextAlign>Center</TextAlign>
                             <VerticalAlign>Middle</VerticalAlign>
                         </Style>
-                        <Value>=[SOPackageDetail.UsrGWCarton]* CDec([SOPackageDetail.UsrTotalCartons])</Value>
+                        <Value>= CDec([InventoryItem.GRSWHTCART_Attributes]) * CDec([SOPackageDetail.UsrTotalCartons])</Value>
                     </TextBox>
                 </Items>
             </Detail>
@@ -7492,7 +7251,7 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                 <Visible>False</Visible>
             </PageFooter>
             <ReportFooter Name="reportFooterSection1">
-                <Height>4.44444cm</Height>
+                <Height>4.86772cm</Height>
                 <Items>
                     <Line Name="line2">
                         <Excel>
@@ -7500,7 +7259,7 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                             <row>7</row>
                             <width>2</width>
                         </Excel>
-                        <Location>408px, 144px</Location>
+                        <Location>408px, 152px</Location>
                         <Size>264px, 8px</Size>
                     </Line>
                     <PictureBox Name="pictureBox1">
@@ -7520,7 +7279,7 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                             <column>7</column>
                             <row>6</row>
                         </Excel>
-                        <Location>408px, 32px</Location>
+                        <Location>408px, 40px</Location>
                         <MimeType>image/jpeg</MimeType>
                         <QRCodeSettings>
                         </QRCodeSettings>
@@ -7573,7 +7332,7 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                             <column>7</column>
                             <row>8</row>
                         </Excel>
-                        <Location>408px, 152px</Location>
+                        <Location>408px, 160px</Location>
                         <Size>120px, 16px</Size>
                         <Value>Tomofun Co., Ltd.</Value>
                     </TextBox>
@@ -7583,7 +7342,7 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                         </Excel>
                         <Location>0px, 104px</Location>
                         <Size>224px, 16px</Size>
-                        <Value>='PLT No. 1-' + $SumPallet</Value>
+                        <Value>='PLT No. 1-' + Ceiling(CDec($SumTotalCTNS) / CDec($CartonsPerPallet))</Value>
                     </TextBox>
                     <TextBox Name="textBox90">
                         <CanGrow>True</CanGrow>
@@ -7619,7 +7378,7 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
             <Group Name="PackagesGroup">
                 <Headers>
                     <Header Name="groupHeaderSection1">
-                        <Height>0.42328cm</Height>
+                        <Height>0.84656cm</Height>
                         <Variables>
                             <ReportVariable>
                                 <Name>CartonsPerPallet</Name>
@@ -7632,7 +7391,7 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                                     <row>2</row>
                                 </Excel>
                                 <Location>0px, 0px</Location>
-                                <Size>88px, 16px</Size>
+                                <Size>88px, 32px</Size>
                                 <Style>
                                     <BorderStyle>
                                         <Bottom>Double</Bottom>
@@ -7657,7 +7416,7 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                                     <row>2</row>
                                 </Excel>
                                 <Location>88px, 0px</Location>
-                                <Size>88px, 16px</Size>
+                                <Size>88px, 32px</Size>
                                 <Style>
                                     <BorderStyle>
                                         <Bottom>Double</Bottom>
@@ -7682,7 +7441,7 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                                     <row>2</row>
                                 </Excel>
                                 <Location>176px, 0px</Location>
-                                <Size>88px, 16px</Size>
+                                <Size>88px, 32px</Size>
                                 <Style>
                                     <BorderStyle>
                                         <Bottom>Double</Bottom>
@@ -7708,7 +7467,7 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                                     <width>2</width>
                                 </Excel>
                                 <Location>264px, 0px</Location>
-                                <Size>168px, 16px</Size>
+                                <Size>168px, 32px</Size>
                                 <Style>
                                     <BorderStyle>
                                         <Bottom>Double</Bottom>
@@ -7733,7 +7492,7 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                                     <row>2</row>
                                 </Excel>
                                 <Location>432px, 0px</Location>
-                                <Size>80px, 16px</Size>
+                                <Size>80px, 32px</Size>
                                 <Style>
                                     <BorderStyle>
                                         <Bottom>Double</Bottom>
@@ -7758,7 +7517,7 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                                     <row>2</row>
                                 </Excel>
                                 <Location>512px, 0px</Location>
-                                <Size>80px, 16px</Size>
+                                <Size>80px, 32px</Size>
                                 <Style>
                                     <BorderStyle>
                                         <Bottom>Double</Bottom>
@@ -7783,7 +7542,7 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                                     <row>2</row>
                                 </Excel>
                                 <Location>592px, 0px</Location>
-                                <Size>80px, 16px</Size>
+                                <Size>80px, 32px</Size>
                                 <Style>
                                     <BorderStyle>
                                         <Bottom>Double</Bottom>
@@ -7807,7 +7566,33 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                 </Headers>
                 <Footers>
                     <Footer Name="groupFooterSection1">
-                        <Height>3.59788cm</Height>
+                        <Height>4.2328cm</Height>
+                        <Variables>
+                            <ReportVariable>
+                                <Name>BasePallet</Name>
+                                <ValueExpr>=Substring([SOShipment.AttributePLTSIZE],0,InStr([SOShipment.AttributePLTSIZE],' '))</ValueExpr>
+                            </ReportVariable>
+                            <ReportVariable>
+                                <Name>PalletX1</Name>
+                                <ValueExpr>=InStr( $BasePallet, 'x')</ValueExpr>
+                            </ReportVariable>
+                            <ReportVariable>
+                                <Name>PalletX2</Name>
+                                <ValueExpr>=InStr(Substring($BasePallet,$PalletX1+1,Len($BasePallet) - $PalletX1 - 1),'x')+$PalletX1+1</ValueExpr>
+                            </ReportVariable>
+                            <ReportVariable>
+                                <Name>NumPallet1</Name>
+                                <ValueExpr>=CDec(Substring($BasePallet,0,$PalletX1))</ValueExpr>
+                            </ReportVariable>
+                            <ReportVariable>
+                                <Name>NumPallet2</Name>
+                                <ValueExpr>=CDec(Substring($BasePallet,$PalletX1+1,$PalletX2-$PalletX1-1))</ValueExpr>
+                            </ReportVariable>
+                            <ReportVariable>
+                                <Name>NumPallet3</Name>
+                                <ValueExpr>=CDec(Substring($BasePallet,$PalletX2+1,Len($BasePallet)-$PalletX2-1))</ValueExpr>
+                            </ReportVariable>
+                        </Variables>
                         <Items>
                             <Line Name="line1">
                                 <Excel>
@@ -7816,40 +7601,6 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                                 <Location>0px, 8px</Location>
                                 <Size>672px, 8px</Size>
                             </Line>
-                            <Panel Name="panel1">
-                                <Location>0px, 120px</Location>
-                                <Size>296px, 16px</Size>
-                                <Items>
-                                    <TextBox Name="textBox86">
-                                        <Excel>
-                                            <column>2</column>
-                                            <row>11</row>
-                                            <width>3</width>
-                                        </Excel>
-                                        <Location>88px, 0px</Location>
-                                        <Size>208px, 16px</Size>
-                                        <Style>
-                                            <Font>
-                                                <Size>10px</Size>
-                                            </Font>
-                                        </Style>
-                                        <Value>=IsNull([SOShipment.AttributeFORWARDER], '')</Value>
-                                    </TextBox>
-                                    <TextBox Name="textBox88">
-                                        <Excel>
-                                            <row>11</row>
-                                        </Excel>
-                                        <Location>0px, 0px</Location>
-                                        <Size>88px, 16px</Size>
-                                        <Style>
-                                            <Font>
-                                                <Style>Bold</Style>
-                                            </Font>
-                                        </Style>
-                                        <Value>Forwarder :</Value>
-                                    </TextBox>
-                                </Items>
-                            </Panel>
                             <TextBox Name="textBox59">
                                 <Excel>
                                     <row>2</row>
@@ -7868,7 +7619,6 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                                     <column>3</column>
                                     <row>2</row>
                                 </Excel>
-                                <Format>#,##0;-#,##0</Format>
                                 <Location>176px, 16px</Location>
                                 <Size>88px, 16px</Size>
                                 <Style>
@@ -7884,7 +7634,6 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                                     <column>3</column>
                                     <row>3</row>
                                 </Excel>
-                                <Format>#,##0;-#,##0</Format>
                                 <Location>176px, 32px</Location>
                                 <Size>88px, 16px</Size>
                                 <Style>
@@ -7893,8 +7642,8 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                                     </Font>
                                     <TextAlign>Center</TextAlign>
                                 </Style>
-                                <Value>=$SumPallet</Value>
-                                <VisibleExpr>=True/*[SOShipment.AttributePLTSIZE] = Null And [SOShipment.AttributePLTSIZE2] = Null*/</VisibleExpr>
+                                <Value>=Ceiling(CDec($SumTotalCTNS) / CDec($CartonsPerPallet))</Value>
+                                <VisibleExpr>=IIF([SOShipment.AttributePLTSIZE] = Null And [SOShipment.AttributePLTSIZE2] = Null, False, True)</VisibleExpr>
                             </TextBox>
                             <TextBox Name="textBox62">
                                 <Excel>
@@ -7943,7 +7692,6 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                                     <column>7</column>
                                     <row>2</row>
                                 </Excel>
-                                <Format>#,##0;-#,##0</Format>
                                 <Location>512px, 16px</Location>
                                 <Size>80px, 16px</Size>
                                 <Style>
@@ -7956,7 +7704,6 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                                     <column>8</column>
                                     <row>2</row>
                                 </Excel>
-                                <Format>#,##0;-#,##0</Format>
                                 <Location>592px, 16px</Location>
                                 <Size>80px, 16px</Size>
                                 <Style>
@@ -7983,13 +7730,12 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                                     <column>8</column>
                                     <row>3</row>
                                 </Excel>
-                                <Format>#,##0;-#,##0</Format>
                                 <Location>592px, 32px</Location>
                                 <Size>80px, 16px</Size>
                                 <Style>
                                     <TextAlign>Center</TextAlign>
                                 </Style>
-                                <Value>=$SumPallet * CDec([SOShipment.AttributePLTWHT])</Value>
+                                <Value>=(Ceiling(CDec($SumTotalCTNS) / CDec($CartonsPerPallet))) * CDec([SOShipment.AttributePLTWHT])</Value>
                                 <VisibleExpr>=IIF([SOShipment.AttributePLTSIZE] = Null And [SOShipment.AttributePLTSIZE2] = Null, False, True)</VisibleExpr>
                             </TextBox>
                             <TextBox Name="textBox69">
@@ -8033,7 +7779,6 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                                     <column>8</column>
                                     <row>4</row>
                                 </Excel>
-                                <Format>#,##0;-#,##0</Format>
                                 <Location>592px, 48px</Location>
                                 <Size>80px, 16px</Size>
                                 <Style>
@@ -8045,7 +7790,7 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                                     </BorderWidth>
                                     <TextAlign>Center</TextAlign>
                                 </Style>
-                                <Value>=[SOShipment.AttributeTOTALGW]</Value>
+                                <Value>=$SumGW + IIF([SOShipment.AttributePLTSIZE] = Null And [SOShipment.AttributePLTSIZE2] = Null, 0, #010;(Ceiling(CDec($SumTotalCTNS) / CDec($CartonsPerPallet))) * CDec([SOShipment.AttributePLTWHT]))</Value>
                             </TextBox>
                             <TextBox Name="textBox72">
                                 <Excel>
@@ -8093,7 +7838,6 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                                     <column>3</column>
                                     <row>6</row>
                                 </Excel>
-                                <Format>#,##0;-#,##0</Format>
                                 <Location>144px, 72px</Location>
                                 <Size>64px, 16px</Size>
                                 <Style>
@@ -8122,7 +7866,6 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                                     <column>5</column>
                                     <row>6</row>
                                 </Excel>
-                                <Format>#,##0;-#,##0</Format>
                                 <Location>264px, 72px</Location>
                                 <Size>64px, 16px</Size>
                                 <Style>
@@ -8130,7 +7873,7 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                                         <Size>10px</Size>
                                     </Font>
                                 </Style>
-                                <Value>=[SOShipment.AttributeTOTALGW]</Value>
+                                <Value>=$SumGW + (Round(CDec($SumTotalCTNS) / CDec($CartonsPerPallet), 0)) * CDec([SOShipment.AttributePLTWHT])</Value>
                             </TextBox>
                             <TextBox Name="textBox78">
                                 <Excel>
@@ -8145,7 +7888,7 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                                         <Size>10px</Size>
                                     </Font>
                                 </Style>
-                                <Value>='Volume (CBM)  ' + IsNull([SOShipment.AttributeCBM], '')</Value>
+                                <Value>='Volume (CBM) ' + Format('{0:0.00}',$NumPallet1 * $NumPallet2 * $NumPallet3 / 1000000 * CInt($SumTotalCTNS) / 30)</Value>
                             </TextBox>
                             <TextBox Name="textBox79">
                                 <Excel>
@@ -8195,13 +7938,56 @@ Bn86K+E9RDPC0VxHddGh8tiPzxXR+DfgT408ZahFp2k6VKhlYBpcEV++N/wDDvwxcN+98PaZt7stnEG/
                                     <row>9</row>
                                 </Excel>
                                 <Location>88px, 104px</Location>
-                                <Size>608px, 16px</Size>
+                                <Size>400px, 16px</Size>
                                 <Style>
                                     <Font>
                                         <Size>10px</Size>
                                     </Font>
                                 </Style>
-                                <Value>=Substring($SummaryPalletSzie, 1, Len($SummaryPalletSzie) - 2)</Value>
+                                <Value>=[SOShipment.AttributePLTSIZE]</Value>
+                            </TextBox>
+                            <TextBox Name="textBox86">
+                                <Excel>
+                                    <column>2</column>
+                                    <row>11</row>
+                                    <width>3</width>
+                                </Excel>
+                                <Location>88px, 136px</Location>
+                                <Size>208px, 16px</Size>
+                                <Style>
+                                    <Font>
+                                        <Size>10px</Size>
+                                    </Font>
+                                </Style>
+                                <Value>=IsNull([SOShipment.AttributeFORWARDER], '')</Value>
+                            </TextBox>
+                            <TextBox Name="textBox88">
+                                <Excel>
+                                    <row>11</row>
+                                </Excel>
+                                <Location>0px, 136px</Location>
+                                <Size>88px, 16px</Size>
+                                <Style>
+                                    <Font>
+                                        <Style>Bold</Style>
+                                    </Font>
+                                </Style>
+                                <Value>Forwarder :</Value>
+                            </TextBox>
+                            <TextBox Name="textBox94">
+                                <CanGrow>True</CanGrow>
+                                <Excel>
+                                    <column>2</column>
+                                    <row>9</row>
+                                </Excel>
+                                <Location>88px, 120px</Location>
+                                <Size>400px, 16px</Size>
+                                <Style>
+                                    <Font>
+                                        <Size>10px</Size>
+                                    </Font>
+                                </Style>
+                                <Value>=[SOShipment.AttributePLTSIZE2]</Value>
                             </TextBox>
                         </Items>
                     </Footer>
