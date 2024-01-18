@@ -8,7 +8,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-//using static PX.Data.BQL.BqlPlaceholder;
 using Note = PX.Data.Note;
 
 namespace PX.Objects.SO
@@ -37,8 +36,10 @@ namespace PX.Objects.SO
         public override void Initialize()
         {
             base.Initialize();
+
             Base.report.AddMenuAction(PackingList);
             Base.report.AddMenuAction(CommercialInvoice);
+            Base.report.AddMenuAction(packingListOld);
         }
         #endregion
 
@@ -181,10 +182,10 @@ namespace PX.Objects.SO
         {
             if (Base.Document.Current != null)
             {
-                var _reportID = "LM642005";
-                Dictionary<string, string> parameters = new Dictionary<string, string>();
-                parameters["ShipmentNbr"] = Base.Document.Current.ShipmentNbr;
-                throw new PXReportRequiredException(parameters, _reportID, $"Report {_reportID}") { Mode = PXBaseRedirectException.WindowMode.New };
+                RedirectWithReport(new Dictionary<string, string>
+                {
+                    [nameof(SOShipment.ShipmentNbr)] = Base.Document.Current.ShipmentNbr
+                }, "LM642005");
             }
             return adapter.Get();
         }
@@ -237,11 +238,32 @@ namespace PX.Objects.SO
                 {
                     // 轉型失敗不做任何事
                 }
-                var _reportID = "LM642010";
-                Dictionary<string, string> parameters = new Dictionary<string, string>();
-                parameters["ShipmentNbr"] = Base.Document.Current.ShipmentNbr;
-                parameters["TotalValueEn"] = Number2English(Convert.ToDecimal(sumUsrTotalCartons));
-                throw new PXReportRequiredException(parameters, _reportID, $"Report {_reportID}") { Mode = PXBaseRedirectException.WindowMode.New };
+                //var _reportID = "LM642010";
+                //Dictionary<string, string> parameters = new Dictionary<string, string>();
+                //parameters["ShipmentNbr"] = Base.Document.Current.ShipmentNbr;
+                //parameters["TotalValueEn"] = Number2English(Convert.ToDecimal(sumUsrTotalCartons));
+                //throw new PXReportRequiredException(parameters, _reportID, $"Report {_reportID}") { Mode = PXBaseRedirectException.WindowMode.New };
+
+                RedirectWithReport(new Dictionary<string, string>
+                {
+                    ["ShipmentNbr"] = Base.Document.Current.ShipmentNbr,
+                    ["TotalValueEn"] = Number2English(Convert.ToDecimal(sumUsrTotalCartons))
+                }, "LM642010");
+            }
+            return adapter.Get();
+        }
+
+        public PXAction<SOShipment> packingListOld;
+        [PXButton(DisplayOnMainToolbar = false)]
+        [PXUIField(DisplayName = "Print Packing List (Old)", Enabled = true, MapEnableRights = PXCacheRights.Select)]
+        protected virtual IEnumerable PackingListOld(PXAdapter adapter)
+        {
+            if (Base.Document.Current != null)
+            {
+                RedirectWithReport(new Dictionary<string, string>
+                {
+                    [nameof(SOShipment.ShipmentNbr)] = Base.Document.Current.ShipmentNbr
+                }, "LM642004");
             }
             return adapter.Get();
         }
@@ -308,6 +330,11 @@ namespace PX.Objects.SO
         {
             Base.Document.Cache.SetValueExt(Base.Document.Current, $"{CS.Messages.Attribute}{attributeID}", value);
             Base.Document.Cache.MarkUpdated(Base.Document.Current);
+        }
+
+        protected virtual void RedirectWithReport(Dictionary<string, string> parameters, string reportID)
+        {
+            throw new PXReportRequiredException(parameters, reportID, $"Report {reportID}") { Mode = PXBaseRedirectException.WindowMode.New };
         }
 
         #region Number2English mothod
