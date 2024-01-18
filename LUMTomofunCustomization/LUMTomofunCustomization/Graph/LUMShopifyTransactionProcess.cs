@@ -176,7 +176,7 @@ namespace LumTomofunCustomization.Graph
                                 if (!item.requires_shipping)
                                     continue;
                                 var line = soGraph.Transactions.Cache.CreateInstance() as SOLine;
-                                line.InventoryID = AmazonPublicFunction.GetInvetoryitemID(soGraph, item.sku);
+                                line.InventoryID = AmazonPublicFunction.GetInvetoryitemID(soGraph, item.sku, spOrder?.shipping_address?.country_code);
                                 if (line.InventoryID == null)
                                     throw new Exception($"can not find Inventory item ID({item.sku})");
                                 line.SiteID = defWarehouse;

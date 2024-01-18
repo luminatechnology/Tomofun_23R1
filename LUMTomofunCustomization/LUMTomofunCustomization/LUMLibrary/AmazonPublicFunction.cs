@@ -56,6 +56,21 @@ namespace LumTomofunCustomization.LUMLibrary
                .Where<INItemXRef.alternateID.IsEqual<P.AsString>>
                .View.SelectSingleBound(graph, null, sku).TopFirst?.InventoryID;
 
+        /// <summary> 取Inventory Item ID according to Country Code </summary>
+        public static int? GetInvetoryitemID(PXGraph graph, string sku, string countryCode)
+        {
+            if (countryCode?.ToUpper() == "HK")
+                return SelectFrom<INItemXRef>
+                       .Where<INItemXRef.alternateID.IsEqual<P.AsString>>
+                       .View.SelectSingleBound(graph, null, sku).TopFirst?.InventoryID ??
+                       InventoryItem.UK.Find(graph, sku)?.InventoryID;
+            else
+                return InventoryItem.UK.Find(graph, sku)?.InventoryID ??
+                       SelectFrom<INItemXRef>
+                       .Where<INItemXRef.alternateID.IsEqual<P.AsString>>
+                       .View.SelectSingleBound(graph, null, sku).TopFirst?.InventoryID;
+        }
+
         /// <summary> 取Location ID By CD </summary>
         public static int? GetLocationID(int? siteid)
             => SelectFrom<INLocation>
