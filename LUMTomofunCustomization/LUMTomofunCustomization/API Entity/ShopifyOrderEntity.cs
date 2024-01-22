@@ -274,7 +274,7 @@ namespace LumTomofunCustomization.API_Entity.ShopifyOrder
     {
         public long id { get; set; }
         public string admin_graphql_api_id { get; set; }
-        public int app_id { get; set; }
+        public string app_id { get; set; }
         public string browser_ip { get; set; }
         public bool buyer_accepts_marketing { get; set; }
         public object cancel_reason { get; set; }

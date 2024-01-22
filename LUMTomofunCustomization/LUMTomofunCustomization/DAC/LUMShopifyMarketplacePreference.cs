@@ -33,7 +33,7 @@ namespace LumTomofunCustomization.DAC
 
         #region IsTaxCalculation
         [PXDBBool]
-        [PXDefault(false)]
+        [PXDefault(false,PersistingCheck = PXPersistingCheck.Nothing)]
         [PXUIField(DisplayName = "Tax Calculation")]
         public virtual bool? IsTaxCalculation { get;set;}
         public abstract class isTaxCalculation : PX.Data.BQL.BqlBool.Field<isTaxCalculation> { }

@@ -250,10 +250,7 @@ namespace LumTomofunCustomization.Graph
                             if (!isTaxCalculate)
                             {
                                 systemTax = soGraph.Taxes.Current?.CuryTaxAmt ?? 0;
-                                soGraph.Taxes.Cache.SetValueExt<SOTaxTran.taxID>(soGraph.Taxes.Current, row.Marketplace + "EC");
-                                soGraph.Taxes.Cache.SetValueExt<SOTaxTran.curyTaxAmt>(soGraph.Taxes.Current, amzTotalTax);
-
-                                soGraph.Document.Cache.SetValueExt<SOOrder.curyTaxTotal>(soGraph.Document.Current, amzTotalTax);
+                                SalesOrderTaxHandler(soGraph, row?.Marketplace + "EC", row.Marketplace + "AMZ", amzTotalTax);
                                 //soGraph.Document.Cache.SetValueExt<SOOrder.curyOrderTotal>(soGraph.Document.Current, (soGraph.Document.Current?.CuryOrderTotal ?? 0) + amzTotalTax - systemTax);
                             }
                             else
@@ -447,6 +444,17 @@ namespace LumTomofunCustomization.Graph
                        .View.Select(baseGraph, amazonOrderId).TopFirst;
             return data == null ? null : data.ShipmentDate?.AddHours(marketplacePreference?.TimeZone ?? 0);
         }
+
+        public void SalesOrderTaxHandler(SOOrderEntry soGraph, string taxID, string taxZoneID, decimal? taxAmt)
+        {
+            soGraph.Taxes.Current = soGraph.Taxes.Current ?? soGraph.Taxes.Cache.CreateInstance() as SOTaxTran;
+            soGraph.Taxes.Cache.SetValueExt<SOTaxTran.taxID>(soGraph.Taxes.Current, taxID);
+            soGraph.Taxes.Cache.SetValueExt<SOTaxTran.taxZoneID>(soGraph.Taxes.Current, soGraph.Taxes.Current?.TaxZoneID ?? taxZoneID);
+            soGraph.Taxes.Cache.SetValueExt<SOTaxTran.curyTaxAmt>(soGraph.Taxes.Current, taxAmt);
+            soGraph.Taxes.UpdateCurrent();
+            soGraph.Document.Cache.SetValueExt<SOOrder.curyTaxTotal>(soGraph.Document.Current, taxAmt);
+        }
+
         #endregion
     }
 }
