@@ -447,9 +447,14 @@ namespace LumTomofunCustomization.Graph
 
         public void SalesOrderTaxHandler(SOOrderEntry soGraph, string taxID, string taxZoneID, decimal? taxAmt)
         {
+            if (string.IsNullOrEmpty(soGraph.Document.Current?.TaxZoneID))
+            {
+                soGraph.Document.Current.OverrideTaxZone = true;
+                soGraph.Document.Current.TaxZoneID = taxZoneID;
+            }
             soGraph.Taxes.Current = soGraph.Taxes.Current ?? soGraph.Taxes.Cache.CreateInstance() as SOTaxTran;
             soGraph.Taxes.Cache.SetValueExt<SOTaxTran.taxID>(soGraph.Taxes.Current, taxID);
-            soGraph.Taxes.Cache.SetValueExt<SOTaxTran.taxZoneID>(soGraph.Taxes.Current, soGraph.Taxes.Current?.TaxZoneID ?? taxZoneID);
+            //soGraph.Taxes.Cache.SetValueExt<SOTaxTran.taxZoneID>(soGraph.Taxes.Current, string.IsNullOrEmpty(soGraph.Taxes.Current?.TaxZoneID) ? taxZoneID : soGraph.Taxes.Current?.TaxZoneID);
             soGraph.Taxes.Cache.SetValueExt<SOTaxTran.curyTaxAmt>(soGraph.Taxes.Current, taxAmt);
             soGraph.Taxes.UpdateCurrent();
             soGraph.Document.Cache.SetValueExt<SOOrder.curyTaxTotal>(soGraph.Document.Current, taxAmt);
