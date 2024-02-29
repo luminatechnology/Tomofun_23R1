@@ -91,15 +91,7 @@ namespace LumTomofunCustomization.LUMLibrary
             for (int i = 0; i < AbbreviatedMonthNames.Length - 1; i++)
             {
                 if (sourceDatetime.Contains(AbbreviatedMonthNames[i].Replace(".", "")))
-                {
-                    sourceDatetime = sourceDatetime.Replace(AbbreviatedMonthNames[i].Replace(".", ""), AbbreviatedMonthNames[i]);
-
-                    // Since the Italian "March" abbreviated month name will have conversion problems in the .Net framework, simply change all abbreviations to the genitive case.
-                    if (cultureName.Contains("IT"))
-                    {
-                        sourceDatetime = sourceDatetime.Replace(AbbreviatedMonthNames[i], CultureInfo.GetCultureInfo(cultureName).DateTimeFormat.MonthGenitiveNames[i]);
-                    }
-                }
+                    sourceDatetime = sourceDatetime.Replace(AbbreviatedMonthNames[i].Replace(".", ""), CultureInfo.GetCultureInfo(cultureName).DateTimeFormat.MonthGenitiveNames[i]);
             }
             // 處理"Timezone"文字
             if (sourceDatetime.LastIndexOf(" ") != -1)
