@@ -88,10 +88,22 @@ namespace LumTomofunCustomization.LUMLibrary
             sourceDatetime = sourceDatetime.ToLower().Replace("sept", "sep");
             // 處理日期歐洲英文月份轉換問題(文字ex:ago)
             var AbbreviatedMonthNames = CultureInfo.GetCultureInfo(cultureName).DateTimeFormat.AbbreviatedMonthNames;
+            // sv-SE 'mars'/'juni' is not exists in culture datetime format 
+            if (cultureName == "sv-SE")
+            { 
+                sourceDatetime = sourceDatetime.Replace("mars","mar");
+                sourceDatetime = sourceDatetime.Replace("juni", "jun");
+                sourceDatetime = sourceDatetime.Replace("juli", "jul");
+            }
+
             for (int i = 0; i < AbbreviatedMonthNames.Length - 1; i++)
             {
-                if (sourceDatetime.Contains(AbbreviatedMonthNames[i].Replace(".", "")))
+                if (sourceDatetime.Contains(AbbreviatedMonthNames[i].Replace(".", "")) && (!cultureName.Contains("ja-JP") && !cultureName.Contains("de-DE")))
+                { 
                     sourceDatetime = sourceDatetime.Replace(AbbreviatedMonthNames[i].Replace(".", ""), CultureInfo.GetCultureInfo(cultureName).DateTimeFormat.MonthGenitiveNames[i]);
+                    sourceDatetime = sourceDatetime.Replace(".", "");
+                    continue;
+                }
             }
             // 處理"Timezone"文字
             if (sourceDatetime.LastIndexOf(" ") != -1)
