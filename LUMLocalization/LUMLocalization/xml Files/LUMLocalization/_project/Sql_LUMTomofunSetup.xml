@@ -1,0 +1,14 @@
+﻿<Sql TableName="LUMTomofunSetup" TableSchemaXml="#CDATA">
+    <CDATA name="TableSchemaXml"><![CDATA[<table name="LUMTomofunSetup">
+  <col name="CompanyID" type="Int" nullable="true" default="Zero" />
+  <col name="DefPalletLength" type="Decimal(25,6)" nullable="true" />
+  <col name="DefPalletWidth" type="Decimal(25,6)" nullable="true" />
+  <col name="DefPalletHeight" type="Decimal(25,6)" nullable="true" />
+  <col name="CreatedByID" type="UniqueIdentifier" />
+  <col name="CreatedByScreenID" type="Char(8)" />
+  <col name="CreatedDateTime" type="DateTime" />
+  <col name="LastModifiedByID" type="UniqueIdentifier" />
+  <col name="LastModifiedByScreenID" type="Char(8)" />
+  <col name="LastModifiedDateTime" type="DateTime" />
+</table>]]></CDATA>
+</Sql>
