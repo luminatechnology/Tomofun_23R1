@@ -1,4 +1,5 @@
-﻿using PX.Data;
+﻿using LUMLocalization.DAC;
+using PX.Data;
 using PX.Data.BQL;
 using PX.Data.BQL.Fluent;
 using PX.Objects.CS;
@@ -8,7 +9,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Note = PX.Data.Note;
 
 namespace PX.Objects.SO
 {
@@ -93,6 +93,15 @@ namespace PX.Objects.SO
         #endregion
 
         #region Event Handlers
+        protected void _(Events.RowSelected<SOShipment> e, PXRowSelected baseHandler)
+        {
+            baseHandler?.Invoke(e.Cache, e.Args);
+
+            PXUIFieldAttribute.SetVisible<SOPackageDetail.length>(Base.Packages.Cache, null, false);
+            PXUIFieldAttribute.SetVisible<SOPackageDetail.width>(Base.Packages.Cache, null, false);
+            PXUIFieldAttribute.SetVisible<SOPackageDetail.height>(Base.Packages.Cache, null, false);
+        }
+
         protected void _(Events.RowUpdated<SOShipment> e, PXRowUpdated baseHanlder)
         {
             baseHanlder?.Invoke(e.Cache, e.Args);
@@ -166,6 +175,23 @@ namespace PX.Objects.SO
         {
             UpdateShipmentUDF(Attr_TOTALGW, CalcTotalShipWeight(Base.Document.Cache, Base.Document.Current, Base.Packages.View.SelectMulti().RowCast<SOPackageDetailEx>().ToList()));
             UpdateShipmentUDF(Attr_CBM, CalcVolumnCBM(e.Cache));
+        }
+
+        protected virtual void _(Events.FieldDefaulting<SOPackageDetailExt.usrPalletSize> e)
+        {
+            var row    = e.Row as SOPackageDetail;
+            var rowExt = row.GetExtension<SOPackageDetailExt>();
+
+            if (rowExt.UsrPalletLength == null)
+            {
+                var pref = SelectFrom<LUMTomofunSetup>.View.Select(Base).TopFirst;
+
+                rowExt.UsrPalletLength = pref?.DefPalletLength ?? 0m;
+                rowExt.UsrPalletWidth  = pref?.DefPalletWidth  ?? 0m;
+                rowExt.UsrPalletHeight = pref?.DefPalletHeight ?? 0m;
+            }
+            
+            e.NewValue = $"{rowExt.UsrPalletLength:0.##}x{rowExt.UsrPalletWidth:0.##}x{rowExt.UsrPalletHeight:0.##} CM";
         }
 
         protected virtual void _(Events.FieldUpdated<SOPackageDetailExt.usrPalletSize> e)
@@ -308,12 +334,20 @@ namespace PX.Objects.SO
             {
                 var packageExt = packages[i].GetExtension<SOPackageDetailExt>();
 
-                decimal volumn = Convert.ToDecimal(SelectFrom<Note>.Where<Note.noteID.IsEqual<@P.AsGuid>>.View
-                                                                   .SelectSingleBound(packageCache.Graph, null, 
-                                                                                      CSAttributeDetail.PK.Find(packageCache.Graph, Attr_PALLETSIZE, packageExt?.UsrPalletSize)?.NoteID)
-                                                                   .TopFirst?.NoteText ?? "0");
+                if (string.IsNullOrEmpty(packageExt.UsrPalletSize)) { continue; }
 
-                calcValue += Math.Round(volumn / 1000000m * (packageExt.UsrTotalPallet ?? 0m), 2, MidpointRounding.AwayFromZero);
+                string[] pallets = packageExt.UsrPalletSize.Substring(0, packageExt.UsrPalletSize.Length - 3).Split('x').Where(w => !string.IsNullOrEmpty(w)).ToArray();
+
+                if (System.Text.RegularExpressions.Regex.IsMatch(pallets[0], @"\d"))
+                {
+                    decimal volumn = Convert.ToDecimal(pallets[0]) * Convert.ToDecimal(pallets[1]) * Convert.ToDecimal(pallets[2]);
+                    /*Convert.ToDecimal(SelectFrom<Note>.Where<Note.noteID.IsEqual<@P.AsGuid>>.View
+                                                      .SelectSingleBound(packageCache.Graph, null, 
+                                                                         CSAttributeDetail.PK.Find(packageCache.Graph, Attr_PALLETSIZE, packageExt?.UsrPalletSize)?.NoteID)
+                                                      .TopFirst?.NoteText ?? "0");*/
+
+                    calcValue += Math.Round(volumn / 1000000m * (packageExt.UsrTotalPallet ?? 0m), 2, MidpointRounding.AwayFromZero);
+                }
             }
 
             return calcValue;
