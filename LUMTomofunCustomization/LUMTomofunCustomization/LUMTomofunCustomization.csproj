@@ -178,6 +178,7 @@
     <Compile Include="Graph_Extension\SOOrderEntryExt.cs" />
     <Compile Include="LUMLibrary\AmazonPublicFunction.cs" />
     <Compile Include="LUMLibrary\ShopifyPublicFunction.cs" />
+    <Compile Include="LUMLibrary\TomofunPublicFunction.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

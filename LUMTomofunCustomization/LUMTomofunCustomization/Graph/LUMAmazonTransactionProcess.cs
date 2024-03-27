@@ -14,6 +14,7 @@ using PX.Objects.AR;
 using PX.Objects.CM;
 using System.Collections;
 using LumTomofunCustomization.LUMLibrary;
+using LUMTomofunCustomization.LUMLibrary;
 
 namespace LumTomofunCustomization.Graph
 {
@@ -250,7 +251,7 @@ namespace LumTomofunCustomization.Graph
                             if (!isTaxCalculate)
                             {
                                 systemTax = soGraph.Taxes.Current?.CuryTaxAmt ?? 0;
-                                SalesOrderTaxHandler(soGraph, row?.Marketplace + "EC", row.Marketplace + "AMZ", amzTotalTax);
+                                TomofunPublicFunction.SalesOrderTaxHandler(soGraph, row?.Marketplace + "EC", row.Marketplace + "AMZ", amzTotalTax.ToString());
                                 //soGraph.Document.Cache.SetValueExt<SOOrder.curyOrderTotal>(soGraph.Document.Current, (soGraph.Document.Current?.CuryOrderTotal ?? 0) + amzTotalTax - systemTax);
                             }
                             else
@@ -443,21 +444,6 @@ namespace LumTomofunCustomization.Graph
                        .Where<LUMAmazonFulfillmentTransData.amazonOrderID.IsEqual<P.AsString>>
                        .View.Select(baseGraph, amazonOrderId).TopFirst;
             return data == null ? null : data.ShipmentDate?.AddHours(marketplacePreference?.TimeZone ?? 0);
-        }
-
-        public void SalesOrderTaxHandler(SOOrderEntry soGraph, string taxID, string taxZoneID, decimal? taxAmt)
-        {
-            if (string.IsNullOrEmpty(soGraph.Document.Current?.TaxZoneID))
-            {
-                soGraph.Document.Current.OverrideTaxZone = true;
-                soGraph.Document.Current.TaxZoneID = taxZoneID;
-            }
-            soGraph.Taxes.Current = soGraph.Taxes.Current ?? soGraph.Taxes.Cache.CreateInstance() as SOTaxTran;
-            soGraph.Taxes.Cache.SetValueExt<SOTaxTran.taxID>(soGraph.Taxes.Current, taxID);
-            //soGraph.Taxes.Cache.SetValueExt<SOTaxTran.taxZoneID>(soGraph.Taxes.Current, string.IsNullOrEmpty(soGraph.Taxes.Current?.TaxZoneID) ? taxZoneID : soGraph.Taxes.Current?.TaxZoneID);
-            soGraph.Taxes.Cache.SetValueExt<SOTaxTran.curyTaxAmt>(soGraph.Taxes.Current, taxAmt);
-            soGraph.Taxes.UpdateCurrent();
-            soGraph.Document.Cache.SetValueExt<SOOrder.curyTaxTotal>(soGraph.Document.Current, taxAmt);
         }
 
         #endregion

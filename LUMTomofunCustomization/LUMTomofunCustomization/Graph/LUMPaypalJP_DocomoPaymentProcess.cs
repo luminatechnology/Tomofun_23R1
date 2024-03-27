@@ -16,6 +16,7 @@ using LumTomofunCustomization.LUMLibrary;
 using PX.Objects.SO.GraphExtensions.SOOrderEntryExt;
 using LumTomofunCustomization.DAC;
 using PX.Objects.SO.GraphExtensions.ARPaymentEntryExt;
+using LUMTomofunCustomization.LUMLibrary;
 
 namespace LumTomofunCustomization.Graph
 {
@@ -278,14 +279,12 @@ namespace LumTomofunCustomization.Graph
                                 #endregion
 
                                 #region Update Tax
-                                if (isTaxCalculate)
+                                // Setting SO Tax
+                                if (!isTaxCalculate)
+                                    TomofunPublicFunction.SalesOrderTaxHandler(soGraph, $"{row?.Marketplace}EC", $"{row?.Marketplace}SPF");
+                                else
                                     soGraph.Document.Cache.SetValue<SOOrder.disableAutomaticTaxCalculation>(soGraph.Document.Current, false);
                                 soGraph.Document.UpdateCurrent();
-
-                                // Setting SO Tax
-                                soGraph.Taxes.Current = soGraph.Taxes.Current ?? soGraph.Taxes.Insert(soGraph.Taxes.Cache.CreateInstance() as SOTaxTran);
-                                soGraph.Taxes.Cache.SetValueExt<SOTaxTran.taxID>(soGraph.Taxes.Current, row.Marketplace + "EC");
-                                soGraph.Taxes.Update(soGraph.Taxes.Current);
                                 #endregion
 
                                 // Sales Order Save

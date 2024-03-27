@@ -15,6 +15,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Globalization;
+using LUMTomofunCustomization.LUMLibrary;
 
 namespace LumTomofunCustomization.LUMLibrary
 {
@@ -90,8 +91,8 @@ namespace LumTomofunCustomization.LUMLibrary
             var AbbreviatedMonthNames = CultureInfo.GetCultureInfo(cultureName).DateTimeFormat.AbbreviatedMonthNames;
             // sv-SE 'mars'/'juni' is not exists in culture datetime format 
             if (cultureName == "sv-SE")
-            { 
-                sourceDatetime = sourceDatetime.Replace("mars","mar");
+            {
+                sourceDatetime = sourceDatetime.Replace("mars", "mar");
                 sourceDatetime = sourceDatetime.Replace("juni", "jun");
                 sourceDatetime = sourceDatetime.Replace("juli", "jul");
             }
@@ -99,7 +100,7 @@ namespace LumTomofunCustomization.LUMLibrary
             for (int i = 0; i < AbbreviatedMonthNames.Length - 1; i++)
             {
                 if (sourceDatetime.Contains(AbbreviatedMonthNames[i].Replace(".", "")) && (!cultureName.Contains("ja-JP") && !cultureName.Contains("de-DE")))
-                { 
+                {
                     sourceDatetime = sourceDatetime.Replace(AbbreviatedMonthNames[i].Replace(".", ""), CultureInfo.GetCultureInfo(cultureName).DateTimeFormat.MonthGenitiveNames[i]);
                     sourceDatetime = sourceDatetime.Replace(".", "");
                     continue;
@@ -261,6 +262,7 @@ namespace LumTomofunCustomization.LUMLibrary
             //var amzTotalTax = amzGroupOrderData.Where(x => x.AmountDescription == "Tax" || x.AmountDescription == "ShippingTax" || x.AmountDescription == "TaxDiscount" || x.AmountType == "ItemWithheldTax").Sum(x => (x.Amount ?? 0) * -1);
             using (new PXCommandScope(3000))
             {
+                var _taxID = isTaxCalculate ? $"{_marketplace}ECZ" : $"{_marketplace}EC";
                 var paycheck = $"{amazonData?.Api_date?.ToString("yyyyMMddHHmmss")}_{amazonData?.Api_trantype}_{amazonData?.Api_orderid}_{amazonData.Api_sku}_{amazonData?.Api_total?.ToString("0.0000")}";
 
                 switch (amazonData.Api_trantype?.ToUpper())
@@ -448,13 +450,12 @@ namespace LumTomofunCustomization.LUMLibrary
                         #endregion
 
                         #region Update Tax
-                        if (isTaxCalculate)
+                        // Setting SO Tax
+                        if (!isTaxCalculate)
+                            TomofunPublicFunction.SalesOrderTaxHandler(soGraph, _taxID, $"{_marketplace}AMZ");
+                        else
                             soGraph.Document.Cache.SetValue<SOOrder.disableAutomaticTaxCalculation>(soGraph.Document.Current, false);
                         soGraph.Document.UpdateCurrent();
-
-                        // Setting SO Tax
-                        soGraph.Taxes.Current = soGraph.Taxes.Current ?? soGraph.Taxes.Insert(soGraph.Taxes.Cache.CreateInstance() as SOTaxTran);
-                        soGraph.Taxes.Cache.SetValueExt<SOTaxTran.taxID>(soGraph.Taxes.Current, isTaxCalculate ? $"{_marketplace}ECZ" : $"{_marketplace}EC");
                         #endregion
 
                         lock (thisLock)
@@ -652,18 +653,15 @@ namespace LumTomofunCustomization.LUMLibrary
 
                             #region Update Tax
                             // Setting SO Tax
-                            if (isTaxCalculate)
+                            if (!isTaxCalculate)
+                                TomofunPublicFunction.SalesOrderTaxHandler(soGraph, _taxID, $"{_marketplace}AMZ");
+                            else
                                 soGraph.Document.Cache.SetValue<SOOrder.disableAutomaticTaxCalculation>(soGraph.Document.Current, false);
                             soGraph.Document.UpdateCurrent();
 
                             // 只有JP有兩個Tax
                             if (soDoc?.TaxZoneID == "JPAMZCOD")
                                 soGraph.Taxes.Insert(new SOTaxTran() { TaxID = isTaxCalculate ? $"{_marketplace}ECZ" : $"{_marketplace}EC" });
-                            else
-                            {
-                                soGraph.Taxes.Current = soGraph.Taxes.Current ?? soGraph.Taxes.Insert(soGraph.Taxes.Cache.CreateInstance() as SOTaxTran);
-                                soGraph.Taxes.Cache.SetValueExt<SOTaxTran.taxID>(soGraph.Taxes.Current, isTaxCalculate ? $"{_marketplace}ECZ" : $"{_marketplace}EC");
-                            }
                             #endregion
 
                             lock (thisLock)
@@ -763,13 +761,12 @@ namespace LumTomofunCustomization.LUMLibrary
                             #endregion
 
                             #region Update Tax
-                            if (isTaxCalculate)
+                            // Setting SO Tax
+                            if (!isTaxCalculate)
+                                TomofunPublicFunction.SalesOrderTaxHandler(soGraph, _taxID, $"{_marketplace}AMZ");
+                            else
                                 soGraph.Document.Cache.SetValue<SOOrder.disableAutomaticTaxCalculation>(soGraph.Document.Current, false);
                             soGraph.Document.UpdateCurrent();
-
-                            // Setting SO Tax
-                            soGraph.Taxes.Current = soGraph.Taxes.Current ?? soGraph.Taxes.Insert(soGraph.Taxes.Cache.CreateInstance() as SOTaxTran);
-                            soGraph.Taxes.Cache.SetValueExt<SOTaxTran.taxID>(soGraph.Taxes.Current, isTaxCalculate ? $"{_marketplace}ECZ" : $"{_marketplace}EC");
                             #endregion
 
                             lock (thisLock)
@@ -861,13 +858,12 @@ namespace LumTomofunCustomization.LUMLibrary
                             #endregion
 
                             #region Update Tax
-                            if (isTaxCalculate)
+                            // Setting SO Tax
+                            if (!isTaxCalculate)
+                                TomofunPublicFunction.SalesOrderTaxHandler(soGraph, _taxID, $"{_marketplace}AMZ");
+                            else
                                 soGraph.Document.Cache.SetValue<SOOrder.disableAutomaticTaxCalculation>(soGraph.Document.Current, false);
                             soGraph.Document.UpdateCurrent();
-
-                            // Setting SO Tax
-                            soGraph.Taxes.Current = soGraph.Taxes.Current ?? soGraph.Taxes.Insert(soGraph.Taxes.Cache.CreateInstance() as SOTaxTran);
-                            soGraph.Taxes.Cache.SetValueExt<SOTaxTran.taxID>(soGraph.Taxes.Current, isTaxCalculate ? $"{_marketplace}ECZ" : $"{_marketplace}EC");
                             #endregion
 
                             lock (thisLock)
@@ -1033,13 +1029,12 @@ namespace LumTomofunCustomization.LUMLibrary
                         #endregion
 
                         #region Update Tax
-                        if (isTaxCalculate)
+                        // Setting SO Tax
+                        if (!isTaxCalculate)
+                            TomofunPublicFunction.SalesOrderTaxHandler(soGraph, _taxID, $"{_marketplace}AMZ");
+                        else
                             soGraph.Document.Cache.SetValue<SOOrder.disableAutomaticTaxCalculation>(soGraph.Document.Current, false);
                         soGraph.Document.UpdateCurrent();
-
-                        // Setting SO Tax
-                        soGraph.Taxes.Current = soGraph.Taxes.Current ?? soGraph.Taxes.Insert(soGraph.Taxes.Cache.CreateInstance() as SOTaxTran);
-                        soGraph.Taxes.Cache.SetValueExt<SOTaxTran.taxID>(soGraph.Taxes.Current, isTaxCalculate ? $"{_marketplace}ECZ" : $"{_marketplace}EC");
                         #endregion
 
                         lock (thisLock)
@@ -1133,13 +1128,12 @@ namespace LumTomofunCustomization.LUMLibrary
                         #endregion
 
                         #region Update Tax
-                        if (isTaxCalculate)
+                        // Setting SO Tax
+                        if (!isTaxCalculate)
+                            TomofunPublicFunction.SalesOrderTaxHandler(soGraph, _taxID, $"{_marketplace}AMZ");
+                        else
                             soGraph.Document.Cache.SetValue<SOOrder.disableAutomaticTaxCalculation>(soGraph.Document.Current, false);
                         soGraph.Document.UpdateCurrent();
-
-                        // Setting SO Tax
-                        soGraph.Taxes.Current = soGraph.Taxes.Current ?? soGraph.Taxes.Insert(soGraph.Taxes.Cache.CreateInstance() as SOTaxTran);
-                        soGraph.Taxes.Cache.SetValueExt<SOTaxTran.taxID>(soGraph.Taxes.Current, isTaxCalculate ? $"{_marketplace}ECZ" : $"{_marketplace}EC");
                         #endregion
 
                         lock (thisLock)
@@ -1241,13 +1235,12 @@ namespace LumTomofunCustomization.LUMLibrary
                         #endregion
 
                         #region Update Tax
-                        if (isTaxCalculate)
+                        // Setting SO Tax
+                        if (!isTaxCalculate)
+                            TomofunPublicFunction.SalesOrderTaxHandler(soGraph, _taxID, $"{_marketplace}AMZ");
+                        else
                             soGraph.Document.Cache.SetValue<SOOrder.disableAutomaticTaxCalculation>(soGraph.Document.Current, false);
                         soGraph.Document.UpdateCurrent();
-
-                        // Setting SO Tax
-                        soGraph.Taxes.Current = soGraph.Taxes.Current ?? soGraph.Taxes.Insert(soGraph.Taxes.Cache.CreateInstance() as SOTaxTran);
-                        soGraph.Taxes.Cache.SetValueExt<SOTaxTran.taxID>(soGraph.Taxes.Current, isTaxCalculate ? $"{_marketplace}ECZ" : $"{_marketplace}EC");
                         #endregion
 
                         lock (thisLock)
@@ -1343,13 +1336,12 @@ namespace LumTomofunCustomization.LUMLibrary
                         #endregion
 
                         #region Update Tax
-                        if (isTaxCalculate)
+                        // Setting SO Tax
+                        if (!isTaxCalculate)
+                            TomofunPublicFunction.SalesOrderTaxHandler(soGraph, _taxID, $"{_marketplace}AMZ");
+                        else
                             soGraph.Document.Cache.SetValue<SOOrder.disableAutomaticTaxCalculation>(soGraph.Document.Current, false);
                         soGraph.Document.UpdateCurrent();
-
-                        // Setting SO Tax
-                        soGraph.Taxes.Current = soGraph.Taxes.Current ?? soGraph.Taxes.Insert(soGraph.Taxes.Cache.CreateInstance() as SOTaxTran);
-                        soGraph.Taxes.Cache.SetValueExt<SOTaxTran.taxID>(soGraph.Taxes.Current, isTaxCalculate ? $"{_marketplace}ECZ" : $"{_marketplace}EC");
                         #endregion
 
                         lock (thisLock)
