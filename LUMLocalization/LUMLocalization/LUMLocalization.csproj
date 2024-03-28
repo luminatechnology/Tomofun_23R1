@@ -69,6 +69,7 @@
     <Compile Include="DAC\LMTFInvQty.cs" />
     <Compile Include="DAC\LumINItemCostHist.cs" />
     <Compile Include="DAC\LumSOForPurchaseReceiptFilter .cs" />
+    <Compile Include="DAC\LUMTomofunSetup.cs" />
     <Compile Include="DAC\LumTWCustomsDutyRefresh.cs" />
     <Compile Include="DAC\RefreshTWCustomsDutyFilter.cs" />
     <Compile Include="DAC\vGlobalINReconciliation.cs" />
@@ -83,6 +84,7 @@
     <Compile Include="Graph\LMTFInvEntry.cs" />
     <Compile Include="Graph\LumINItemCostHistMaint.cs" />
     <Compile Include="Graph\LumPOCreateIntertenantSO.cs" />
+    <Compile Include="Graph\LUMTomofunSetupMaint.cs" />
     <Compile Include="Graph\RefreshCustomsDuty.cs" />
     <Compile Include="Graph_Extensions\POOrderEntry.cs" />
     <Compile Include="Graph_Extensions\SOOrderEntry.cs" />

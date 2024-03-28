@@ -65,5 +65,12 @@ namespace LUMLocalization.DAC
         public virtual DateTime? LastModifiedDateTime { get; set; }
         public abstract class lastModifiedDateTime : PX.Data.BQL.BqlDateTime.Field<lastModifiedDateTime> { }
         #endregion
+
+        #region RequireReferenceShipmentID
+        [PXDBBool]
+        [PXUIField(DisplayName = "Require Amazon & Tomofun Reference / Shipment ID")]
+        public virtual bool? RequireReferenceShipmentID { get; set; }
+        public abstract class requireReferenceShipmentID : PX.Data.BQL.BqlBool.Field<requireReferenceShipmentID> { }
+        #endregion
     }
 }

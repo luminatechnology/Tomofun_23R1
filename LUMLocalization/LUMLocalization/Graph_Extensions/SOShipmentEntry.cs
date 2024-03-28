@@ -9,25 +9,34 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using static PX.Objects.PO.POOrderEntry;
 
 namespace PX.Objects.SO
 {
+    //[PXProtectedAccess]
+    //public abstract class SOShipmentEntry_ProtectedExt : PXGraphExtension<SOShipmentEntry_Extension, SOShipmentEntry>
+    //{
+    //    [PXProtectedAccess(typeof(SOShipmentEntry))]
+    //    protected abstract IEnumerable ReleaseFromHold(PXAdapter adapter);
+    //}
+
+
     public class SOShipmentEntry_Extension : PXGraphExtension<SOShipmentEntry>
     {
         #region Constant Strings / Strng array
-        public const string Attr_QTYCARTON  = "QTYCARTON";
+        public const string Attr_QTYCARTON = "QTYCARTON";
         public const string Attr_NETWHTCART = "NETWHTCART";
         public const string Attr_GRSWHTCART = "GRSWHTCART";
-        public const string Attr_PLTAIRUS   = "PLTAIRUS";
-        public const string Attr_PLTSEAUS   = "PLTSEAUS";
-        public const string Attr_PLTAIREU   = "PLTAIREU";
-        public const string Attr_PLTSEAEU   = "PLTSEAEU";
-        public const string ShipVia_Air     = "AIR";
-        public const string ShipVia_Ocean   = "OCEAN";
+        public const string Attr_PLTAIRUS = "PLTAIRUS";
+        public const string Attr_PLTSEAUS = "PLTSEAUS";
+        public const string Attr_PLTAIREU = "PLTAIREU";
+        public const string Attr_PLTSEAEU = "PLTSEAEU";
+        public const string ShipVia_Air = "AIR";
+        public const string ShipVia_Ocean = "OCEAN";
         public const string Attr_PALLETSIZE = "PALLETSIZE";
-        public const string Attr_PLTWHT     = "PLTWHT";
-        public const string Attr_TOTALGW    = "TOTALGW";
-        public const string Attr_CBM        = "CBM";
+        public const string Attr_PLTWHT = "PLTWHT";
+        public const string Attr_TOTALGW = "TOTALGW";
+        public const string Attr_CBM = "CBM";
 
         public string[] InclCountries_EU = new string[] { "BE", "DE", "ES", "FR", "IT", "NL", "SE" };
         #endregion
@@ -40,6 +49,29 @@ namespace PX.Objects.SO
             Base.report.AddMenuAction(PackingList);
             Base.report.AddMenuAction(CommercialInvoice);
             Base.report.AddMenuAction(packingListOld);
+        }
+        #endregion
+
+        #region Override Actioin
+
+        public delegate IEnumerable ReleaseFromHoldDelegate(PXAdapter adapter);
+        [PXOverride]
+        public virtual IEnumerable ReleaseFromHold(PXAdapter adapter, ReleaseFromHoldDelegate baseMethod)
+        {
+            var preference = SelectFrom<LUMTomofunSetup>.View.Select(Base).TopFirst;
+            if ((preference?.RequireReferenceShipmentID ?? false))
+            {
+                var UDF_AmzRefID = (string)(Base.Document.Cache.GetValueExt(Base.Document.Current, PX.Objects.CS.Messages.Attribute + "AMZREFID") as PXFieldState)?.Value;
+                var UDF_AmzShipID = (string)(Base.Document.Cache.GetValueExt(Base.Document.Current, PX.Objects.CS.Messages.Attribute + "AMZSHIPID") as PXFieldState)?.Value;
+                var UDF_TomofunShipmentNo = (string)(Base.Document.Cache.GetValueExt(Base.Document.Current, PX.Objects.CS.Messages.Attribute + "INVOICENO") as PXFieldState)?.Value;
+                if (string.IsNullOrEmpty(UDF_AmzRefID))
+                    throw new PXException("Amazon Reference ID is required.");
+                if (string.IsNullOrEmpty(UDF_AmzShipID))
+                    throw new PXException("Amazon Shipment ID is required.");
+                if (string.IsNullOrEmpty(UDF_TomofunShipmentNo))
+                    throw new PXException("Tomofun Shipment No is required.");
+            }
+            return baseMethod(adapter);
         }
         #endregion
 
@@ -179,7 +211,7 @@ namespace PX.Objects.SO
 
         protected virtual void _(Events.FieldDefaulting<SOPackageDetailExt.usrPalletSize> e)
         {
-            var row    = e.Row as SOPackageDetail;
+            var row = e.Row as SOPackageDetail;
             var rowExt = row.GetExtension<SOPackageDetailExt>();
 
             if (rowExt.UsrPalletLength == null)
@@ -187,10 +219,10 @@ namespace PX.Objects.SO
                 var pref = SelectFrom<LUMTomofunSetup>.View.Select(Base).TopFirst;
 
                 rowExt.UsrPalletLength = pref?.DefPalletLength ?? 0m;
-                rowExt.UsrPalletWidth  = pref?.DefPalletWidth  ?? 0m;
+                rowExt.UsrPalletWidth = pref?.DefPalletWidth ?? 0m;
                 rowExt.UsrPalletHeight = pref?.DefPalletHeight ?? 0m;
             }
-            
+
             e.NewValue = $"{rowExt.UsrPalletLength:0.##}x{rowExt.UsrPalletWidth:0.##}x{rowExt.UsrPalletHeight:0.##} CM";
         }
 
@@ -308,7 +340,7 @@ namespace PX.Objects.SO
             {
                 var packageExt = packages[i].GetExtension<SOPackageDetailExt>();
 
-                calcValue   += (packageExt.UsrTotalCartons ?? 0m) * (packageExt.UsrGWCarton ?? 0m);
+                calcValue += (packageExt.UsrTotalCartons ?? 0m) * (packageExt.UsrGWCarton ?? 0m);
                 totalPallet += packageExt.UsrTotalPallet ?? 0m;
             }
 

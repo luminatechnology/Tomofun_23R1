@@ -10,5 +10,6 @@
   <col name="LastModifiedByID" type="UniqueIdentifier" />
   <col name="LastModifiedByScreenID" type="Char(8)" />
   <col name="LastModifiedDateTime" type="DateTime" />
+  <col name="RequireReferenceShipmentID" type="Bit" nullable="true" />
 </table>]]></CDATA>
 </Sql>
